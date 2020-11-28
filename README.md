@@ -1,5 +1,5 @@
-# mpp-backend
-Medicine Patent Pool - Reporting System - Backend
+# Medicine Data Portal
+This repository contains source code of a prototype version of an official project I have been working on. It is a data reporting tool for a large sized pharma companies which has multiple partner pharma companies. The prototype is hosted on my free tier azure instance at: http://mpp-prototype.centralindia.cloudapp.azure.com/
 
 ### Steps to setup Backend on Local Machine
 1. Clone the repository and cd into it

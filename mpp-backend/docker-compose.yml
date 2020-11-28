@@ -1,0 +1,65 @@
+version: '3.7'
+
+services:
+  mpp-backend:
+    build:
+      context: .
+    ports:
+      - 8000:8000
+    command: gunicorn MPP_API.wsgi:application --bind 0.0.0.0:8000 --log-level=debug
+    expose:
+      - 8000
+    volumes:
+      # - ./
+      - static_volume:/static
+      - /etc/localtime:/etc/localtime
+    env_file:
+      - ./MPP_API/.env.dev
+    depends_on:
+      - db
+#    logging:
+#      driver: "awslogs"
+#      options:
+#        awslogs-region: "ap-south-1"
+#        awslogs-group: "mpp-be-log"
+#        awslogs-stream: "mpp-be-log-stream"
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./MPP_API/.env.dev
+  
+      
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/static
+    ports:
+      - 8080:80
+    depends_on:
+      - mpp-backend
+
+#  redis:
+#    image: "redis:alpine"
+  
+#  celery:
+#    build: .
+#    command: celery -A MPP_API worker -l INFO
+#    depends_on:
+#      - db
+#      - redis
+#    env_file:
+#      - ./MPP_API/.env.dev
+
+#  celery-beat:
+#    build: .
+#    command: celery -A MPP_API beat -l INFO
+#    depends_on:
+#      - db
+#      - redis
+#    env_file:
+#      - ./MPP_API/.env.dev
+volumes:
+  postgres_data:
+  static_volume:

@@ -1,0 +1,232 @@
+/*Login Styles*/
+
+.@{class-prefix}-login-container {
+  position: relative;
+  height: 100%;
+  padding-bottom: @size-30;
+  .flex-only(1);
+
+  .flex-display(flex, row, wrap);
+  .align-items(center);
+  .justify-content(center);
+}
+
+.@{class-prefix}-login-content {
+  max-width: 420px;
+  width: 94%;
+  margin: auto;
+  padding: 35px 35px 20px;
+  background-color: @white-color;
+  .border-radius(@border-radius-lg);
+  .box-shadow(@gx-card-shadow);
+  font-size: 14px;
+
+  & .ant-input {
+    background-color: @grey-3;
+    height: auto;
+    padding: 6px 12px;
+
+    &:focus {
+      box-shadow: none;
+      border-color: @primary-color;
+    }
+  }
+
+  & .ant-input-affix-wrapper {
+    background-color: @grey-3;
+    max-height: none;
+  }
+
+  & .ant-form-item-control-wrapper {
+    width: 100%;
+  }
+
+  & .ant-form-item-children {
+    display: block;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding: 20px 20px 10px;
+  }
+}
+
+.@{class-prefix}-login-header {
+  margin-bottom: 30px;
+
+  @media screen and (max-width: @screen-xs-max) {
+    margin-bottom: 15px;
+  }
+}
+
+.@{class-prefix}-app-login-wrap {
+  height: 100%;
+  .flex-display(flex, column, nowrap);
+  .justify-content(center);
+  overflow-x: hidden;
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding-top: 20px;
+    .justify-content(flex-start);
+  }
+}
+
+.@{class-prefix}-app-login-container {
+  position: relative;
+  max-width: 680px;
+  width: 94%;
+  margin: 0 auto;
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding-bottom: 20px ;
+  }
+
+  & .@{class-prefix}-loader-view {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+  }
+}
+
+.@{class-prefix}-app-login-main-content {
+  .flex-display(flex, row, wrap);
+  background-color: @white-color;
+  .box-shadow(@gx-card-shadow);
+  .border-radius(@border-radius-lg + 2px);
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.@{class-prefix}-app-login-content {
+  padding: 35px 35px 20px;
+  width: 60%;
+
+  & .ant-input {
+    background-color: @grey-3;
+
+    &:focus {
+      box-shadow: none;
+      border-color: @primary-color;
+    }
+  }
+
+  & .@{class-prefix}-btn {
+    padding: 6px 35px !important;
+    height: auto;
+  }
+
+  & .ant-form-item-control-wrapper {
+    width: 100%;
+  }
+
+  & .ant-form-item-children {
+    display: block;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    width: 100%;
+    padding: 20px 20px 10px;
+  }
+}
+
+.@{class-prefix}-app-login-header {
+  margin-bottom: 30px;
+
+  @media screen and (max-width: @screen-xs-max) {
+    margin-bottom: 15px;
+  }
+}
+
+.@{class-prefix}-app-logo-content {
+  color: @white-color;
+  padding: 35px 35px 20px;
+  width: 40%;
+  position: relative;
+  overflow: hidden;
+  .flex-display(flex, column, nowrap);
+
+  & > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  & h1 {
+    // color: @white-color;
+    color: @primary-color;
+  }
+
+  & p {
+    // color: @white-color;
+    color: @primary-color;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    width: 100%;
+    padding: 20px 20px 10px;
+  }
+
+  &-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 1;
+      right: 0;
+      bottom: 0;
+      background-color: fade(@white-color, 70%);
+    }
+
+    & img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.@{class-prefix}-app-logo-wid {
+  margin-bottom: auto;
+}
+
+.@{class-prefix}-app-social-block {
+  .flex-display(flex, row, wrap);
+  .align-items(center);
+  .justify-content(space-between);
+
+  & .@{class-prefix}-social-link,
+  & .@{class-prefix}-social-link li {
+    margin: 0;
+  }
+
+  & .@{class-prefix}-social-link span {
+    border: @border-style-base @border-width-base @primary-color;
+    .border-radius(@border-radius-circle);
+    color: @primary-color;
+
+    &:hover,
+    &:focus {
+      color: @white-color;
+      background-color: @primary-color;
+    }
+  }
+
+  & p {
+    margin-bottom: 0;
+  }
+}
+
+.@{class-prefix}-signin-form {
+  & .ant-form-item-control-input {
+    min-height: 40px;
+  }
+}

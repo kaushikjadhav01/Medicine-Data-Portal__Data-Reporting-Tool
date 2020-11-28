@@ -1,0 +1,435 @@
+/*Button Styles*/
+.ant-btn {
+
+  line-height: @btn-height-base - 2px;
+  display: inline-block;
+  vertical-align: middle;
+
+  &-group-sm {
+    & .ant-btn {
+      line-height: @btn-height-sm;
+    }
+  }
+
+  &-group-lg {
+    & .ant-btn {
+      line-height: @btn-height-lg;
+    }
+  }
+
+  &-sm {
+    line-height: @btn-height-sm;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .ant-btn-group > & {
+      line-height: @btn-height-sm;
+    }
+
+    &.ant-btn-icon-only {
+      line-height: 1;
+    }
+  }
+
+  &-lg {
+    line-height: @btn-height-lg;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .ant-btn-group > & {
+      line-height: @btn-height-lg;
+    }
+
+    &.ant-btn-icon-only {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &-group-lg > .ant-btn,
+  &-group-lg > span > .ant-btn {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &:not(:last-child) {
+    margin-right: 15px;
+
+    @media screen and (max-width: @screen-xs-max) {
+      margin-right: 10px;
+    }
+
+    .ant-btn-group &,
+    .ant-transfer-operation & {
+      margin-right: 0;
+    }
+
+    .@{class-prefix}-product-footer & {
+      @media (max-width: (@screen-xxl-min - 1px)) {
+        margin-right: 6px;
+      }
+    }
+  }
+
+  .ant-input-group-addon & {
+    margin-right: 0;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    margin-bottom: 10px;
+  }
+}
+
+.ant-btn {
+
+  .ant-input-search & {
+    margin-bottom: 0;
+  }
+
+  .@{class-prefix}-customizer-option & {
+    padding: 0 @padding-md + 2px;
+    font-size: @font-size-lg + 2px;
+    height: @btn-height-lg + 2px;
+    line-height: @btn-height-lg + 2px;
+    margin: 0;
+    .box-shadow(@gx-card-shadow-md);
+    .border-radius(30px 0 0 30px);
+    .horizontal-gradient();
+    border: 0 none;
+    color: @white-color;
+
+    &:hover,
+    &:focus {
+      .horizontal-gradient(@red-6, @orange-6);
+    }
+
+    & .icon:before {
+      display: block;
+    }
+  }
+
+  .horizontal-layout.full-scroll .@{class-prefix}-customizer-option & {
+    margin-right: 0;
+  }
+
+  .@{class-prefix}-module-add-task & {
+    height: @btn-height-lg - 4px;
+
+    & .icon:before {
+      position: relative;
+      top: 2px;
+    }
+  }
+  .ant-modal-footer &,
+  .ant-modal-confirm-btns & {
+    margin-bottom: 0;
+  }
+
+  .@{class-prefix}-login-content & {
+    padding: 9px 20px !important;
+    height: auto;
+    line-height: 1;
+  }
+
+  .ant-btn-group & {
+    .boxed-layout & {
+      padding: 0 @padding-md - 4px;
+    }
+
+    @media (max-width: (@screen-xl-min + 166px)) {
+      padding: 0 @padding-md - 4px;
+    }
+  }
+
+  .@{class-prefix}-product-footer & {
+    @media (max-width: (@screen-xl-min + 166px)) {
+      padding: 0 10px;
+      height: 32px;
+      font-size: 12px;
+      line-height: 32px;
+    }
+  }
+}
+
+.ant-btn-background-ghost {
+  &.ant-btn-primary {
+    border-color: @primary-color !important;
+    color: @primary-color !important;
+
+    &:hover,
+    &:focus {
+      background-color: @primary-color !important;
+      border-color: @primary-color !important;
+      color: @white-color !important;
+    }
+  }
+}
+
+.ant-btn-group {
+  &:not(:last-child) {
+    margin-right: 15px;
+
+    @media screen and (max-width: @screen-xs-max) {
+      margin-right: 10px;
+    }
+  }
+}
+
+.ant-radio-group {
+  & .ant-radio-button-wrapper {
+    margin-bottom: 6px;
+  }
+}
+
+button {
+  outline: none;
+}
+
+.ant-confirm .ant-confirm-btns button + button {
+  margin-bottom: 8px;
+}
+
+.ant-modal.ant-confirm .ant-confirm-btns button + button,
+.ant-modal.ant-confirm .ant-btn {
+  margin-bottom: 0;
+}
+
+.@{class-prefix}-btn,
+.btn {
+  display: inline-block;
+  font-weight: @btn-font-weight;
+  color: @btn-default-color;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border: @border-style-base @border-width-base @btn-default-border;
+  padding: @btn-padding-base;
+  height: @btn-height-base;
+  font-size: @font-size-base;
+  line-height: @btn-height-base - 2px;
+  .border-radius(@border-radius-sm);
+  margin-bottom: 15px;
+
+  &:not(:last-child) {
+    margin-right: 15px;
+
+    @media screen and (max-width: @screen-xs-max) {
+      margin-right: 10px;
+    }
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    margin-bottom: 10px;
+  }
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 0;
+  }
+
+  &.disabled,
+  &:disabled {
+    opacity: 0.65;
+  }
+
+  &:not([disabled]):not(.disabled) {
+    cursor: pointer;
+  }
+
+  .@{class-prefix}-btn-list & {
+    margin-bottom: 6px;
+  }
+
+  .@{class-prefix}-sub-popover & {
+    border: 0 none;
+    margin-bottom: 5px;
+
+    &:focus,
+    &:hover {
+      background-color: @grey-3;
+    }
+
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+
+  .@{class-prefix}-login-content & {
+    padding: 9px 20px !important;
+    height: auto;
+    line-height: 1;
+  }
+}
+
+.@{class-prefix}-btn-block {
+  display: block;
+  width: 100%;
+}
+
+a.@{class-prefix}-btn.disabled,
+fieldset[disabled] a.@{class-prefix}-btn {
+  pointer-events: none;
+}
+
+.@{class-prefix}-btn-rounded {
+  .border-radius(50px) !important;
+}
+
+.@{class-prefix}-btn-link {
+  font-size: @font-size-base;
+  font-weight: @btn-font-weight;
+  color: @primary-color;
+  background-color: transparent;
+
+  &:hover {
+    color: @primary-color;
+    text-decoration: underline;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  &:focus,
+  &.focus {
+    text-decoration: underline;
+    border-color: transparent;
+  }
+
+  &:disabled,
+  &.disabled {
+    color: @grey-6;
+  }
+}
+
+.@{class-prefix}-btn-lg,
+.@{class-prefix}-btn-group-lg > .@{class-prefix}-btn {
+  padding: @btn-padding-lg;
+  font-size: @btn-font-size-lg;
+  line-height: @btn-height-lg;
+  .border-radius(6px);
+  height: @btn-height-lg;
+}
+
+.@{class-prefix}-btn-sm,
+.@{class-prefix}-btn-group-sm > .@{class-prefix}-btn {
+  padding: @btn-padding-sm;
+  font-size: @btn-font-size-sm;
+  line-height: @btn-height-sm;
+  .border-radius(2px);
+  height: @btn-height-sm;
+}
+
+.@{class-prefix}-btn-xs {
+  font-size: @btn-font-size-xs;
+  padding: @btn-padding-xs;
+  height: @btn-height-base - 10px;
+  line-height: @btn-height-base - 11px;
+}
+
+.@{class-prefix}-btn-block {
+  display: block;
+  width: 100%;
+
+  & + & {
+    margin-top: 0.5rem;
+  }
+}
+
+.@{class-prefix}-icon-btn {
+  width: @size-40;
+  height: @size-40;
+  .border-radius(2px);
+  .flex-display(flex, row, wrap);
+  .justify-content(center);
+  .align-items(center);
+  cursor: pointer;
+
+  &:focus,
+  &:hover {
+    background-color: fade(@black-color, 10%);
+
+    .@{class-prefix}-layout-sider-dark & {
+      background-color: @nav-dark-bg;
+    }
+  }
+
+  .@{class-prefix}-popover-header & {
+    width: @size-30;
+    height: @size-30;
+  }
+
+  & .icon-star-o:before,
+  & .icon-star:before {
+    position: relative;
+    top: 3px;
+  }
+
+  &.icon {
+    .@{class-prefix}-module-box-content & {
+      @media screen and (max-width: @screen-xs-max) {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.@{class-prefix}-radio-group-link {
+  &.ant-radio-group {
+    & .ant-radio-button-wrapper {
+      height: @btn-height-sm;
+      line-height: @btn-height-sm;
+      border: 0 none;
+      .border-radius(2px);
+      margin-left: 0;
+
+      &.ant-radio-button-wrapper-checked {
+        background-color: @primary-color;
+        color: @white-color;
+      }
+    }
+
+    & .ant-radio-button-wrapper:not(:first-child)::before {
+      display: none;
+    }
+  }
+
+  &-news {
+
+    @media screen and (max-width: @screen-xs-max) {
+      .flex-display(flex, row, wrap);
+    }
+  }
+
+  & .ant-radio-button-wrapper {
+    @media screen and (max-width: @screen-xs-max) {
+      padding: 0 8px;
+    }
+  }
+}
+
+.@{class-prefix}-radio-group-link-bg-light {
+  margin-left: -5px;
+  margin-right: -5px;
+
+  &.ant-radio-group {
+    & .ant-radio-button-wrapper {
+      padding: 0 10px;
+      margin-left: 5px;
+      margin-right: 5px;
+      background-color: @grey-4;
+
+      &.ant-radio-button-wrapper-checked {
+        background-color: @primary-color;
+        color: @white-color;
+      }
+    }
+
+    & .ant-radio-button-wrapper:not(:first-child)::before {
+      display: none;
+    }
+  }
+}

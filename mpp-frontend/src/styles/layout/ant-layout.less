@@ -1,0 +1,138 @@
+/* Ant Layout Style */
+.ant-layout {
+  position: relative;
+  background: none;
+
+  & > .@{class-prefix}-layout-content {
+    overflow-x: hidden;
+    .flex-display(flex, column, nowrap);
+
+    .full-scroll & {
+      overflow-x: inherit;
+    }
+  }
+
+  &.ant-layout-has-sider > .ant-layout {
+    position: relative;
+    background: @body-background;
+  }
+  .framed-layout &,
+  .boxed-layout & {
+    background: @body-background;
+  }
+
+  .framed-layout &,
+  .boxed-layout & {
+    background: @body-background;
+  }
+
+  &.@{class-prefix}-app-layout {
+    height: 100vh;
+
+    .framed-layout & {
+      height: calc(100vh~"-"2 * @framed-layout-base);
+
+      @media screen and (max-width: @screen-md-max) {
+        height: 100vh;
+      }
+    }
+
+    .framed-layout.full-scroll &,
+    .boxed-layout.full-scroll & {
+      overflow-y: scroll;
+    }
+
+    & > .ant-layout {
+      height: 100vh;
+
+      .framed-layout & {
+        height: calc(100vh~"-"2 * @framed-layout-base);
+
+        @media screen and (max-width: @screen-md-max) {
+          height: 100vh;
+        }
+      }
+    }
+  }
+
+  &.ant-layout-has-sider > .ant-layout,
+  &.ant-layout-has-sider > .ant-layout-content {
+
+    .full-scroll & {
+      overflow-x: inherit;
+    }
+  }
+}
+
+.@{class-prefix}-main-content-wrapper {
+  padding: @layout-main-content-padding @layout-main-content-padding 0;
+  flex: 1;
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding: (@layout-main-content-padding-res + 5px) @layout-main-content-padding-res 0;
+  }
+
+  .@{class-prefix}-container-wrap & {
+    width: 94vw;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    @media screen and (min-width: @screen-md-min) {
+      width: (@screen-md-min - 48);//720
+    }
+
+    @media screen and (min-width: @screen-lg-min) {
+      width: (@screen-lg-min - 72);//920
+    }
+
+    @media screen and (min-width: @screen-xl-min) {
+      width: (@screen-xl-min - 100);//1100
+    }
+
+    @media screen and (min-width: (@screen-xl-min + 167px)) {
+      width: @screen-xl-min;//1200
+    }
+
+    @media screen and (min-width: @screen-xxl-min) {
+      width: (@screen-xxl-min - 200);//1400
+    }
+  }
+}
+
+.@{class-prefix}-main-content {
+  .flex-display(flex, column, nowrap);
+  flex: 1;
+  height: 100%;
+}
+
+.@{class-prefix}-container {
+  width: 94vw; //320
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+
+  @media screen and (min-width: @screen-md-min) {
+    width: (@screen-md-min - 48);//720
+  }
+
+  @media screen and (min-width: @screen-lg-min) {
+    width: (@screen-lg-min - 72);//920
+  }
+
+  @media screen and (min-width: @screen-xl-min) {
+    width: (@screen-xl-min - 100);//1100
+  }
+
+  @media screen and (min-width: (@screen-xl-min + 167px)) {
+    width: @screen-xl-min;//1200
+  }
+
+  @media screen and (min-width: @screen-xxl-min) {
+    width: (@screen-xxl-min - 200);//1400
+  }
+}
+
+

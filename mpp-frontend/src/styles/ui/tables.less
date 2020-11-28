@@ -1,0 +1,184 @@
+/*Tables Styles*/
+.ant-table-small {
+  & .ant-table-thead > tr > th {
+    background-color: transparent;
+  }
+
+  > .ant-table-content {
+    > .ant-table-header > table,
+    > .ant-table-body > table,
+    > .ant-table-scroll > .ant-table-header > table,
+    > .ant-table-scroll > .ant-table-body > table,
+    > .ant-table-fixed-left > .ant-table-header > table,
+    > .ant-table-fixed-right > .ant-table-header > table,
+    > .ant-table-fixed-left > .ant-table-body-outer > .ant-table-body-inner > table,
+    > .ant-table-fixed-right > .ant-table-body-outer > .ant-table-body-inner > table {
+      padding: 0;
+    }
+
+    > .ant-table-body {
+      margin: 0;
+    }
+  }
+}
+
+.ant-table {
+  &-thead > tr > th,
+  &-tbody > tr > td {
+    word-break: normal;
+  }
+}
+
+.@{class-prefix}-table-responsive .ant-table {
+  min-height: .01%;
+  overflow-x: auto;
+}
+
+@media screen and (max-width: @screen-sm-max) {
+  .@{class-prefix}-table-responsive .ant-table {
+    width: 100%;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: @border-style-base @border-width-base @border-color;
+
+    .ant-card-bordered.@{class-prefix}-card-full & {
+      border: 0 none;
+      border-bottom: @border-style-base @border-width-base @border-color;
+    }
+
+    & .ant-table-tbody > tr:last-child > td {
+      border-bottom: 0 none;
+    }
+
+    &.ant-table-bordered {
+
+      & .ant-table-header > table,
+      & .ant-table-body > table,
+      & .ant-table-fixed-left table,
+      & .ant-table-fixed-right table {
+        border-top: 0 none;
+        border-left: 0 none;
+      }
+
+      & .ant-table-title {
+        border: 0 none;
+      }
+
+      & .ant-table-footer {
+        border: 0 none;
+        border-top: @border-style-base @border-width-base @border-color;
+      }
+
+      & .ant-table-thead > tr > th:last-child,
+      & .ant-table-tbody > tr > td:last-child {
+        border-right: 0 none;
+      }
+    }
+  }
+
+  .@{class-prefix}-table-responsive .ant-table-body > table > thead > tr > th,
+  .@{class-prefix}-table-responsive .ant-table-body > table > tbody > tr > th,
+  .@{class-prefix}-table-responsive .ant-table-body > table > tfoot > tr > th,
+  .@{class-prefix}-table-responsive .ant-table-body > table > thead > tr > td,
+  .@{class-prefix}-table-responsive .ant-table-body > table > tbody > tr > td,
+  .@{class-prefix}-table-responsive .ant-table-body > table > tfoot > tr > td {
+    white-space: nowrap;
+  }
+}
+
+.@{class-prefix}-table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+
+  & th,
+  & td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: @border-style-base @border-width-base @border-color;
+  }
+
+  & thead th {
+    vertical-align: bottom;
+    border-bottom: 2px @border-style-base @border-color;
+  }
+
+  & tbody + tbody {
+    border-top: 2px @border-style-base @border-color;
+  }
+}
+
+.@{class-prefix}-table-bordered {
+  border: @border-width-base @border-style-base @border-color;
+
+  & th,
+  & td {
+    border: @border-width-base @border-style-base @border-color;
+  }
+
+  & thead th,
+  & thead td {
+    border-bottom-width: 2px;
+  }
+}
+
+.@{class-prefix}-table-no-bordered {
+  border: 0 none;
+
+  & th,
+  & td {
+    border: 0 none;
+  }
+
+  & thead th,
+  & thead td {
+    border-bottom-width: 2px;
+  }
+
+  & .ant-table {
+    border: 0 none;
+    .border-radius(0);
+  }
+
+  & .ant-table-thead > tr > th {
+    font-weight: @font-weight-light;
+    text-transform: uppercase;
+    font-size: @font-size-sm - 1px;
+  }
+
+  & .ant-table-tbody > tr > td {
+    border-bottom: 0 none;
+  }
+}
+
+.@{class-prefix}-table-thead-uppercase {
+  & thead th {
+    text-transform: uppercase;
+  }
+}
+
+.@{class-prefix}-table-padding-lg {
+  & thead th,
+  & tbody td {
+    padding: 20px 30px !important;
+
+    @media screen and (max-width: @screen-md-max) {
+      padding: 15px 20px !important;
+    }
+
+    @media screen and (max-width: @screen-sm-max) {
+      padding: 10px !important;
+    }
+  }
+
+  & .ant-table-pagination {
+    float: none;
+    text-align: center;
+    margin: 22px 0;
+
+    @media screen and (max-width: @screen-md-max) {
+      margin: 16px 0;
+    }
+  }
+}

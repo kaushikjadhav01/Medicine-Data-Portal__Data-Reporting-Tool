@@ -1,0 +1,23 @@
+/*Pagination Styles*/
+.ant-pagination {
+  & > li {
+    margin-bottom: 10px;
+  }
+
+  &.mini {
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    & li {
+      margin-bottom: 5px !important;
+    }
+  }
+
+  &-prev,
+  &-next,
+  &-jump-prev,
+  &-jump-next {
+    line-height: @pagination-item-size - 2px;
+  }
+}

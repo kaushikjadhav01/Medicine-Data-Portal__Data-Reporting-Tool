@@ -1,0 +1,13 @@
+.empty-msg {
+    font-size: 20px;
+}
+
+.sales-report-btn-save .ant-btn-primary:disabled {
+    margin-bottom: 0;
+    margin-right: 15px;
+}
+
+.ant-input-number {
+    margin-right: 10px;
+    height: 36px;
+}

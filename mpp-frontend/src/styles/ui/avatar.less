@@ -1,0 +1,134 @@
+/*Avatar Styles*/
+.@{class-prefix}-avatar-img {
+  height: @size-50;
+  width: @size-50;
+  position: relative;
+  .border-radius(@border-radius-circle);
+  border: @border-style-base @border-width-base @border-color;
+}
+
+.@{class-prefix}-avatar-img-lg {
+  height: @size-100;
+  width: @size-100;
+}
+
+.ant-avatar {
+  position: relative;
+
+  &.@{class-prefix}-size-150 > * {
+    line-height: @size-150;
+  }
+
+  &.@{class-prefix}-size-120 > * {
+    line-height: @size-120;
+  }
+
+  &.@{class-prefix}-size-100 > * {
+    line-height: @size-100;
+  }
+
+  &.@{class-prefix}-size-80 > * {
+    line-height: @size-80;
+  }
+
+  &.@{class-prefix}-size-60 > * {
+    line-height: @size-60;
+  }
+
+  &.@{class-prefix}-size-50 > * {
+    line-height: @size-50;
+  }
+
+  &.@{class-prefix}-size-40 > * {
+    line-height: @size-40;
+  }
+
+  &.@{class-prefix}-size-36 > * {
+    line-height: @size-36;
+  }
+
+  &.@{class-prefix}-size-30 > * {
+    line-height: @size-30;
+  }
+
+  &.@{class-prefix}-size-24 > * {
+    line-height: @size-20 + 4px;
+  }
+
+  &.@{class-prefix}-size-20 > * {
+    line-height: @size-20;
+  }
+
+  &.@{class-prefix}-size-15 > * {
+    line-height: @size-20 - 6px;
+  }
+
+  .@{class-prefix}-customers-list & {
+    width: 70px;
+    height: 70px;
+
+    @media (max-width: (@screen-xl-min + 300px)) {
+      width: 60px;
+      height: 60px;
+    }
+
+    @media (max-width: (@screen-xl-min + 166px)) {
+      width: 48px;
+      height: 48px;
+    }
+
+    @media (max-width: (@screen-xl-min - 1px)) {
+      width: 60px;
+      height: 60px;
+    }
+
+    @media screen and (max-width: (@screen-xs-max - 175px)) {
+      width: 52px;
+      height: 52px;
+    }
+  }
+}
+
+.@{class-prefix}-avatar {
+  .flex-display(flex, row, wrap);
+  overflow: hidden;
+  .justify-content(center);
+  .align-items(center);
+  height: @size-50;
+  width: @size-50;
+  position: relative;
+  .border-radius(@border-radius-circle);
+  border: @border-style-base @border-width-base @border-color;
+
+  @media screen and (max-width: @screen-md-max) {
+    .@{class-prefix}-user-nav & {
+      height: @size-40;
+      width: @size-40;
+      line-height: @size-40;
+    }
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    .@{class-prefix}-user-nav & {
+      height: @size-30;
+      width: @size-30;
+      line-height: @size-30;
+    }
+  }
+
+  .@{class-prefix}-header-horizontal-main & {
+    height: @size-40;
+    width: @size-40;
+    line-height: @size-40;
+
+    @media screen and (max-width: @screen-md-max) {
+      height: @size-30;
+      width: @size-30;
+      line-height: @size-30;
+    }
+  }
+}
+
+.@{class-prefix}-user-thumb {
+  position: relative;
+}

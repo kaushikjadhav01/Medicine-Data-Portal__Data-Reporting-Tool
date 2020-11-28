@@ -1,0 +1,59 @@
+/*Badge Styles*/
+.ant-badge {
+  margin-bottom: 6px;
+
+  &:not(:last-child) {
+    margin-right: 12px;
+  }
+}
+
+.ant-tag {
+  margin-bottom: 8px;
+}
+
+.@{class-prefix}-badge {
+  display: inline-block;
+  padding: 5px 8px 4px;
+  font-size: 75%;
+  margin-bottom: 6px;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  .border-radius(@border-radius-sm);
+
+  &:not(:last-child) {
+    margin-right: 12px;
+  }
+
+  .@{class-prefix}-chat-date & {
+    margin-bottom: 0;
+    width: @size-20;
+    height: @size-20;
+    text-align: center;
+    line-height: @size-20 - 4px;
+    padding: 2px;
+  }
+
+  .@{class-prefix}-user-thumb & {
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    z-index: 1;
+    margin: 0;
+    display: block;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    line-height: 16px;
+  }
+}
+
+.@{class-prefix}-badge-outline {
+  background-color: transparent;
+  border: @border-style-base @border-width-base @border-color;
+}
+
+.@{class-prefix}-badge-radius-sm .ant-badge-count {
+  .border-radius(2px);
+}

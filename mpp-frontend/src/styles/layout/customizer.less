@@ -1,0 +1,189 @@
+/* Customizer Style */
+.@{class-prefix}-customizer {
+  height: calc(100vh ~"-" 30px) !important;
+
+  &-item {
+
+    &:not(:last-child) {
+      border-bottom: @border-style-base @border-width-base @border-color;
+      padding-bottom: @gx-customizer-base;
+      margin-bottom: @gx-customizer-base;
+    }
+
+    & .ant-radio-group {
+      & .ant-radio-button {
+        display: none;
+      }
+    }
+  }
+
+  &-option {
+    position: absolute;
+    right: 0;
+    top: 150px;
+    z-index: 99;
+
+    .full-scroll & {
+      position: fixed;
+    }
+
+    .full-scroll.boxed-layout & {
+      position: absolute;
+    }
+
+    .full-scroll.framed-layout & {
+      right: 20px;
+
+      @media screen and (max-width: @screen-md-max) {
+        right: 0;
+      }
+    }
+
+    .horizontal-layout.full-scroll & {
+      top: 200px;
+    }
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    width: @gx-customizer-width - 120px !important;
+
+    & .ant-radio-button-wrapper {
+      padding: 0 10px;
+    }
+  }
+
+  & .@{class-prefix}-list-inline {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .framed-layout & {
+    height: calc(100vh~"-"30px ~"-" 2 * @framed-layout-base) !important;
+
+    @media screen and (max-width: @screen-md-max) {
+      height: calc(100vh ~"-" 30px) !important;
+    }
+  }
+}
+
+.@{class-prefix}-color-option {
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+
+  & li {
+    font-size: 36px;
+    line-height: 1;
+
+    & .@{class-prefix}-link {
+      width: @size-40;
+      height: @size-40;
+      display: block;
+      position: relative;
+      .border-radius(@border-radius-circle);
+      overflow: hidden;
+    }
+
+    & .@{class-prefix}-link:before {
+      font-family: "gaxon";
+      font-size: 20px;
+      content: "\30";
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
+      width: @size-40;
+      height: @size-40;
+      line-height: @size-40;
+      text-align: center;
+      display: none;
+    }
+
+    & .@{class-prefix}-link.active:before {
+      display: block;
+    }
+
+    & .@{class-prefix}-link:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 1;
+      width: @size-20;
+      height: @size-40;
+      background-color: #9283D4;
+    }
+
+    & .@{class-prefix}-link.@{class-prefix}-color-red:after {
+      background-color: #FF2B7A;
+    }
+
+    & .@{class-prefix}-link.@{class-prefix}-color-blue:after {
+      background-color: #3DA4E6;
+    }
+
+    & .@{class-prefix}-link.@{class-prefix}-color-dark-blue:after {
+      background-color: #0469B9;
+    }
+
+    & .@{class-prefix}-link.@{class-prefix}-color-orange:after {
+      background-color: #F18805;
+    }
+
+    & .@{class-prefix}-link.@{class-prefix}-color-light-blue:after {
+      background-color: #6A95FF;
+    }
+
+    & .@{class-prefix}-link.@{class-prefix}-color-deep-orange:after {
+      background-color: #F87060;
+    }
+
+    & .@{class-prefix}-link.@{class-prefix}-color-light-purple1:after {
+      background-color: #A172E7;
+    }
+
+    & .@{class-prefix}-link.@{class-prefix}-color-light-purple2:after {
+      background-color: #956FE7;
+    }
+  }
+}
+
+.@{class-prefix}-cus-customiz {
+  padding-right: 20px;
+}
+
+.@{class-prefix}-layout-option,
+.@{class-prefix}-nav-option {
+
+  & li {
+    margin-bottom: 10px;
+
+    & span {
+      position: relative;
+      display: block;
+
+      &:before {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        font-family: "gaxon" !important;
+        content: "\30";
+        .translate(-50%, -50%);
+        display: none;
+        width: @size-20;
+        font-size: @font-size-sm;
+        height: @size-20;
+        .border-radius(@border-radius-circle);
+        background-color: @primary-color;
+        text-align: center;
+        padding: 2px;
+        color: @white-color;
+      }
+
+      &.active:before {
+        display: block;
+      }
+    }
+  }
+}

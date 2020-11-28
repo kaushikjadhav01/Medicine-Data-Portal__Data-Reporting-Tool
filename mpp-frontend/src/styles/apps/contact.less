@@ -1,0 +1,114 @@
+/*Contact Apps Styles*/
+
+.@{class-prefix}-contact-item {
+  .align-items(center);
+  .flex-display(flex, row, wrap);
+  padding: 8px 28px;
+
+  &:not(:last-child) {
+    border-bottom: @border-style-base @border-width-base @border-color;
+  }
+}
+
+.@{class-prefix}-dragndrop-item {
+  padding: @dragndrop-paddding-tb @dragndrop-paddding-lr;
+
+  & .@{class-prefix}-draggable-icon {
+    margin-left: -@dragndrop-paddding-lr;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding-right: 5px;
+  }
+}
+
+.@{class-prefix}-contact-list-info {
+  padding-left: 10px;
+
+  .@{class-prefix}-email {
+    word-break: break-all;
+  }
+
+  .@{class-prefix}-toolbar-separator {
+    display: inline-block;
+
+    @media screen and (max-width: @screen-xs-max) {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding-left: 0;
+    max-width: calc(100% ~"-" 50px);
+
+    .@{class-prefix}-job-title {
+      display: none;
+    }
+  }
+}
+
+.@{class-prefix}-module-contact-content {
+  .flex-only(1);
+}
+
+.@{class-prefix}-module-contact-right {
+  margin-left: 8px;
+}
+
+.@{class-prefix}-contact-name {
+  font-size: 15px;
+}
+
+.@{class-prefix}-draggable-icon {
+  cursor: all-scroll;
+  color: @grey-7;
+
+  &:hover,
+  &:focus,
+  &:active {
+    cursor: all-scroll;
+    color: @grey-9;
+  }
+}
+
+.@{class-prefix}-module-side-nav {
+  padding: 20px 0;
+}
+
+.@{class-prefix}-modal-box-row {
+  .flex-display(flex, row, wrap);
+
+  & .@{class-prefix}-modal-box-avatar {
+    .flex-order(2);
+    margin-left: 16px;
+
+    & .ant-avatar {
+      width: @size-120;
+      height: @size-120;
+    }
+
+    @media screen and (max-width: @screen-xs-max) {
+      .flex-order(1);
+      margin-left: 0;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+  }
+
+  & .@{class-prefix}-modal-box-form-item {
+    .flex-order(1);
+    .flex-only(1);
+
+    @media screen and (max-width: @screen-xs-max) {
+      .flex-order(2);
+    }
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    .flex-display(flex, column, nowrap);
+  }
+}
+
+.@{class-prefix}-dragndrop-actions {
+  .flex-display(flex, row, wrap);
+}

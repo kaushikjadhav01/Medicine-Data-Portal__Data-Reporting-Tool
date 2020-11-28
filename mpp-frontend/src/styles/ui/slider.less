@@ -1,0 +1,226 @@
+/*Slider Styles*/
+.ant-carousel {
+  & h1,
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    line-height: inherit;
+    margin-bottom: 0;
+  }
+
+  & .slick-dots {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.@{class-prefix}-vertical-slider {
+  position: relative;
+  .flex-display(flex, row, wrap);
+  margin: 0 -15px;
+}
+
+.@{class-prefix}-vertical-slider-item {
+  width: 33.33%;
+  padding: 0 15px;
+  height: 300px;
+  .flex-display(flex, column, nowrap);
+  .align-items(center);
+
+  @media screen and (max-width: @screen-xs-max ) {
+    width: 50%;
+    margin-bottom: 15px;
+  }
+}
+
+.ant-carousel-vertical .@{class-prefix}-vertical-slide {
+  & .slick-slide {
+    height: 160px;
+  }
+}
+
+.slick-slider {
+  margin-bottom: @gx-card-margin-base;
+
+  @media screen and (max-width: @screen-xs-max) {
+    margin-bottom: @gx-card-margin-base-res;
+  }
+
+  & .slick-prev {
+    left: -10px;
+
+    &:before {
+      color: @black-color;
+    }
+  }
+
+  & .slick-next {
+    right: -10px;
+
+    &:before {
+      color: @black-color;
+    }
+  }
+
+  & img {
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.slick-dots {
+
+  & li button {
+
+    &:before {
+      display: none;
+    }
+  }
+}
+
+.@{class-prefix}-slick-slider .slick-dots {
+  bottom: @gx-card-padding-base + 2px;
+  padding: 0 @gx-card-padding-base;
+  text-align: left;
+
+  & li {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  & li button {
+    width: 10px !important;
+    height: 10px !important;
+
+    &:before {
+      width: 10px !important;
+      height: 10px !important;
+      line-height: 10px !important;
+      color: transparent;
+      border: solid 2px @black-color;
+      .border-radius(@border-radius-circle);
+      display: block;
+    }
+  }
+
+  & li.slick-active button {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  & li.slick-active button:before {
+    color: transparent;
+    border-color: @primary-color;
+    width: 12px !important;
+    height: 12px !important;
+    line-height: 12px !important;
+  }
+}
+
+.@{class-prefix}-slide-item {
+  margin-left: 15px;
+  margin-right: 15px;
+
+  @media screen and (max-width: (@screen-xs-max - 95px)) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.@{class-prefix}-slider {
+  position: relative;
+
+  &-img {
+    position: relative;
+    padding-bottom: @gx-card-padding-base;
+
+    .@{class-prefix}-img-up {
+      position: absolute;
+      left: @gx-card-padding-base;
+      bottom: -5px;
+      z-index: 1;
+      .border-radius(@border-radius-lg);
+      width: auto;
+      max-width: @size-60 + 4px;
+    }
+  }
+
+  &-content {
+    padding: @gx-card-padding-base;
+  }
+}
+
+.@{class-prefix}-slick-slider {
+  margin-bottom: 0;
+  padding-bottom: @gx-card-padding-base;
+
+  &-dot-top {
+    padding-top: (3*@gx-card-padding-base - 2);
+    padding-right: @gx-card-padding-base;
+    padding-bottom: (2*@gx-card-padding-base + 10);
+
+    @media (max-width: (@screen-xl-min + 166px)) {
+      padding-top: (@gx-card-padding-base + 16);
+      padding-bottom: (@gx-card-padding-base - 14);
+    }
+
+    & .slick-dots {
+      bottom: auto;
+      top: @gx-card-padding-base + 6px;
+      padding-left: 0;
+
+      @media (max-width: (@screen-xl-min + 166px)) {
+        top: 10px;
+      }
+    }
+
+    @media screen and (max-width: @screen-xs-max) {
+      padding-left: @gx-card-padding-base;
+    }
+  }
+}
+
+.@{class-prefix}-slick-slider-lt-thumb {
+  height: 100%;
+  position: relative;
+
+  & img {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+
+    @media screen and (max-width: @screen-xs-max) {
+      position: relative;
+      left: auto;
+      top: auto;
+    }
+  }
+}
+
+.ant-modal .slides {
+  position: relative;
+
+  & .slick-prev,
+  & .slick-next {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    margin-top: -10px;
+  }
+
+  & .slick-prev {
+    left: 20px;
+  }
+
+  & .slick-next {
+    right: 20px;
+  }
+}
+
+.ant-modal .slick-slider {
+  margin-bottom: 0;
+}

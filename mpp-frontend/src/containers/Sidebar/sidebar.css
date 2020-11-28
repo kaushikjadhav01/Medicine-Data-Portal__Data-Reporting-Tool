@@ -1,0 +1,28 @@
+.sidebar-width-200 {
+    width: 200px !important;
+}
+
+.ant-layout-sider .ant-menu-inline .ant-menu-item {
+    padding-left: 20px !important;
+}
+
+.gx-site-logo img {
+    width: 120px;
+}
+
+.max-width-150 {
+    max-width: 150px;
+}
+
+.gx-app-sidebar .ant-menu-submenu-inline>.ant-menu-submenu-title .ant-menu-submenu-arrow {
+    left: auto;
+    right: 22px;
+}
+
+.ant-layout-sider .ant-menu-inline .ant-menu-submenu-title {
+    padding-left: 20px !important;
+}
+
+.ant-layout-sider .ant-menu-submenu>.ant-menu.ant-menu-sub .ant-menu-item {
+    padding-left: 54px !important;
+}

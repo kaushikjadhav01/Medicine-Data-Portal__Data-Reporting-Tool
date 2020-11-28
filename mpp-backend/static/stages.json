@@ -1,0 +1,31 @@
+{
+	"FDF":[
+		"01. Development set-up",
+		"02. Trial Batch",
+		"03. Pilot BE",
+		"04. Exhibit batches",
+		"05. Pivotal BE",
+		"06. Stability loading in different packs",
+		"07. Stability data 6 months",
+		"08. Dossier Compilation",
+		"09. DF Dossier Filing USFDA",
+		"10. DF Dossier Filing WHO",
+		"11. USFDA Approval (FDF)",
+		"12. WHO-PQ Approval (FDF)"
+	],
+	"API":[
+		"01. Investigation and route selection",
+		"02. R&D Batch API",
+		"03. Lab scale batch API",
+		"04. RM Procurement",
+		"05. API Trial Batch",
+		"06. API Validation Batches",
+		"07. API Stability loading",
+		"08. API Stability Study",
+		"09. DMF Compilation",
+		"10. DMF Filing USFDA",
+		"11. DMF Filing WHO-PQ",
+		"12. USFDA Approval (API)",
+		"13. WHO-PQ Approval (API)"
+	]
+}

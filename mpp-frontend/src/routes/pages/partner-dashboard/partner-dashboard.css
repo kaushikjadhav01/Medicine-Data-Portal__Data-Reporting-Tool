@@ -1,0 +1,8 @@
+.tile-hover:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.bg {
+    color: #4557cc;
+}

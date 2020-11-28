@@ -1,0 +1,131 @@
+//Profile App Style
+.@{class-prefix}-profile-banner {
+  padding: @layout-main-content-padding;
+  padding-bottom: (3*@layout-main-content-padding - 8);
+  margin: -@layout-main-content-padding;
+  margin-bottom: -(2*@layout-main-content-padding - 6);
+  background-color: @nav-dark-bg;
+  color: @white-color;
+  position: relative;
+
+  @media screen and (max-width: @screen-xs-max) {
+    padding: (@layout-main-content-padding-res + 5px) @layout-main-content-padding-res;
+    padding-bottom: (3*@layout-main-content-padding - 13);
+    margin: -(@layout-main-content-padding-res + 5px) -@layout-main-content-padding-res;
+    margin-bottom: -(2*@layout-main-content-padding - 6);
+  }
+
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-color: fade(@black-color, 30%);
+  }
+
+  & > div {
+    position: relative;
+    z-index: 2;
+  }
+
+  &-top {
+    .flex-display(flex, row, wrap);
+    .align-items(center);
+    margin-bottom: 40px;
+
+    @media (max-width: @screen-xs-max) {
+      .flex-display(flex, column, nowrap);
+      margin-bottom: 25px;
+    }
+  }
+
+  &-top-left {
+    .flex-display(flex, row, wrap);
+    .align-items(center);
+
+    @media (max-width: @screen-xs-max) {
+      .flex-display(flex, column, nowrap);
+      margin-bottom: 25px;
+    }
+  }
+
+  &-avatar {
+    margin-right: 1.5rem;
+
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 8px;
+      margin-right: 0;
+    }
+  }
+
+  &-top-right {
+    text-align: center;
+    margin-left: auto;
+
+    @media (max-width: @screen-xs-max) {
+      margin-left: 0;
+    }
+  }
+
+  &-bottom {
+    .flex-display(flex, row, wrap);
+    .align-items(center);
+
+    @media (max-width: @screen-xs-max) {
+      .flex-display(flex, column, nowrap);
+
+      .@{class-prefix}-tab-list {
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: @white-color;
+  }
+
+  & .@{class-prefix}-link {
+    color: @white-color;
+
+    &:hover,
+    &:focus {
+      color: @secondary-color;
+    }
+  }
+}
+
+.@{class-prefix}-profile-content {
+  position: relative;
+  z-index: 2;
+}
+
+.@{class-prefix}-profile-setting {
+  margin-left: auto;
+
+  @media (max-width: @screen-xs-max) {
+    margin-left: 0;
+  }
+}
+
+.@{class-prefix}-profile-content-right {
+
+  @media (max-width: @screen-xs-max) {
+    .flex-display(flex, row, wrap) !important;
+    .align-items(center) !important;
+
+    .@{class-prefix}-text-truncate {
+      width: auto;
+      margin-left: auto;
+    }
+  }
+}
+
+.@{class-prefix}-pro-contact-list {
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+}

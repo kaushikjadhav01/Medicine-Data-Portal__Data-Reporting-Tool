@@ -1,0 +1,16 @@
+/*Steps Styles*/
+.ant-steps-dot {
+  flex-wrap: wrap;
+  overflow: hidden;
+  padding: 10px 0;
+
+  & .ant-steps-item {
+    margin-bottom: 10px;
+  }
+
+  & .ant-steps-item-description {
+    @media screen and (max-width: @screen-xs-max) {
+      display: none;
+    }
+  }
+}

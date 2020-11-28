@@ -1,0 +1,186 @@
+/*Callout Styles*/
+/*Different size images set in Equal block height and width*/
+
+.@{class-prefix}-thumb-equal,
+.@{class-prefix}-grid-thumb-equal {
+  position: relative;
+  padding-bottom: 68%;
+  height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.@{class-prefix}-thumb-cover,
+.@{class-prefix}-grid-thumb-cover {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.@{class-prefix}-thumb-cover-img,
+.@{class-prefix}-grid-thumb-cover img {
+  height: auto;
+  max-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.@{class-prefix}-grid-thumb-equal {
+
+  .@{class-prefix}-product-image & {
+    padding-bottom: 82%;
+  }
+}
+
+/*Product listing page styles*/
+
+.@{class-prefix}-product-row {
+  position: relative;
+  overflow: hidden;
+  .flex-display(flex, row, wrap);
+  .align-items(center);
+  .justify-content(center);
+  text-align: right;
+
+  &.even {
+    text-align: left;
+  }
+}
+
+.@{class-prefix}-product-col {
+  order: 1;
+  width: 50%;
+}
+
+.odd .@{class-prefix}-product-thumb {
+  order: 2;
+}
+
+.@{class-prefix}-product-content {
+  padding: 20px 55px;
+
+  p {
+    margin-bottom: 10px;
+  }
+}
+
+.@{class-prefix}-product-row .@{class-prefix}-grid-thumb-equal {
+  padding-bottom: 69%;
+}
+
+.@{class-prefix}-product-thumb img {
+  width: 100%;
+}
+
+.@{class-prefix}-product-content h4 {
+  margin-bottom: 25px;
+}
+
+@media screen and (max-width: 1230px) {
+  .@{class-prefix}-product-row .@{class-prefix}-grid-thumb-equal {
+    padding-bottom: 71%;
+  }
+}
+
+@media screen and (max-width: @screen-lg-max) {
+  .@{class-prefix}-product-row {
+    .flex-display(flex, column, nowrap);
+    text-align: center;
+
+    &.even {
+      text-align: center;
+    }
+  }
+
+  .@{class-prefix}-product-content h4 {
+    margin-bottom: 10px;
+  }
+
+  .@{class-prefix}-product-content {
+    padding: 20px 35px;
+  }
+
+  .@{class-prefix}-product-col,
+  .odd .@{class-prefix}-product-thumb {
+    order: 1;
+    width: 100%;
+  }
+
+  .@{class-prefix}-product-row .@{class-prefix}-grid-thumb-equal {
+    padding-bottom: 40%;
+  }
+}
+
+@media screen and (max-width: @screen-md-max) {
+  .@{class-prefix}-product-row {
+    .flex-display(flex, row, wrap);
+    text-align: right;
+
+    &.even {
+      text-align: left;
+    }
+  }
+
+  .@{class-prefix}-grid-thumb-equal {
+    .@{class-prefix}-product-image & {
+      padding-bottom: 120%;
+    }
+  }
+
+  .@{class-prefix}-product-col,
+  .odd .@{class-prefix}-product-thumb {
+    order: 1;
+    width: 50%;
+  }
+
+  .odd .@{class-prefix}-product-thumb {
+    order: 2;
+  }
+
+  .@{class-prefix}-product-row .@{class-prefix}-grid-thumb-equal {
+    padding-bottom: 70%;
+  }
+}
+
+@media screen and (max-width: @screen-sm-max) {
+  .@{class-prefix}-product-row {
+    .flex-display(flex, column, nowrap);
+    text-align: center;
+
+    &.even {
+      text-align: center;
+    }
+
+    &:last-child {
+      & .@{class-prefix}-product-col {
+        padding-bottom: 0;
+      }
+
+      & .ant-btn {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .@{class-prefix}-product-content {
+    padding: 20px 0;
+  }
+
+  .@{class-prefix}-product-col,
+  .odd .@{class-prefix}-product-thumb {
+    order: 1;
+    width: 100%;
+  }
+
+  .@{class-prefix}-product-row .@{class-prefix}-grid-thumb-equal {
+    padding-bottom: 44%;
+  }
+
+  .@{class-prefix}-grid-thumb-equal {
+    .@{class-prefix}-product-image & {
+      padding-bottom: 44%;
+    }
+  }
+}

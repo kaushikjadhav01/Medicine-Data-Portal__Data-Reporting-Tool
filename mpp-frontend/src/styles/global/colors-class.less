@@ -1,0 +1,1530 @@
+@import "variables";
+@import '../../../node_modules/antd/lib/style/color/colors.less';
+
+/* color classes */
+
+// BG ColorPicker
+.@{class-prefix}-bg-primary {
+  background-color: @primary-color !important;
+}
+
+a.@{class-prefix}-bg-primary {
+  &:hover,
+  &:focus {
+    background-color: @primary-color !important;
+  }
+}
+
+.@{class-prefix}-bg-primary-light {
+  background-color: @primary-4 !important;
+}
+
+.@{class-prefix}-bg-secondary {
+  background-color: @secondary-color !important;
+}
+
+a.@{class-prefix}-bg-secondary {
+  &:hover,
+  &:focus {
+    background-color: @secondary-color !important;
+  }
+}
+
+.@{class-prefix}-bg-success {
+  background-color: @success-color !important;
+}
+
+a.@{class-prefix}-bg-success {
+  &:hover,
+  &:focus {
+    background-color: darken(@success-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-success-dark {
+  background-color: darken(@success-color, 15%) !important;
+}
+
+a.@{class-prefix}-bg-success-dark {
+  &:hover,
+  &:focus {
+    background-color: darken(@success-color, 20%) !important;
+  }
+}
+
+.@{class-prefix}-bg-info {
+  background-color: @info-color !important;
+}
+
+a.@{class-prefix}-bg-info {
+  &:hover,
+  &:focus {
+    background-color: darken(@info-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-warning {
+  background-color: @warning-color !important;
+}
+
+a.@{class-prefix}-bg-warning {
+  &:hover,
+  &:focus {
+    background-color: darken(@warning-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-danger {
+  background-color: @danger-color !important;
+}
+
+a.@{class-prefix}-bg-danger {
+  &:hover,
+  &:focus {
+    background-color: darken(@danger-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-light {
+  background-color: @grey-4 !important;
+}
+
+a.@{class-prefix}-bg-light {
+  &:hover,
+  &:focus {
+    background-color: @grey-5 !important;
+  }
+}
+
+.@{class-prefix}-bg-dark {
+  background-color: @black-color !important;
+}
+
+a.@{class-prefix}-bg-dark {
+  &:hover,
+  &:focus {
+    background-color: lighten(@black-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-white {
+  background-color: @white-color !important;
+}
+
+a.@{class-prefix}-bg-white {
+  &:hover,
+  &:focus {
+    background-color: darken(@white-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-bg-grey {
+  background-color: darken(@grey-5, 5%) !important;
+}
+
+a.@{class-prefix}-bg-grey {
+  &:hover,
+  &:focus {
+    background-color: darken(@grey-6, 5%) !important;
+  }
+}
+
+.@{class-prefix}-bg-light-grey {
+  background-color: @grey-2 !important;
+}
+
+.@{class-prefix}-bg-transparent {
+  background-color: transparent !important;
+}
+
+.@{class-prefix}-bg-pink {
+  background-color: @pink-color !important;
+}
+
+a.@{class-prefix}-bg-pink {
+  &:hover,
+  &:focus {
+    background-color: darken(@pink-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-green {
+  background-color: @green-color !important;
+}
+
+a.@{class-prefix}-bg-green {
+  &:hover,
+  &:focus {
+    background-color: darken(@green-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-green-light {
+  background-color: lighten(@green-color, 40%) !important;
+}
+
+a.@{class-prefix}-bg-green-light {
+  &:hover,
+  &:focus {
+    background-color: lighten(@green-color, 20%) !important;
+  }
+}
+
+.@{class-prefix}-bg-red {
+  background-color: @red-color !important;
+}
+
+a.@{class-prefix}-bg-red {
+  &:hover,
+  &:focus {
+    background-color: darken(@red-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-amber {
+  background-color: @amber-color !important;
+}
+
+a.@{class-prefix}-bg-amber {
+  &:hover,
+  &:focus {
+    background-color: darken(@amber-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-amber-light {
+  background-color: lighten(@amber-color, 30%) !important;
+}
+
+a.@{class-prefix}-bg-amber-light {
+  &:hover,
+  &:focus {
+    background-color: lighten(@amber-color, 20%) !important;
+  }
+}
+
+.@{class-prefix}-bg-blue {
+  background-color: @blue-color !important;
+}
+
+a.@{class-prefix}-bg-blue {
+  &:hover,
+  &:focus {
+    background-color: darken(@blue-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-light-blue {
+  background-color: lighten(@blue-color, 5%) !important;
+}
+
+a.@{class-prefix}-bg-light-blue {
+  &:hover,
+  &:focus {
+    background-color: lighten(@blue-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-indigo {
+  background-color: @indigo-color !important;
+}
+
+a.@{class-prefix}-bg-indigo {
+  &:hover,
+  &:focus {
+    background-color: darken(@indigo-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-purple {
+  background-color: @purple-color !important;
+}
+
+a.@{class-prefix}-bg-purple {
+  &:hover,
+  &:focus {
+    background-color: darken(@purple-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-orange {
+  background-color: @orange-color !important;
+}
+
+a.@{class-prefix}-bg-orange {
+  &:hover,
+  &:focus {
+    background-color: darken(@orange-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-yellow {
+  background-color: @yellow-color !important;
+}
+
+a.@{class-prefix}-bg-yellow {
+  &:hover,
+  &:focus {
+    background-color: darken(@yellow-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-teal {
+  background-color: @teal-color !important;
+}
+
+a.@{class-prefix}-bg-teal {
+  &:hover,
+  &:focus {
+    background-color: darken(@teal-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-cyan {
+  background-color: @cyan-color !important;
+}
+
+a.@{class-prefix}-bg-cyan {
+  &:hover,
+  &:focus {
+    background-color: darken(@cyan-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-sepia {
+  background-color: @sepia-color !important;
+}
+
+a.@{class-prefix}-bg-sepia {
+  &:hover,
+  &:focus {
+    background-color: darken(@sepia-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-bg-geekblue {
+  background-color: @geekblue-10 !important;
+}
+
+a.@{class-prefix}-bg-geekblue {
+  &:hover,
+  &:focus {
+    background-color: darken(@geekblue-10, 10%) !important;
+  }
+}
+
+// Text ColorPicker
+.@{class-prefix}-text-white {
+  color: @white-color !important;
+}
+
+.@{class-prefix}-text-primary {
+  color: @primary-color !important;
+}
+
+a.@{class-prefix}-text-primary {
+  &:hover,
+  &:focus {
+    color: @primary-color !important;
+  }
+}
+
+.@{class-prefix}-text-secondary {
+  color: @secondary-color !important;
+}
+
+a.@{class-prefix}-text-secondary {
+  &:hover,
+  &:focus {
+    color: @secondary-color !important;
+  }
+}
+
+.@{class-prefix}-text-success {
+  color: @success-color !important;
+}
+
+a.@{class-prefix}-text-success {
+  &:hover,
+  &:focus {
+    color: darken(@success-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-success-dark {
+  color: darken(@success-color, 15%) !important;
+}
+
+a.@{class-prefix}-text-success-dark {
+  &:hover,
+  &:focus {
+    color: darken(@success-color, 20%) !important;
+  }
+}
+
+.@{class-prefix}-text-info {
+  color: @info-color !important;
+}
+
+a.@{class-prefix}-text-info {
+  &:hover,
+  &:focus {
+    color: darken(@info-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-warning {
+  color: @warning-color !important;
+}
+
+a.@{class-prefix}-text-warning {
+  &:hover,
+  &:focus {
+    color: darken(@warning-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-danger {
+  color: @danger-color !important;
+}
+
+a.@{class-prefix}-text-danger {
+  &:hover,
+  &:focus {
+    color: darken(@danger-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-light {
+  color: darken(@grey-6, 8%) !important;
+}
+
+a.@{class-prefix}-text-light {
+  &:hover,
+  &:focus {
+    color: darken(@grey-7, 8%) !important;
+  }
+}
+
+.@{class-prefix}-text-light-grey {
+  color: darken(@grey-5, 5%) !important;
+}
+
+a.@{class-prefix}-text-light-grey {
+  &:hover,
+  &:focus {
+    color: @grey-6 !important;
+  }
+}
+
+.@{class-prefix}-text-grey {
+  color: @grey-7 !important;
+}
+
+a.@{class-prefix}-text-grey {
+  &:hover,
+  &:focus {
+    color: @grey-9 !important;
+  }
+}
+
+.@{class-prefix}-text-dark {
+  color: @grey-8 !important;
+}
+
+a.@{class-prefix}-text-dark {
+  &:hover,
+  &:focus {
+    color: darken(@grey-8, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-black {
+  color: @black-color !important;
+}
+
+a.@{class-prefix}-text-black {
+  &:hover,
+  &:focus {
+    color: darken(@grey-8, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-pink {
+  color: @pink-color !important;
+}
+
+a.@{class-prefix}-text-pink {
+  &:hover,
+  &:focus {
+    color: darken(@pink-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-green {
+  color: @green-color !important;
+}
+
+a.@{class-prefix}-text-green {
+  &:hover,
+  &:focus {
+    color: darken(@green-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-red {
+  color: @red-color !important;
+}
+
+a.@{class-prefix}-text-red {
+  &:hover,
+  &:focus {
+    color: darken(@red-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-amber {
+  color: @amber-color !important;
+}
+
+a.@{class-prefix}-text-amber {
+  &:hover,
+  &:focus {
+    color: darken(@amber-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-blue {
+  color: @blue-color !important;
+}
+
+a.@{class-prefix}-text-blue {
+  &:hover,
+  &:focus {
+    color: darken(@blue-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-indigo {
+  color: @indigo-color !important;
+}
+
+a.@{class-prefix}-text-indigo {
+  &:hover,
+  &:focus {
+    color: darken(@indigo-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-purple {
+  color: @purple-color !important;
+}
+
+a.@{class-prefix}-text-purple {
+  &:hover,
+  &:focus {
+    color: darken(@purple-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-orange {
+  color: @orange-color !important;
+}
+
+a.@{class-prefix}-text-orange {
+  &:hover,
+  &:focus {
+    color: darken(@orange-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-yellow {
+  color: @yellow-color !important;
+}
+
+a.@{class-prefix}-text-yellow {
+  &:hover,
+  &:focus {
+    color: darken(@yellow-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-teal {
+  color: @teal-color !important;
+}
+
+a.@{class-prefix}-text-teal {
+  &:hover,
+  &:focus {
+    color: darken(@teal-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-cyan {
+  color: @cyan-color !important;
+}
+
+a.@{class-prefix}-text-cyan {
+  &:hover,
+  &:focus {
+    color: darken(@cyan-color, 5%) !important;
+  }
+}
+
+.@{class-prefix}-text-muted {
+  color: @grey-7 !important;
+}
+
+.@{class-prefix}-text-geekblue {
+  color: @geekblue-10 !important;
+}
+
+a.@{class-prefix}-text-geekblue {
+  &:hover,
+  &:focus {
+    color: @geekblue-8 !important;
+  }
+}
+
+.@{class-prefix}-text-sepia {
+  color: @sepia-color !important;
+}
+
+a.@{class-prefix}-text-sepia {
+  &:hover,
+  &:focus {
+    color: @sepia-color !important;
+  }
+}
+
+.@{class-prefix}-icon-white {
+  color: @white-color !important;
+}
+
+// Border ColorPicker
+.@{class-prefix}-border-primary {
+  border-color: @primary-color !important;
+}
+
+.@{class-prefix}-border-secondary {
+  border-color: @secondary-color !important;
+}
+
+.@{class-prefix}-border-success {
+  border-color: @success-color !important;
+}
+
+.@{class-prefix}-border-success-dark {
+  border-color: darken(@success-color, 15%) !important;
+}
+
+.@{class-prefix}-border-info {
+  border-color: @info-color !important;
+}
+
+.@{class-prefix}-border-warning {
+  border-color: @warning-color !important;
+}
+
+.@{class-prefix}-border-danger {
+  border-color: @danger-color !important;
+}
+
+.@{class-prefix}-border-light {
+  border-color: @grey-6 !important;
+}
+
+.@{class-prefix}-border-dark {
+  border-color: @grey-8 !important;
+}
+
+.@{class-prefix}-border-white {
+  border-color: @white-color !important;
+}
+
+.@{class-prefix}-border-grey {
+  border-color: @grey-6 !important;
+}
+
+.@{class-prefix}-border-pink {
+  border-color: @pink-color !important;
+}
+
+.@{class-prefix}-border-green {
+  border-color: @green-color !important;
+}
+
+.@{class-prefix}-border-red {
+  border-color: @red-color !important;
+}
+
+.@{class-prefix}-border-amber {
+  border-color: @amber-color !important;
+}
+
+.@{class-prefix}-border-blue {
+  border-color: @blue-color !important;
+}
+
+.@{class-prefix}-border-indigo {
+  border-color: @indigo-color !important;
+}
+
+.@{class-prefix}-border-purple {
+  border-color: @purple-color !important;
+}
+
+.@{class-prefix}-border-orange {
+  border-color: @orange-color !important;
+}
+
+.@{class-prefix}-border-yellow {
+  border-color: @yellow-color !important;
+}
+
+.@{class-prefix}-border-teal {
+  border-color: @blue-color !important;
+}
+
+.@{class-prefix}-border-cyan {
+  border-color: @cyan-color !important;
+}
+
+.@{class-prefix}-border-sepia {
+  border-color: @sepia-color !important;
+}
+
+.@{class-prefix}-border-geekblue {
+  border-color: @geekblue-10 !important;
+}
+
+// Button ColorPicker
+.@{class-prefix}-btn-primary,
+a.@{class-prefix}-btn-primary,
+.btn-primary {
+  color: @white-color !important;
+  background-color: @primary-color !important;
+  border-color: @primary-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @primary-color !important;
+    border-color: @primary-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @primary-color !important;
+    border-color: @primary-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color;
+    background-color: @primary-color !important;
+    border-color: @primary-color !important;
+  }
+}
+
+.@{class-prefix}-btn-primary-light,
+a.@{class-prefix}-btn-primary-light,
+.btn-primary-light {
+  color: @grey-8 !important;
+  background-color: lighten(@primary-color, 45%) !important;
+  border-color: lighten(@primary-color, 45%) !important;
+
+  &:hover,
+  &:focus {
+    color: @grey-8 !important;
+    background-color: lighten(@primary-color, 30%) !important;
+    border-color: lighten(@primary-color, 30%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: lighten(@primary-color, 50%) !important;
+    border-color: lighten(@primary-color, 50%) !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @grey-8;
+    background-color: lighten(@primary-color, 40%) !important;
+    border-color: lighten(@primary-color, 40%) !important;
+  }
+}
+
+.@{class-prefix}-btn-secondary,
+a.@{class-prefix}-btn-secondary {
+  color: @white-color !important;
+  background-color: @secondary-color !important;
+  border-color: @secondary-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color;
+    background-color: @secondary-color !important;
+    border-color: @secondary-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @secondary-color !important;
+    border-color: @secondary-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color;
+    background-color: @secondary-color !important;
+    border-color: @secondary-color !important;
+  }
+}
+
+.@{class-prefix}-btn-success,
+a.@{class-prefix}-btn-success {
+  color: @white-color !important;
+  background-color: @success-color !important;
+  border-color: @success-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@success-color, 10%) !important;
+    border-color: darken(@success-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @success-color !important;
+    border-color: @success-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@success-color, 10%) !important;
+    border-color: darken(@success-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-btn-success-dark,
+a.@{class-prefix}-btn-success-dark {
+  color: @white-color !important;
+  background-color: darken(@success-color, 15%) !important;
+  border-color: darken(@success-color, 15%) !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@success-color, 20%) !important;
+    border-color: darken(@success-color, 20%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @success-color !important;
+    border-color: @success-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@success-color, 20%) !important;
+    border-color: darken(@success-color, 20%) !important;
+  }
+}
+
+.@{class-prefix}-btn-info,
+a.@{class-prefix}-btn-info {
+  color: @white-color !important;
+  background-color: @info-color !important;
+  border-color: @info-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@info-color, 10%) !important;
+    border-color: darken(@info-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @info-color !important;
+    border-color: @info-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@info-color, 10%) !important;
+    border-color: darken(@info-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-btn-warning,
+a.@{class-prefix}-btn-warning {
+  color: @white-color !important;
+  background-color: @warning-color !important;
+  border-color: @warning-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@warning-color, 10%) !important;
+    border-color: darken(@warning-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @warning-color !important;
+    border-color: @warning-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@warning-color, 10%) !important;
+    border-color: darken(@warning-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-btn-yellow,
+a.@{class-prefix}-btn-yellow {
+  color: @grey-9 !important;
+  background-color: @yellow-color !important;
+  border-color: @yellow-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@yellow-color, 10%) !important;
+    border-color: darken(@yellow-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @yellow-color !important;
+    border-color: @yellow-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@yellow-color, 10%) !important;
+    border-color: darken(@yellow-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-btn-danger,
+a.@{class-prefix}-btn-danger,
+.@{class-prefix}-btn-red,
+a.@{class-prefix}-btn-red {
+  color: @white-color !important;
+  background-color: @danger-color !important;
+  border-color: @danger-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@danger-color, 10%) !important;
+    border-color: darken(@danger-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @danger-color !important;
+    border-color: @danger-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@danger-color, 10%) !important;
+    border-color: darken(@danger-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-btn-light,
+a.@{class-prefix}-btn-light {
+  color: @grey-7 !important;
+  background-color: @grey-4 !important;
+  border-color: @grey-4 !important;
+
+  &:hover,
+  &:focus {
+    color: @grey-7 !important;
+    background-color: @grey-5 !important;
+    border-color: @grey-5 !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @grey-3 !important;
+    border-color: @grey-3 !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @grey-9 !important;
+    background-color: @grey-4 !important;
+    border-color: @grey-4 !important;
+  }
+}
+
+.@{class-prefix}-btn-dark,
+a.@{class-prefix}-btn-dark {
+  color: @white-color !important;
+  background-color: @dark-color !important;
+  border-color: @dark-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@dark-color, 10%) !important;
+    border-color: darken(@dark-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @dark-color !important;
+    border-color: @dark-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@dark-color, 10%) !important;
+    border-color: darken(@dark-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-btn-purple,
+a.@{class-prefix}-btn-purple {
+  color: @white-color !important;
+  background-color: @purple-color !important;
+  border-color: @purple-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@purple-color, 10%) !important;
+    border-color: darken(@purple-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @purple-color !important;
+    border-color: @purple-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@purple-color, 10%) !important;
+    border-color: darken(@purple-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-btn-sepia,
+a.@{class-prefix}-btn-sepia {
+  color: @white-color !important;
+  background-color: @sepia-color !important;
+  border-color: @sepia-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@sepia-color, 15%) !important;
+    border-color: darken(@sepia-color, 15%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @sepia-color !important;
+    border-color: @sepia-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@sepia-color, 15%) !important;
+    border-color: darken(@sepia-color, 15%) !important;
+  }
+}
+
+.@{class-prefix}-btn-geekblue,
+a.@{class-prefix}-btn-geekblue {
+  color: @white-color !important;
+  background-color: @geekblue-8 !important;
+  border-color: @geekblue-8 !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@geekblue-8, 10%) !important;
+    border-color: darken(@geekblue-8, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @geekblue-8 !important;
+    border-color: @geekblue-8 !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@geekblue-8, 15%) !important;
+    border-color: darken(@geekblue-8, 15%) !important;
+  }
+}
+
+.@{class-prefix}-btn-cyan,
+a.@{class-prefix}-btn-cyan {
+  color: @white-color !important;
+  background-color: @cyan-color !important;
+  border-color: @cyan-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@cyan-color, 10%) !important;
+    border-color: darken(@cyan-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @cyan-color !important;
+    border-color: @cyan-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@cyan-color, 12%) !important;
+    border-color: darken(@cyan-color, 12%) !important;
+  }
+}
+
+.@{class-prefix}-btn-white,
+a.@{class-prefix}-btn-white {
+  color: @text-color !important;
+  background-color: @white-color !important;
+  border-color: @white-color !important;
+
+  &:hover,
+  &:focus {
+    color: @text-color !important;
+    background-color: darken(@white-color, 10%) !important;
+    border-color: darken(@white-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @white-color !important;
+    border-color: @white-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @text-color !important;
+    background-color: darken(@white-color, 10%) !important;
+    border-color: darken(@white-color, 10%) !important;
+  }
+}
+
+.@{class-prefix}-btn-orange,
+a.@{class-prefix}-btn-orange {
+  color: @white-color !important;
+  background-color: @orange-color !important;
+  border-color: @orange-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@orange-color, 10%) !important;
+    border-color: darken(@orange-color, 10%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    background-color: @orange-color !important;
+    border-color: @orange-color !important;
+  }
+
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    color: @white-color !important;
+    background-color: darken(@orange-color, 12%) !important;
+    border-color: darken(@orange-color, 12%) !important;
+  }
+}
+
+//Btn Outline
+.@{class-prefix}-btn-outline-primary,
+a.@{class-prefix}-btn-outline-primary {
+  color: @primary-color !important;
+  background-color: transparent !important;
+  border-color: @primary-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @primary-color !important;
+    border-color: @primary-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @primary-color !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-secondary,
+a.@{class-prefix}-btn-outline-secondary {
+  color: @secondary-color !important;
+  background-color: transparent !important;
+  border-color: @secondary-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @secondary-color !important;
+    border-color: @secondary-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @secondary-color !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-success,
+a.@{class-prefix}-btn-outline-success {
+  color: @success-color !important;
+  background-color: transparent !important;
+  border-color: @success-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @success-color !important;
+    border-color: @success-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @success-color !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-success-dark,
+a.@{class-prefix}-btn-outline-success-dark {
+  color: @success-color !important;
+  background-color: transparent !important;
+  border-color: darken(@success-color, 15%) !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: darken(@success-color, 20%) !important;
+    border-color: darken(@success-color, 20%) !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: darken(@success-color, 20%) !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-info,
+a.@{class-prefix}-btn-outline-info {
+  color: @info-color !important;
+  background-color: transparent !important;
+  border-color: @info-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @info-color !important;
+    border-color: @info-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @info-color !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-warning,
+a.@{class-prefix}-btn-outline-warning {
+  color: @warning-color !important;
+  background-color: transparent !important;
+  border-color: @warning-color !important;
+
+  &:hover,
+  &:focus {
+    color: @grey-9 !important;
+    background-color: @warning-color !important;
+    border-color: @warning-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @warning-color !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-danger,
+a.@{class-prefix}-btn-outline-danger,
+.@{class-prefix}-btn-outline-red,
+a.@{class-prefix}-btn-outline-red {
+  color: @danger-color !important;
+  background-color: transparent !important;
+  border-color: @danger-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @danger-color !important;
+    border-color: @danger-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @danger-color !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-light,
+a.@{class-prefix}-btn-outline-light {
+  color: @grey-7 !important;
+  background-color: transparent !important;
+  border-color: @grey-5 !important;
+
+  &:hover,
+  &:focus {
+    color: @grey-7 !important;
+    background-color: @grey-5 !important;
+    border-color: @grey-5 !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @grey-4 !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-dark,
+a.@{class-prefix}-btn-outline-dark {
+  color: @grey-9 !important;
+  background-color: transparent !important;
+  border-color: @grey-9 !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @grey-9 !important;
+    border-color: @grey-9 !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @grey-9 !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-sepia,
+a.@{class-prefix}-btn-outline-sepia {
+  color: @white-color !important;
+  background-color: transparent !important;
+  border-color: @sepia-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @sepia-color !important;
+    border-color: @sepia-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @sepia-color !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-geekblue,
+a.@{class-prefix}-btn-outline-geekblue {
+  color: @white-color !important;
+  background-color: transparent !important;
+  border-color: @geekblue-10 !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @geekblue-10 !important;
+    border-color: @geekblue-10 !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @geekblue-6 !important;
+    background-color: transparent !important;
+  }
+}
+
+.@{class-prefix}-btn-outline-orange,
+a.@{class-prefix}-btn-outline-orange {
+  color: @white-color !important;
+  background-color: transparent !important;
+  border-color: @orange-color !important;
+
+  &:hover,
+  &:focus {
+    color: @white-color !important;
+    background-color: @orange-color !important;
+    border-color: @orange-color !important;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: @orange-color !important;
+    background-color: transparent !important;
+  }
+}
+
+// Badge ColorPicker
+.@{class-prefix}-badge-primary {
+  background-color: @primary-color !important;
+}
+
+.@{class-prefix}-badge-primary-light {
+  background-color: @primary-4 !important;
+}
+
+.@{class-prefix}-badge-secondary {
+  background-color: @secondary-color !important;
+}
+
+.@{class-prefix}-badge-success {
+  background-color: @success-color !important;
+}
+
+.@{class-prefix}-badge-success-dark {
+  background-color: darken(@success-color, 15%) !important;
+}
+
+.@{class-prefix}-badge-info {
+  background-color: @info-color !important;
+}
+
+.@{class-prefix}-badge-warning {
+  background-color: @warning-color !important;
+}
+
+.@{class-prefix}-badge-danger {
+  background-color: @danger-color !important;
+}
+
+.@{class-prefix}-badge-light {
+  background-color: @grey-4 !important;
+}
+
+.@{class-prefix}-badge-dark {
+  background-color: @black-color !important;
+}
+
+.@{class-prefix}-badge-white {
+  background-color: @white-color !important;
+}
+
+.@{class-prefix}-badge-grey {
+  background-color: @grey-6 !important;
+}
+
+.@{class-prefix}-badge-light-grey {
+  background-color: @grey-5 !important;
+}
+
+.@{class-prefix}-badge-pink {
+  background-color: @pink-color !important;
+}
+
+.@{class-prefix}-badge-green {
+  background-color: @green-color !important;
+}
+
+.@{class-prefix}-badge-green-light {
+  background-color: lighten(@green-color, 40%) !important;
+}
+
+.@{class-prefix}-badge-red {
+  background-color: @red-color !important;
+}
+
+.@{class-prefix}-badge-amber {
+  background-color: @amber-color !important;
+}
+
+.@{class-prefix}-badge-amber-light {
+  background-color: lighten(@amber-color, 30%) !important;
+}
+
+.@{class-prefix}-badge-blue {
+  background-color: @blue-color !important;
+}
+
+.@{class-prefix}-badge-light-blue {
+  background-color: lighten(@blue-color, 5%) !important;
+}
+
+.@{class-prefix}-badge-indigo {
+  background-color: @indigo-color !important;
+}
+
+.@{class-prefix}-badge-purple {
+  background-color: @purple-color !important;
+}
+
+.@{class-prefix}-badge-orange {
+  background-color: @orange-color !important;
+}
+
+.@{class-prefix}-badge-yellow {
+  background-color: @yellow-color !important;
+}
+
+.@{class-prefix}-badge-teal {
+  background-color: @teal-color !important;
+}
+
+.@{class-prefix}-badge-cyan {
+  background-color: @cyan-color !important;
+}
+
+.@{class-prefix}-badge-sepia {
+  background-color: @sepia-color !important;
+}
+
+.@{class-prefix}-badge-geekblue {
+  background-color: @geekblue-10 !important;
+}
+
+
+
+
+
+
+

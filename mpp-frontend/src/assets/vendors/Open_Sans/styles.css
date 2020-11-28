@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'OpenSans';
+    src: url('OpenSans-Light.eot');
+    src: url('OpenSans-Light.eot?#iefix') format('embedded-opentype'), url('OpenSans-Light.otf') format('opentype'), url('OpenSans-Light.svg') format('svg'), url('OpenSans-Light.ttf') format('truetype'), url('OpenSans-Light.woff') format('woff'), url('OpenSans-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenSans';
+    src: url('OpenSans-Regular.eot');
+    src: url('OpenSans-Regular.eot?#iefix') format('embedded-opentype'), url('OpenSans-Regular.otf') format('opentype'), url('OpenSans-Regular.svg') format('svg'), url('OpenSans-Regular.ttf') format('truetype'), url('OpenSans-Regular.woff') format('woff'), url('OpenSans-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenSans';
+    src: url('OpenSans-SemiBold.eot');
+    src: url('OpenSans-SemiBold.eot?#iefix') format('embedded-opentype'), url('OpenSans-SemiBold.otf') format('opentype'), url('OpenSans-SemiBold.svg') format('svg'), url('OpenSans-SemiBold.ttf') format('truetype'), url('OpenSans-SemiBold.woff') format('woff'), url('OpenSans-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenSans';
+    src: url('OpenSans-Bold.eot');
+    src: url('OpenSans-Bold.eot?#iefix') format('embedded-opentype'), url('OpenSans-Bold.otf') format('opentype'), url('OpenSans-Bold.svg') format('svg'), url('OpenSans-Bold.ttf') format('truetype'), url('OpenSans-Bold.woff') format('woff'), url('OpenSans-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenSans';
+    src: url('OpenSans-ExtraBold.eot');
+    src: url('OpenSans-ExtraBold.eot?#iefix') format('embedded-opentype'), url('OpenSans-ExtraBold.otf') format('opentype'), url('OpenSans-ExtraBold.svg') format('svg'), url('OpenSans-ExtraBold.ttf') format('truetype'), url('OpenSans-ExtraBold.woff') format('woff'), url('OpenSans-ExtraBold.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+}

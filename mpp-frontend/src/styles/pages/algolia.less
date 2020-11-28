@@ -1,0 +1,216 @@
+/*Algolia Styles*/
+.@{class-prefix}-algolia-sidebar {
+  .box-shadow(@gx-card-shadow);
+  .border-radius(@border-radius-lg);
+  margin-bottom: @gx-card-margin-base;
+  width: @sidebar-width !important;
+
+  @media screen and (max-width: @screen-sm-max) {
+    width: 100% !important;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    margin-bottom: @gx-card-margin-base-res;
+  }
+
+  & [class^="ais-"] {
+    font-size: @font-size-base;
+  }
+
+  &-content {
+    padding: @gx-card-padding-base;
+  }
+
+  & .ais-ClearRefinements {
+    margin-bottom: 20px;
+  }
+
+  & .ais-HierarchicalMenu {
+    margin-bottom: 20px;
+
+    &-list li {
+      margin-bottom: 5px;
+
+      & a {
+        color: @text-color;
+
+        &:hover,
+        &:focus {
+          color: @primary-color;
+        }
+      }
+    }
+
+    &-count {
+      padding: 0 5px;
+      font-size: @font-size-sm;
+      color: @grey-7;
+      background-color: transparent;
+      border-radius: 0;
+    }
+  }
+
+  & .ais-Panel {
+    margin-bottom: 20px;
+  }
+
+  & .ais-Panel-header {
+    margin-bottom: 8px;
+    padding-bottom: 0;
+    font-size: @font-size-base;
+    font-weight: @font-weight-semi-bold;
+    text-transform: uppercase;
+    border-bottom: 0 none;
+  }
+
+  & .ais-RefinementList {
+    &-list li {
+      margin-bottom: 5px;
+    }
+
+    &-checkbox {
+      margin-right: 12px;
+    }
+
+    &-labelText {
+      font-size: @font-size-base;
+    }
+
+    &-count {
+      padding: 0 5px;
+      font-size: @font-size-base;
+      color: @grey-7;
+      background-color: transparent;
+      border-radius: 0;
+    }
+  }
+
+  & .ais-HierarchicalMenu-list {
+    & .ais-Breadcrumb-item--selected,
+    & .ais-HierarchicalMenu-item--selected,
+    & .ais-Menu-item--selected {
+      font-weight: normal;
+
+      & > a {
+        color: @primary-color;
+      }
+    }
+  }
+
+  & .ais-RatingMenu-item--selected {
+    font-weight: @font-weight-semi-bold;
+  }
+}
+
+.@{class-prefix}-algolia {
+
+  &-layout-has-sider {
+    flex-wrap: nowrap;
+
+    @media screen and (max-width: @screen-sm-max) {
+      flex-wrap: wrap;
+    }
+  }
+
+  &-category {
+    &-title {
+      font-size: @font-size-base;
+      margin-bottom: 10px;
+      color: @grey-7;
+    }
+  }
+
+  &-main {
+    .flex-display(flex, column, nowrap);
+    width: 100%;
+    .flex-only(1);
+    padding-left: @gx-card-padding-base + 6px;
+    margin-bottom: @gx-card-margin-base;
+
+    & [class^="ais-"] {
+      font-size: @font-size-base;
+    }
+
+    @media screen and (max-width: @screen-sm-max) {
+      padding-left: 0;
+    }
+
+    @media screen and (max-width: @screen-xs-max) {
+      margin-bottom: @gx-card-margin-base-res;
+    }
+  }
+
+  &-header {
+    .flex-display(flex, row, wrap);
+    margin-bottom: 20px;
+  }
+
+  &-sort-by {
+    margin-left: auto;
+    .flex-display(flex, row, wrap);
+    .align-items(center);
+
+    & label {
+      margin-right: 15px;
+    }
+
+    @media screen and (max-width: (@screen-xs-max - 175px)) {
+      margin-left: 0;
+    }
+  }
+
+  &-footer {
+    padding: 10px;
+
+    .ais-Pagination-list {
+      flex-wrap: wrap;
+    }
+
+    .ais-Pagination-list li {
+      margin-bottom: 5px;
+    }
+  }
+
+  &-content {
+    & .ais-Stats {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.@{class-prefix}-product-name [class^="ais-"] {
+  font-size: @font-size-lg;
+}
+
+.@{class-prefix}-algolia-refinementList {
+  width: 100%;
+
+  & li.ais-RefinementList-item {
+    .gx-text-truncate;
+  }
+}
+
+.ais-RangeInput-submit, .ais-ClearRefinements-button, .ais-CurrentRefinements-reset, .ais-GeoSearch-redo, .ais-GeoSearch-reset, .ais-HierarchicalMenu-showMore, .ais-InfiniteHits-loadMore, .ais-InfiniteResults-loadMore, .ais-Menu-showMore, .ais-RefinementList-showMore {
+  background-color: @primary-color;
+
+  &:focus,
+  &:hover {
+    background-color: @primary-color;
+  }
+}
+
+.ais-Breadcrumb-link, .ais-HierarchicalMenu-link, .ais-Menu-link, .ais-Pagination-link, .ais-RatingMenu-link {
+  color: @primary-color;
+
+  &:focus,
+  &:hover {
+    color: @primary-color;
+  }
+}
+
+.ais-Pagination-item--selected .ais-Pagination-link {
+  background-color: @primary-color;
+  border-color: @primary-color;
+}
+
+

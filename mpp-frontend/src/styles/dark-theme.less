@@ -1,0 +1,2964 @@
+//global style variables
+@dark-theme-primary-color: #38424B;
+@dark-theme-secondary-color: lighten(@dark-theme-primary-color, 10%);
+@dark-theme-text-color: #E0E0E0;
+@dark-theme-heading-color: lighten(@dark-theme-text-color, 5%);
+@dark-theme-sidebar-dark-bg: darken(@dark-theme-primary-color, 2%);
+@dark-theme-component-background: #434f5a;
+@dark-theme-sidebar-dark-text-color: #a1a1a1;
+@dark-theme-sidebar-dark-bg-darken: lighten(@dark-theme-sidebar-dark-bg, 6%);
+@dark-theme-sidebar-dark-hover-color: @dark-theme-component-background;
+@dark-theme-border-color: #495762;
+
+/*Base Styles*/
+body.dark-theme {
+  &.framed-layout,
+  &.boxed-layout {
+    background-color: darken(@dark-theme-primary-color, 10%);
+  }
+}
+
+.dark-theme {
+  color: @dark-theme-text-color;
+  background-color: @dark-theme-primary-color;
+
+  & .@{class-prefix}-link {
+    color: darken(@dark-theme-text-color, 10%);
+  }
+
+  & .@{class-prefix}-link:hover,
+  & .@{class-prefix}-link:focus {
+    color: lighten(@dark-theme-text-color, 3%);
+  }
+
+  & .@{class-prefix}-social-link {
+    & li .@{class-prefix}-link {
+      color: @dark-theme-text-color;
+    }
+
+    & li.active .@{class-prefix}-link,
+    & li .@{class-prefix}-link:hover,
+    & li .@{class-prefix}-link:focus {
+      color: lighten(@dark-theme-text-color, 30%);
+    }
+  }
+
+  & h1, & h2, & h3, & h4, & h5, & h6,
+  & .h1, & .h2, & .h3, & .h4, & .h5, & .h6 {
+    color: @dark-theme-heading-color;
+  }
+
+  & .ant-modal h1, & .ant-modal h2, & .ant-modal h3, & .ant-modal h4, & .ant-modal h5, & .ant-modal h6,
+  & .ant-modal .h1, & .ant-modal .h2, & .ant-modal .h3, & .ant-modal .h4, & .ant-modal .h5, & .ant-modal .h6 {
+    color: @dark-theme-primary-color;
+  }
+
+  & .@{class-prefix}-drawer-sidebar-dark .ant-drawer-content {
+    background-color: @dark-theme-sidebar-dark-bg;
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-drawer-right .ant-drawer-content-wrapper,
+  & .ant-drawer-right .ant-drawer-content {
+    background: @dark-theme-primary-color;
+  }
+
+  & .ant-drawer-close {
+    color: @dark-theme-text-color;
+
+    &:hover,
+    &:focus {
+      color: @white-color;
+    }
+  }
+
+  & .ant-layout,
+  & .ant-layout.ant-layout-has-sider > .ant-layout {
+    background: @dark-theme-primary-color;
+  }
+
+  & .ant-layout-header {
+    background: @dark-theme-primary-color;
+    color: @dark-theme-text-color;
+  }
+
+  & .@{class-prefix}-news-content {
+    color: @dark-theme-text-color;
+  }
+
+  & .@{class-prefix}-header-horizontal {
+    background: darken(@dark-theme-primary-color, 5%);
+  }
+
+  & .@{class-prefix}-header-horizontal-main {
+    color: @dark-theme-text-color;
+    background: none;
+  }
+
+  & .@{class-prefix}-header-horizontal-dark {
+    &:before {
+      background: lighten(@dark-theme-primary-color, 5%);
+    }
+
+    & .@{class-prefix}-header-search .@{class-prefix}-lt-icon-search-bar-lg input[type="search"] {
+      border-color: @border-color;
+    }
+  }
+
+  & .@{class-prefix}-above-header-horizontal .@{class-prefix}-header-horizontal-nav-curve {
+
+    & .ant-menu-horizontal > .ant-menu-item:hover > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu:hover > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-active > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-active > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-open > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-open > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-selected > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-selected > .ant-menu-submenu-title:before {
+      color: darken(@dark-theme-primary-color, 5%);
+    }
+
+    & .ant-menu-horizontal > .ant-menu-submenu:hover > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-active > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-active > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-open > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-open > .ant-menu-submenu-title:before {
+      color: @menu-dark-highlight-color;
+    }
+  }
+
+  & .@{class-prefix}-below-header-horizontal .@{class-prefix}-header-horizontal-nav-curve,
+  & .@{class-prefix}-inside-header-horizontal .@{class-prefix}-header-horizontal-nav-curve {
+
+    & .ant-menu-horizontal > .ant-menu-item:hover > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu:hover > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-active > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-active > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-open > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-open > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-selected > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-selected > .ant-menu-submenu-title:before {
+      color: @dark-theme-primary-color;
+    }
+
+    & .ant-menu-horizontal > .ant-menu-submenu:hover > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-active > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-active > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-item-open > .ant-menu-submenu-title:before,
+    & .ant-menu-horizontal > .ant-menu-submenu-open > .ant-menu-submenu-title:before {
+      color: @menu-dark-highlight-color;
+    }
+  }
+
+  & .@{class-prefix}-menu-horizontal {
+    & .ant-menu-submenu:hover > .ant-menu-submenu-title,
+    & .ant-menu-item-active > .ant-menu-submenu-title,
+    & .ant-menu-submenu-active > .ant-menu-submenu-title,
+    & .ant-menu-item-open > .ant-menu-submenu-title,
+    & .ant-menu-submenu-open > .ant-menu-submenu-title {
+      color: @menu-dark-highlight-color;
+    }
+  }
+
+  & .ant-layout-footer {
+    background: @dark-theme-primary-color;
+    color: @dark-theme-text-color;
+    border-top-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-nav-header {
+    background-color: @dark-theme-primary-color;
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  & .ant-menu {
+    color: @dark-theme-text-color;
+    background: @dark-theme-sidebar-dark-bg;
+  }
+
+  & .ant-menu-inline,
+  & .ant-menu-vertical,
+  & .ant-menu-vertical-left {
+    border-right-color: @dark-theme-border-color;
+  }
+
+  & .ant-menu-dark {
+    color: @dark-theme-text-color;
+    background: @dark-theme-sidebar-dark-bg;
+
+    & .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
+    & .ant-menu-submenu-title .ant-menu-submenu-arrow:before {
+      background: @white-color;
+    }
+  }
+
+  & .ant-menu-submenu-title {
+    &:hover {
+      color: @menu-dark-highlight-color;
+    }
+  }
+
+  & .ant-menu-dark .ant-menu-submenu-selected .ant-menu-sub .ant-menu-submenu-title {
+    color: @dark-theme-text-color;
+
+    &:hover {
+      color: @menu-dark-highlight-color;
+    }
+  }
+
+  & .ant-menu-dark .ant-menu-sub {
+    color: @dark-theme-text-color;
+    background: none;
+
+    & .ant-menu-submenu-title .ant-menu-submenu-arrow:after,
+    & .ant-menu-submenu-title .ant-menu-submenu-arrow:before {
+      background: @white-color;
+    }
+
+    & .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:after,
+    & .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:before {
+      background: @menu-dark-highlight-color;
+    }
+  }
+
+  & .ant-menu-item > a {
+    color: @dark-theme-text-color;
+
+    &:hover {
+      color: @menu-dark-highlight-color;
+    }
+  }
+
+  & .ant-menu-item-selected > a:hover {
+    color: @menu-dark-highlight-color;
+  }
+
+  & .ant-menu-dark.ant-menu-submenu-popup,
+  & .ant-menu-submenu-popup {
+    background: @dark-theme-primary-color;
+    .border-radius(@border-radius-lg);
+  }
+
+  & .ant-menu-dark.ant-menu-submenu-popup .ant-menu-sub {
+
+    & .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:after,
+    & .ant-menu-submenu-title:hover .ant-menu-submenu-arrow:before {
+      background: @white-color;
+    }
+  }
+
+  & .ant-menu-submenu-popup.ant-menu-light .ant-menu-submenu-open > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
+  & .ant-menu-submenu-popup.ant-menu-light .ant-menu-submenu-open > .ant-menu-submenu-title .ant-menu-submenu-arrow::after {
+    background: @menu-dark-highlight-color;
+  }
+
+  & .ant-menu-dark.ant-menu-horizontal {
+    border-bottom-color: @dark-theme-sidebar-dark-bg;
+  }
+
+  & .ant-menu-dark.ant-menu-horizontal > .ant-menu-item,
+  & .ant-menu-dark.ant-menu-horizontal > .ant-menu-submenu {
+    border-color: @dark-theme-sidebar-dark-bg;
+  }
+
+  & .ant-menu-horizontal {
+    border-bottom-color: @dark-theme-border-color;
+    background: @dark-theme-primary-color;
+  }
+
+  & .@{class-prefix}-header-horizontal-nav .ant-menu-horizontal {
+    background: none;
+  }
+
+  & .ant-menu-horizontal > .ant-menu-item:hover,
+  & .ant-menu-horizontal > .ant-menu-submenu:hover,
+  & .ant-menu-horizontal > .ant-menu-item-active,
+  & .ant-menu-horizontal > .ant-menu-submenu-active,
+  & .ant-menu-horizontal > .ant-menu-item-open,
+  & .ant-menu-horizontal > .ant-menu-submenu-open,
+  & .ant-menu-horizontal > .ant-menu-item-selected,
+  & .ant-menu-horizontal > .ant-menu-submenu-selected {
+    border-bottom-color: @dark-theme-text-color;
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-menu-horizontal > .ant-menu-item > a,
+  & .ant-menu-horizontal > .ant-menu-submenu > a {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: lighten(@dark-theme-component-background, 5%);
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-layout-sider .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: fade(@white-color, 12%);
+  }
+
+  & .ant-layout-sider.@{class-prefix}-mini-custom-sidebar .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: transparent;
+
+    & > a:hover {
+      color: @menu-dark-bg;
+    }
+  }
+
+  & .ant-menu-submenu > .ant-menu,
+  & .ant-menu-item:active,
+  & .ant-menu-submenu-title:active {
+    background-color: lighten(@dark-theme-component-background, 5%);
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-layout-sider .ant-menu-submenu > .ant-menu,
+  & .ant-layout-sider .ant-menu-item:active,
+  & .ant-layout-sider .ant-menu-submenu-title:active {
+    background-color: transparent;
+  }
+
+  & .ant-menu-item-group-title,
+  & .ant-menu-item-selected,
+  & .ant-menu-submenu-selected .ant-menu-submenu-title {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-menu-item:hover,
+  & .ant-menu-item-active,
+  & .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+  & .ant-menu-submenu-active {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-menu-item-disabled,
+  & .ant-menu-submenu-disabled {
+    color: darken(@dark-theme-text-color, 25%) !important;
+  }
+
+  & .ant-menu-dark .ant-menu-item-group-title {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-menu-dark .ant-menu-item {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-menu-dark .ant-menu-item > a {
+    color: @white-color;
+
+    &:hover {
+      color: @menu-dark-highlight-color;
+    }
+  }
+
+  & .ant-menu-dark .ant-menu-item-selected > a {
+    color: @menu-dark-highlight-color;
+  }
+
+  & .ant-menu-submenu-horizontal {
+    & > .ant-menu-submenu-title {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .ant-menu-submenu-vertical > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
+  & .ant-menu-submenu-vertical-left > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
+  & .ant-menu-submenu-vertical-right > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
+  & .ant-menu-submenu-inline > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
+  & .ant-menu-submenu-vertical > .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
+  & .ant-menu-submenu-vertical-left > .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
+  & .ant-menu-submenu-vertical-right > .ant-menu-submenu-title .ant-menu-submenu-arrow::after,
+  & .ant-menu-submenu-inline > .ant-menu-submenu-title .ant-menu-submenu-arrow::after {
+    background: @white-color;
+  }
+
+  & .ant-menu-vertical .ant-menu-item::after,
+  & .ant-menu-vertical-left .ant-menu-item::after,
+  & .ant-menu-vertical-right .ant-menu-item::after,
+  & .ant-menu-inline .ant-menu-item::after {
+    border-right-color: darken(@dark-theme-border-color, 30%);
+  }
+
+  & .ant-layout-sider,
+  & .@{class-prefix}-layout-sider-dark {
+    background-color: @dark-theme-sidebar-dark-bg;
+    color: @dark-theme-sidebar-dark-text-color;
+    .box-shadow(0px 0 4px rgba(0, 0, 0, 0.35));
+  }
+
+  & .@{class-prefix}-task-list-item {
+
+    &:not(:last-child) {
+      border-bottom-color: @dark-theme-border-color;
+    }
+
+    &:hover .gx-text-hover {
+      color: darken(@dark-theme-text-color, 10%);
+    }
+  }
+
+  & .@{class-prefix}-card-ticketlist .@{class-prefix}-task-list-item {
+
+    &:hover {
+      background-color: transparent;
+
+      & .@{class-prefix}-task-item-title {
+        color: lighten(@dark-theme-text-color, 3%);
+      }
+    }
+  }
+
+  & .@{class-prefix}-card-testimonial-content {
+    background-color: @dark-theme-primary-color;
+
+    &:before {
+      border-right-color: @dark-theme-primary-color;
+    }
+  }
+
+  & .@{class-prefix}-progress-task-list {
+    & + .@{class-prefix}-progress-task-list {
+      border-top-color: @dark-theme-border-color;
+    }
+  }
+
+  & .@{class-prefix}-card-ticketlist {
+    & .@{class-prefix}-link {
+      color: darken(@dark-theme-text-color, 10%);
+    }
+  }
+
+  & .@{class-prefix}-overview-description {
+    border-left-color: @dark-theme-border-color;
+
+    @media screen and (max-width: @screen-sm-max) {
+      border-top-color: @dark-theme-border-color;
+      border-bottom-color: @dark-theme-border-color;
+    }
+  }
+
+  & .@{class-prefix}-revenu {
+
+    &-total {
+      border-bottom-color: @dark-theme-border-color;
+    }
+
+    &-col:not(:last-child) {
+      border-right-color: @dark-theme-border-color;
+    }
+  }
+
+  & .@{class-prefix}-product-item {
+    background: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-login-content {
+    background-color: @dark-theme-component-background;
+
+    & .ant-input {
+      background-color: @grey-6;
+
+      &:focus {
+        border-color: @dark-theme-primary-color;
+      }
+    }
+  }
+
+  & .@{class-prefix}-app-login-main-content {
+    background-color: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-app-login-content .ant-input {
+    background-color: @grey-6;
+
+    &:focus {
+      border-color: @dark-theme-primary-color;
+    }
+  }
+
+  & .@{class-prefix}-app-logo-content {
+    color: @dark-theme-text-color;
+
+    &:before {
+      background-color: fade(@dark-theme-primary-color, 70%);
+    }
+
+    & h1 {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .@{class-prefix}-app-social-block {
+
+    & .@{class-prefix}-social-link span {
+      border-color: @dark-theme-primary-color;
+      color: @dark-theme-primary-color;
+
+      &:hover,
+      &:focus {
+        color: @dark-theme-text-color;
+        background-color: @dark-theme-primary-color;
+      }
+    }
+  }
+
+  & .@{class-prefix}-avatar-img,
+  & .@{class-prefix}-avatar,
+  & .@{class-prefix}-badge-outline {
+    border-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-btn,
+  & .btn {
+    color: @btn-default-color;
+    border-color: @btn-default-border;
+  }
+
+  & .@{class-prefix}-sub-popover .@{class-prefix}-btn,
+  & .@{class-prefix}-sub-popover .btn {
+    &:focus,
+    &:hover {
+      background-color: @dark-theme-text-color;
+    }
+  }
+
+  & .@{class-prefix}-btn-link {
+    color: darken(@dark-theme-text-color, 10%);
+    background-color: transparent;
+
+    &:hover {
+      color: lighten(@dark-theme-text-color, 3%);
+    }
+  }
+
+  & .@{class-prefix}-ant-card-actions > li {
+    &:not(:last-child) {
+      border-right-color: @dark-theme-border-color;
+    }
+  }
+
+  & .ant-card {
+    color: @dark-theme-text-color;
+    background: @dark-theme-component-background;
+
+    &-bordered {
+      border-color: @dark-theme-border-color;
+    }
+
+    &-head {
+      border-color: @dark-theme-border-color;
+
+      &-title {
+        color: @dark-theme-text-color;
+      }
+    }
+
+    &-type-inner .ant-card-head {
+      background: @dark-theme-component-background;
+    }
+
+    &-meta-title,
+    &-meta-description {
+      color: @dark-theme-text-color;
+    }
+
+    &-actions {
+      border-top-color: @dark-theme-border-color;
+      background: @dark-theme-component-background;
+
+      > li {
+        color: @dark-theme-text-color;
+
+        &:not(:last-child) {
+          border-right-color: @dark-theme-border-color;
+        }
+
+        & > span:hover {
+          color: lighten(@dark-theme-text-color, 3%);
+        }
+      }
+    }
+
+    &-grid {
+      box-shadow: 1px 0 0 0 @dark-theme-border-color, 0 1px 0 0 @dark-theme-border-color, 1px 1px 0 0 @dark-theme-border-color, 1px 0 0 0 @dark-theme-border-color inset, 0 1px 0 0 @dark-theme-border-color inset;
+
+      &:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  & .@{class-prefix}-card {
+    background-color: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-card-overview {
+    background-color: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-card-metrics,
+  & .@{class-prefix}-card-widget {
+    .box-shadow(0 1px 4px 0 rgba(0, 0, 0, .15));
+  }
+
+  & .@{class-prefix}-icon-views:hover {
+    background-color: @dark-theme-primary-color;
+    color: @dark-theme-text-color;
+  }
+
+  & .@{class-prefix}-search-bar {
+
+    & input[type="search"] {
+      background: fade(@grey-2, 10%);
+
+      &:focus {
+        background-color: fade(@grey-2, 30%);
+      }
+    }
+
+    & .@{class-prefix}-search-icon {
+      color: lighten(@grey-6, 10%);
+    }
+  }
+
+  & .@{class-prefix}-chat-search-bar {
+
+    & input[type="search"]:focus {
+      background-color: @dark-theme-component-background;
+    }
+  }
+
+  & .@{class-prefix}-user-list {
+
+    &.@{class-prefix}-card-list {
+      background: @dark-theme-component-background;
+    }
+
+    & .@{class-prefix}-link[class*="gx-meta-"] {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .@{class-prefix}-card-strip:not(:last-child) {
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-loader-container {
+    background-color: @grey-6;
+  }
+
+  & .@{class-prefix}-table {
+
+    & th,
+    & td {
+      border-top-color: @dark-theme-border-color;
+    }
+
+    & thead th {
+      border-bottom-color: @dark-theme-border-color;
+    }
+
+    & tbody + tbody {
+      border-top-color: @dark-theme-border-color;
+    }
+  }
+
+  & .@{class-prefix}-table-bordered {
+    border-color: @dark-theme-border-color;
+
+    & th,
+    & td {
+      border-color: @dark-theme-border-color;
+    }
+  }
+
+  & .@{class-prefix}-timeline-item:before {
+    border-left-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-timeline-badge {
+    color: @dark-theme-component-background;
+
+    &:after {
+      border-color: @dark-theme-border-color;
+    }
+  }
+
+  & .@{class-prefix}-timeline-panel {
+    background-color: @dark-theme-component-background;
+    border-color: @dark-theme-border-color;
+
+    &:before {
+      border-color: transparent @dark-theme-border-color;
+    }
+
+    &:after {
+      border-color: transparent @dark-theme-component-background;
+    }
+  }
+
+  & .@{class-prefix}-timeline-center .@{class-prefix}-timeline-inverted:before {
+    border-right-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-timeline-info .ant-timeline-item-content {
+    color: @dark-theme-text-color;
+
+    & .@{class-prefix}-link {
+      color: darken(@dark-theme-text-color, 5%);
+
+      &:hover,
+      &:focus {
+        color: @white-color;
+      }
+    }
+  }
+
+  & .@{class-prefix}-img-more {
+    background-color: darken(@dark-theme-component-background, 6%);
+  }
+
+  & .ant-tabs {
+    color: @dark-theme-text-color;
+
+    &-nav .ant-tabs-tab-active,
+    &-nav .ant-tabs-tab:hover {
+      color: darken(@dark-theme-text-color, 10%);
+    }
+
+    &-ink-bar {
+      background-color: darken(@dark-theme-text-color, 10%);
+    }
+
+    &-bar {
+      border-bottom-color: @dark-theme-border-color;
+    }
+
+    &-tab-prev,
+    &-tab-next {
+      color: @dark-theme-text-color;
+
+      &:hover {
+        color: @white-color;
+      }
+    }
+
+    &-tab-btn-disabled,
+    &-tab-btn-disabled:hover {
+      color: darken(@dark-theme-text-color, 40%);
+    }
+
+    &.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+      border-color: lighten(@dark-theme-component-background, 8%);
+      border-bottom-color: @dark-theme-component-background;
+      background: lighten(@dark-theme-component-background, 2%);
+    }
+
+    &.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
+      background: @dark-theme-component-background;
+      border-color: lighten(@dark-theme-component-background, 8%);
+      border-bottom-color: @dark-theme-component-background;
+      color: @white-color;
+    }
+
+    &.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab .anticon-close {
+      color: @dark-theme-text-color;
+
+      &:hover {
+        color: @white-color;
+      }
+    }
+  }
+
+  & .ant-checkbox {
+    &-wrapper {
+      color: @dark-theme-text-color;
+    }
+
+    &-disabled + span {
+      color: darken(@dark-theme-text-color, 30%);
+    }
+
+    &-checked::after,
+    &-wrapper:hover .ant-checkbox-inner,
+    &:hover .ant-checkbox-inner,
+    &-input:focus + .ant-checkbox-inner {
+      border-color: lighten(@dark-theme-component-background, 20%);
+    }
+
+    &-checked .ant-checkbox-inner,
+    &-indeterminate .ant-checkbox-inner {
+      background-color: lighten(@dark-theme-component-background, 20%);
+      border-color: lighten(@dark-theme-component-background, 20%);
+    }
+  }
+
+  & .ant-timeline {
+    color: @dark-theme-text-color;
+
+    &-item-head {
+      background-color: transparent;
+    }
+
+    &-item-tail {
+      border-left-color: lighten(@dark-theme-border-color, 8%);
+    }
+
+    &-item-head-blue {
+      border-color: lighten(@dark-theme-border-color, 8%);
+      color: lighten(@dark-theme-text-color, 3%);
+    }
+  }
+
+  & .ant-popover {
+    &-placement-bottom > .ant-popover-content > .ant-popover-arrow,
+    &-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow,
+    &-placement-bottomRight > .ant-popover-content > .ant-popover-arrow {
+      border-top-color: @dark-theme-component-background;
+      border-left-color: @dark-theme-component-background;
+    }
+
+    &-inner,
+    &-arrow {
+      background-color: @dark-theme-component-background;
+    }
+
+    &-inner {
+      .box-shadow(0 0 4px rgba(0, 0, 0, 0.28));
+    }
+
+    &-inner-content,
+    &-message {
+      color: @dark-theme-text-color;
+    }
+
+    &-title {
+      border-bottom-color: @dark-theme-border-color;
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .@{class-prefix}-sub-popover li:not(:last-child),
+  & .@{class-prefix}-popover-header {
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-user-popover li {
+    &:hover,
+    &:focus {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+  }
+
+  & .ant-divider {
+    color: @dark-theme-text-color;
+    background: @dark-theme-border-color;
+
+    &.ant-divider-with-text,
+    &.ant-divider-with-text-left,
+    &.ant-divider-with-text-right {
+      background: none;
+    }
+  }
+
+  & .@{class-prefix}-card-body-border-top .ant-card-body {
+    border-top-color: @dark-theme-border-color;
+  }
+
+  & .ant-list {
+    color: @dark-theme-text-color;
+
+    &-split .ant-list-item,
+    &-split .ant-list-header,
+    &-something-after-last-item .ant-spin-container > .ant-list-item:last-child {
+      border-bottom-color: @dark-theme-border-color;
+    }
+
+    &-item-meta-description,
+    &-vertical .ant-list-item-content,
+    &-item-action > li {
+      color: @dark-theme-text-color;
+    }
+
+    &-bordered {
+      border-color: @dark-theme-border-color;
+    }
+
+    &-item-action-split {
+      background-color: @dark-theme-border-color;
+    }
+  }
+
+  & .@{class-prefix}-btn-light,
+  & .@{class-prefix}-link.@{class-prefix}-btn-light {
+    color: @dark-theme-text-color !important;
+    background-color: @dark-theme-primary-color !important;
+    border-color: @dark-theme-primary-color !important;
+
+    &:hover,
+    &:focus {
+      background-color: darken(@dark-theme-primary-color, 10%) !important;
+      border-color: darken(@dark-theme-primary-color, 10%) !important;
+    }
+  }
+
+  & .ant-table {
+    color: @dark-theme-text-color;
+    background: lighten(@dark-theme-component-background, 5%);
+
+    &-thead > tr > th {
+      background: lighten(@dark-theme-component-background, 5%);
+      color: @dark-theme-text-color;
+      border-bottom-color: lighten(@dark-theme-border-color, 8%);
+    }
+
+    &-tbody > tr > td {
+      border-bottom-color: lighten(@dark-theme-border-color, 8%);
+    }
+
+    &-thead > tr,
+    &-tbody > tr {
+      &.@{table-prefix-cls}-row-hover > td,
+      &:hover > td {
+        background: lighten(@dark-theme-component-background, 5%);
+      }
+    }
+
+    &-tbody > tr.ant-table-row-selected td {
+      background: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-small {
+      border-color: lighten(@dark-theme-border-color, 8%);
+      background-color: transparent;
+    }
+
+    &-small > .ant-table-content > .ant-table-header > table > .ant-table-thead > tr > th,
+    &-small > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th,
+    &-small > .ant-table-content > .ant-table-scroll > .ant-table-header > table > .ant-table-thead > tr > th,
+    &-small > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-thead > tr > th,
+    &-small > .ant-table-content > .ant-table-fixed-left > .ant-table-header > table > .ant-table-thead > tr > th,
+    &-small > .ant-table-content > .ant-table-fixed-right > .ant-table-header > table > .ant-table-thead > tr > th,
+    &-small > .ant-table-content > .ant-table-fixed-left > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-thead > tr > th,
+    &-small > .ant-table-content > .ant-table-fixed-right > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-thead > tr > th {
+      background: lighten(@dark-theme-component-background, 5%);
+      border-bottom-color: lighten(@dark-theme-border-color, 8%);
+    }
+
+    &.ant-table-bordered .ant-table-title,
+    &-bordered .ant-table-header > table,
+    &-bordered .ant-table-body > table,
+    &-bordered .ant-table-fixed-left table,
+    &-bordered .ant-table-fixed-right table,
+    &.ant-table-bordered .ant-table-footer,
+    &.ant-table-bordered .ant-table-container {
+      border-color: lighten(@dark-theme-border-color, 8%);
+    }
+
+    &-header,
+    &-cell-fix-left,
+    &-cell-fix-right,
+    &-thead th.ant-table-column-has-sorters:hover,
+    &-column-sort,
+    &-filter-trigger-container-open, .ant-table-filter-trigger-container:hover,
+    &-thead th.ant-table-column-has-sorters:hover .ant-table-filter-trigger-container:hover,
+    &-filter-dropdown {
+      background: lighten(@dark-theme-component-background, 5%);
+      color: @dark-theme-text-color;
+    }
+
+    &-footer {
+      background: lighten(@dark-theme-component-background, 5%);
+      color: @dark-theme-text-color;
+
+      &:before {
+        background: transparent;
+      }
+    }
+
+    &-bordered .ant-table-thead > tr > th,
+    &-bordered .ant-table-tbody > tr > td {
+      border-right-color: lighten(@dark-theme-border-color, 8%);
+    }
+
+    &-bordered .ant-table-thead > tr:not(:last-child) > th {
+      border-bottom-color: lighten(@dark-theme-border-color, 8%);
+    }
+
+    &-fixed-header > .ant-table-content > .ant-table-scroll > .ant-table-body {
+      background: @dark-theme-component-background;
+    }
+
+    &-fixed-left table,
+    &-fixed-right table {
+      background: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-thead > tr > th .anticon-filter,
+    &-thead > tr > th .ant-table-filter-icon {
+      color: @dark-theme-text-color;
+
+      &:hover {
+        color: @white-color;
+      }
+    }
+
+    &-column-sorter {
+      color: @dark-theme-text-color;
+
+      &-up:hover .anticon,
+      &-down:hover .anticon,
+      &-up.on .anticon-caret-up,
+      &-down.on .anticon-caret-up,
+      &-up.on .anticon-caret-down,
+      &-down.on .anticon-caret-down {
+        color: @white-color;
+      }
+    }
+
+    &-row-expand-icon {
+      background: none;
+    }
+  }
+
+  & .ant-table-thead th.ant-table-column-has-sorters:hover .ant-table-filter-trigger-container {
+    background: lighten(@dark-theme-component-background, 5%);
+    color: @dark-theme-text-color;
+  }
+
+  tr.ant-table-expanded-row,
+  tr.ant-table-expanded-row:hover,
+  tr.ant-table-expanded-row > td,
+  tr.ant-table-expanded-row:hover > td {
+    background: lighten(@dark-theme-component-background, 5%);
+  }
+
+  & .ant-pagination {
+    color: @dark-theme-text-color;
+
+    &-item {
+      background-color: darken(@dark-theme-component-background, 5%);
+      border-color: @dark-theme-border-color;
+
+      &-active,
+      &:hover,
+      &:focus {
+        border-color: @dark-theme-border-color;
+
+        & .@{class-prefix}-link {
+          color: @dark-theme-text-color;
+        }
+      }
+    }
+
+    &-disabled a,
+    &-disabled:hover a,
+    &-disabled:focus a,
+    &-disabled .ant-pagination-item-link,
+    &-disabled:hover .ant-pagination-item-link,
+    &-disabled:focus .ant-pagination-item-link {
+      color: darken(@dark-theme-text-color, 45%);
+    }
+
+    &-prev,
+    &-next,
+    &-jump-prev,
+    &-jump-next {
+      color: @dark-theme-text-color;
+    }
+
+    &-prev .ant-pagination-item-link,
+    &-next .ant-pagination-item-link {
+      background-color: darken(@dark-theme-component-background, 5%);
+      border-color: @dark-theme-border-color;
+      color: @dark-theme-text-color;
+    }
+
+    &-prev:focus .ant-pagination-item-link,
+    &-next:focus .ant-pagination-item-link,
+    &-prev:hover .ant-pagination-item-link,
+    &-next:hover .ant-pagination-item-link {
+      border-color: @dark-theme-border-color;
+      color: @dark-theme-text-color;
+    }
+
+    & .ant-pagination-item a {
+      color: @dark-theme-text-color;
+
+      &:hover,
+      &:focus {
+        color: @dark-theme-text-color;
+      }
+    }
+
+    & .ant-pagination-jump-prev .ant-pagination-item-container .ant-pagination-item-ellipsis,
+    & .ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-ellipsis,
+    & .ant-pagination-jump-prev .ant-pagination-item-container .ant-pagination-item-link-icon,
+    & .ant-pagination-jump-next .ant-pagination-item-container .ant-pagination-item-link-icon {
+      color: @dark-theme-text-color;
+    }
+
+    &-jump-prev:focus:after,
+    &-jump-next:focus:after,
+    &-jump-prev:hover:after,
+    &-jump-next:hover:after {
+      color: @dark-theme-text-color;
+    }
+
+    &-simple .ant-pagination-simple-pager input {
+      background-color: fade(@grey-2, 10%);
+      border-color: fade(@grey-2, 10%);
+      color: @dark-theme-text-color;
+
+      &:hover {
+        border-color: fade(@grey-2, 30%);
+      }
+    }
+
+    &-options-quick-jumper input {
+      background-color: fade(@grey-2, 10%);
+      border-color: fade(@grey-2, 10%);
+      color: @dark-theme-text-color;
+
+      &:hover {
+        border-color: fade(@grey-2, 10%);
+      }
+
+      &:focus {
+        border-color: @dark-theme-border-color;
+        .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.1));
+      }
+    }
+  }
+
+  & .ant-badge {
+    color: @dark-theme-text-color;
+
+    &-status-text {
+      color: @dark-theme-text-color;
+    }
+
+    &-count {
+      .box-shadow(0 0 0 1px rgba(0, 0, 0, .15));
+    }
+  }
+
+  & .ant-cascader {
+    &-picker {
+      &:focus .ant-cascader-input {
+        border-color: @dark-theme-border-color;
+        .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.1));
+      }
+    }
+
+    &-menus {
+      background: darken(@dark-theme-component-background, 5%);
+    }
+
+    &-menu {
+      border-right-color: @dark-theme-border-color;
+    }
+
+    &-menu-item:hover {
+      background: darken(@dark-theme-component-background, 8%);
+    }
+
+    &-picker,
+    &-picker-clear {
+      background-color: transparent;
+      color: @dark-theme-text-color;
+    }
+
+    &-picker-arrow,
+    &-menu-item-expand:after {
+      color: @dark-theme-text-color;
+    }
+
+    &-menu-item-active:not(.ant-cascader-menu-item-disabled),
+    &-menu-item-active:not(.ant-cascader-menu-item-disabled):hover {
+      background: lighten(@dark-theme-component-background, 5%);
+    }
+  }
+
+  & .ant-form {
+    color: @dark-theme-text-color;
+    &-item,
+    &-item-label label,
+    &-explain,
+    &-extra {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .anticon-calendar {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-picker {
+    background-color: fade(@grey-2, 10%) !important;
+    border-color: fade(@grey-2, 10%);
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-input {
+    background-color: fade(@grey-2, 10%) !important;
+    border-color: fade(@grey-2, 10%);
+    color: @dark-theme-text-color;
+
+    &:focus,
+    &:hover {
+      border-color: fade(@grey-3, 10%);
+      .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.1));
+    }
+
+    &-number {
+      background-color: fade(@grey-2, 10%);
+      border-color: fade(@grey-2, 10%);
+      color: @dark-theme-text-color;
+
+      &:focus,
+      &:hover {
+        border-color: fade(@grey-3, 10%);
+        .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.1));
+      }
+    }
+
+    &-affix-wrapper:hover .ant-input:not(.ant-input-disabled) {
+      border-color: @dark-theme-border-color;
+    }
+
+    &-group-addon {
+      background-color: fade(@grey-2, 10%);
+      border-color: fade(@grey-2, 10%);
+      color: @dark-theme-text-color;
+
+      & .ant-select-open .ant-select-selection,
+      & .ant-select-focused .ant-select-selection {
+        color: @dark-theme-text-color;
+      }
+    }
+
+    &-search-icon {
+      color: @dark-theme-text-color;
+    }
+
+    &-affix-wrapper .ant-input-prefix,
+    &-affix-wrapper .ant-input-suffix {
+      color: @dark-theme-text-color;
+
+      & i,
+      & .anticon {
+        color: @dark-theme-text-color !important;
+      }
+    }
+  }
+
+  & .ant-form-item-explain,
+  & .ant-form-item-extra,
+  & .ant-picker-suffix,
+  & .ant-select-multiple .ant-select-selection-item-remove {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-select-multiple .ant-select-selector {
+    background-color: @dark-theme-component-background;
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-select-multiple .ant-select-selection-item {
+    background-color: @dark-theme-component-background;
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-input.@{class-prefix}-chat-textarea {
+    background-color: @dark-theme-component-background !important;
+    border-color: @dark-theme-component-background;
+    color: @dark-theme-text-color;
+
+    &:focus {
+      border-color: @dark-theme-border-color;
+    }
+  }
+
+  & .ant-modal .ant-input {
+    background-color: @white-color !important;
+    border-color: lighten(@dark-theme-border-color, 55%);
+    color: @grey-8;
+
+    &:focus,
+    &:hover {
+      border-color: lighten(@dark-theme-border-color, 50%);
+    }
+  }
+
+  & .ant-modal .ant-upload-list-item-info .anticon-paper-clip {
+    color: @grey-8;
+  }
+
+  & .ant-mention {
+    &-wrapper {
+      color: @dark-theme-text-color;
+
+      &.disabled .ant-mention-editor {
+        background-color: transparent;
+        color: @dark-theme-text-color;
+      }
+
+      &.ant-mention-active:not(.disabled) .ant-mention-editor {
+        border-color: fade(@grey-3, 10%);
+        .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.1));
+      }
+    }
+
+    &-wrapper .ant-mention-editor {
+      background-color: transparent;
+      border-color: transparent;
+      color: @dark-theme-text-color;
+
+      &:focus {
+        border-color: fade(@grey-3, 10%);
+        .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.1));
+      }
+    }
+  }
+
+  & .ant-select {
+    color: @dark-theme-text-color;
+
+    &-selection {
+      background-color: fade(@grey-2, 10%);
+      border-color: fade(@grey-2, 10%);
+
+      &:hover {
+        border-color: fade(@grey-2, 10%);
+      }
+    }
+
+    &-single:not(.ant-select-customize-input) .ant-select-selector {
+      background-color: fade(@grey-2, 10%);
+      border-color: fade(@grey-2, 10%);
+
+      &:hover {
+        border-color: fade(@grey-2, 10%);
+      }
+    }
+
+    &-item {
+      color: @dark-theme-text-color;
+    }
+
+    &-item-option-active:not(.ant-select-item-option-disabled) {
+      background-color: fade(@grey-2, 10%);
+      border-color: fade(@grey-2, 10%);
+
+      &:hover {
+        background-color: fade(@grey-2, 10%);
+        border-color: fade(@grey-2, 10%);
+        color: @dark-theme-text-color;
+      }
+    }
+
+    &-item-option-selected:not(.ant-select-item-option-disabled) {
+      background-color: fade(@grey-2, 10%);
+      color: @dark-theme-text-color;
+    }
+
+    &-arrow {
+      color: @dark-theme-text-color;
+    }
+
+    &-focused .ant-select-selection,
+    &-selection:focus,
+    &-selection:active {
+      border-color: fade(@grey-3, 10%);
+      .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.1));
+    }
+
+    &-dropdown {
+      color: @dark-theme-text-color;
+      background-color: darken(@dark-theme-component-background, 5%);
+    }
+
+    &-dropdown-menu-item {
+      color: @dark-theme-text-color;
+
+      &:hover {
+        background-color: darken(@dark-theme-component-background, 7%);
+      }
+
+      &-selected,
+      &-selected:hover,
+      &-active {
+        background-color: darken(@dark-theme-component-background, 8%);
+        color: @dark-theme-text-color;
+      }
+    }
+
+    &-auto-complete.ant-select .ant-input:focus,
+    &-auto-complete.ant-select .ant-input:hover {
+      border-color: fade(@grey-2, 10%);
+    }
+
+    &-dropdown-menu-item-group-title {
+      color: @dark-theme-text-color;
+    }
+
+    &-auto-complete.ant-select textarea.ant-input {
+      background: fade(@grey-2, 10%) !important;
+    }
+
+    &-tree,
+    &-tree li .ant-select-tree-node-content-wrapper {
+      color: @dark-theme-text-color;
+    }
+
+    &-tree li .ant-select-tree-node-content-wrapper:hover,
+    &-tree li .ant-select-tree-node-content-wrapper.ant-select-tree-node-selected {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-tree-dropdown .ant-select-dropdown-search .ant-select-search__field,
+    &-tree-checkbox-checked .ant-select-tree-checkbox-inner,
+    &-tree-checkbox-indeterminate .ant-select-tree-checkbox-inner {
+      border-color: lighten(@dark-theme-component-background, 5%);
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+  }
+
+  & .ant-select-tree {
+    background-color: lighten(@dark-theme-component-background, 5%);
+
+    & .ant-select-tree-node-content-wrapper:hover,
+    & .ant-select-tree-node-content-wrapper.ant-select-tree-node-selected {
+      background-color: @dark-theme-component-background;
+    }
+  }
+
+  & .ant-select-show-search .ant-select-selection {
+    background-color: transparent;
+    .box-shadow(none);
+  }
+
+  & .ant-transfer {
+    &-list-search-action,
+    &-list-search-action i {
+      color: @dark-theme-text-color;
+    }
+
+    &-list {
+      border-color: lighten(@dark-theme-component-background, 8%);
+      color: @dark-theme-text-color;
+    }
+
+    &-list-body-with-search {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-list-header {
+      background-color: lighten(@dark-theme-component-background, 5%);
+      border-color: lighten(@dark-theme-component-background, 8%);
+      color: @dark-theme-text-color;
+    }
+
+    &-list-content-item:not(.ant-transfer-list-content-item-disabled):hover {
+      background-color: lighten(@dark-theme-component-background, 8%);
+    }
+
+    &-list-footer {
+      border-top-color: lighten(@dark-theme-component-background, 8%);
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-list-content-item-disabled {
+      color: darken(@dark-theme-text-color, 40%);
+    }
+  }
+
+  & .ant-calendar {
+    background-color: lighten(@dark-theme-component-background, 5%);
+    border-color: lighten(@dark-theme-component-background, 5%);
+    color: @dark-theme-text-color;
+
+    &-today .ant-calendar-date {
+      border-color: lighten(@dark-theme-component-background, 25%);
+      color: lighten(@dark-theme-component-background, 25%);
+      background-color: lighten(@dark-theme-component-background, 15%);
+    }
+
+    &-selected-date .ant-calendar-date,
+    &-selected-start-date .ant-calendar-date,
+    &-selected-end-date .ant-calendar-date,
+    &-selected-day .ant-calendar-date {
+      background: lighten(@dark-theme-component-background, 25%);
+      color: @dark-theme-text-color;
+    }
+
+    &-month-panel-selected-cell .ant-calendar-month-panel-month:hover,
+    &-month-panel-selected-cell .ant-calendar-month-panel-month,
+    &-year-panel-selected-cell .ant-calendar-year-panel-year,
+    &-year-panel-selected-cell .ant-calendar-year-panel-year:hover,
+    &-decade-panel-selected-cell .ant-calendar-decade-panel-decade,
+    &-decade-panel-selected-cell .ant-calendar-decade-panel-decade:hover {
+      background: lighten(@dark-theme-component-background, 25%);
+      color: @dark-theme-text-color;
+    }
+
+    &-month-panel-month:hover,
+    &-year-panel-year:hover,
+    &-decade-panel-decade:hover {
+      background: lighten(@dark-theme-component-background, 15%);
+    }
+
+    &-input {
+      color: @dark-theme-text-color;
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-month-panel,
+    &-year-panel,
+    &-decade-panel {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-header,
+    &-input-wrap,
+    &-month-panel-header,
+    &-year-panel-header,
+    &-decade-panel-header {
+      border-bottom-color: lighten(@dark-theme-component-background, 8%);
+    }
+
+    &-footer,
+    &-range .ant-calendar-body,
+    &-range .ant-calendar-month-panel-body,
+    &-range .ant-calendar-year-panel-body {
+      border-top-color: lighten(@dark-theme-component-background, 8%);
+    }
+
+    &-picker-icon,
+    &-picker-icon:after {
+      color: @dark-theme-text-color;
+    }
+
+    &-picker:hover .ant-calendar-picker-input:not(.ant-input-disabled) {
+      border-color: @dark-theme-border-color;
+    }
+
+    &-header .ant-calendar-prev-century-btn,
+    &-header .ant-calendar-next-century-btn,
+    &-header .ant-calendar-prev-decade-btn,
+    &-header .ant-calendar-next-decade-btn,
+    &-header .ant-calendar-prev-month-btn,
+    &-header .ant-calendar-next-month-btn,
+    &-header .ant-calendar-prev-year-btn,
+    &-header .ant-calendar-next-year-btn,
+    &-header .ant-calendar-century-select,
+    &-header .ant-calendar-decade-select,
+    &-header .ant-calendar-year-select,
+    &-header .ant-calendar-month-select {
+      color: @dark-theme-text-color;
+    }
+
+    &-month-panel-header .ant-calendar-month-panel-prev-century-btn,
+    &-month-panel-header .ant-calendar-month-panel-next-century-btn,
+    &-month-panel-header .ant-calendar-month-panel-prev-decade-btn,
+    &-month-panel-header .ant-calendar-month-panel-next-decade-btn,
+    &-month-panel-header .ant-calendar-month-panel-prev-month-btn,
+    &-month-panel-header .ant-calendar-month-panel-next-month-btn,
+    &-month-panel-header .ant-calendar-month-panel-prev-year-btn,
+    &-month-panel-header .ant-calendar-month-panel-next-year-btn,
+    &-month-panel-header .ant-calendar-month-panel-century-select,
+    &-month-panel-header .ant-calendar-month-panel-decade-select,
+    &-month-panel-header .ant-calendar-month-panel-year-select,
+    &-month-panel-header .ant-calendar-month-panel-month-select {
+      color: @dark-theme-text-color;
+    }
+
+    &-year-panel-header .ant-calendar-year-panel-prev-century-btn,
+    &-year-panel-header .ant-calendar-year-panel-next-century-btn,
+    &-year-panel-header .ant-calendar-year-panel-prev-decade-btn,
+    &-year-panel-header .ant-calendar-year-panel-next-decade-btn,
+    &-year-panel-header .ant-calendar-year-panel-prev-month-btn,
+    &-year-panel-header .ant-calendar-year-panel-next-month-btn,
+    &-year-panel-header .ant-calendar-year-panel-prev-year-btn,
+    &-year-panel-header .ant-calendar-year-panel-next-year-btn,
+    &-year-panel-header .ant-calendar-year-panel-century-select,
+    &-year-panel-header .ant-calendar-year-panel-decade-select,
+    &-year-panel-header .ant-calendar-year-panel-year-select,
+    &-year-panel-header .ant-calendar-year-panel-month-select {
+      color: @dark-theme-text-color;
+    }
+
+    &-decade-panel-header .ant-calendar-decade-panel-prev-century-btn,
+    &-decade-panel-header .ant-calendar-decade-panel-next-century-btn,
+    &-decade-panel-header .ant-calendar-decade-panel-prev-decade-btn,
+    &-decade-panel-header .ant-calendar-decade-panel-next-decade-btn,
+    &-decade-panel-header .ant-calendar-decade-panel-prev-month-btn,
+    &-decade-panel-header .ant-calendar-decade-panel-next-month-btn,
+    &-decade-panel-header .ant-calendar-decade-panel-prev-year-btn,
+    &-decade-panel-header .ant-calendar-decade-panel-next-year-btn {
+      color: @dark-theme-text-color;
+    }
+
+    &-date {
+      color: @dark-theme-text-color;
+
+      &:hover {
+        background: lighten(@dark-theme-component-background, 15%);
+      }
+    }
+
+    &-last-month-cell .ant-calendar-date,
+    &-next-month-btn-day .ant-calendar-date,
+    &-year-panel-last-decade-cell .ant-calendar-year-panel-year,
+    &-year-panel-next-decade-cell .ant-calendar-year-panel-year,
+    &-decade-panel-last-century-cell .ant-calendar-decade-panel-decade,
+    &-decade-panel-next-century-cell .ant-calendar-decade-panel-decade {
+      color: darken(@dark-theme-text-color, 20%);
+    }
+
+    &-picker-clear {
+      color: @dark-theme-text-color;
+      background: none;
+    }
+
+    & .ant-calendar-ok-btn {
+      color: @dark-theme-border-color !important;
+      background-color: lighten(@dark-theme-component-background, 25%) !important;
+      border-color: lighten(@dark-theme-component-background, 25%) !important;
+
+      &:hover,
+      &:focus {
+        color: @dark-theme-primary-color !important;
+        background-color: lighten(@dark-theme-component-background, 35%) !important;
+        border-color: @dark-theme-primary-color !important;
+      }
+    }
+
+    &-range .ant-calendar-in-range-cell:before {
+      background-color: lighten(@dark-theme-component-background, 7%);
+    }
+
+    &-week-number .ant-calendar-body tr.ant-calendar-active-week {
+      background: lighten(@dark-theme-component-background, 7%);
+    }
+
+    &-week-number .ant-calendar-body tr .ant-calendar-selected-day .ant-calendar-date,
+    &-week-number .ant-calendar-body tr .ant-calendar-selected-day:hover .ant-calendar-date,
+    &-time .ant-calendar-footer .ant-calendar-time-picker-btn-disabled {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .ant-fullcalendar {
+    color: @dark-theme-text-color;
+    border-top-color: @dark-theme-border-color;
+
+    &-value {
+      color: @dark-theme-text-color;
+
+      &:hover {
+        background: lighten(@dark-theme-component-background, 5%);
+      }
+    }
+
+    &-fullscreen .ant-fullcalendar-month,
+    &-fullscreen .ant-fullcalendar-date {
+      color: @dark-theme-text-color;
+      border-top-color: lighten(@dark-theme-component-background, 8%);
+    }
+
+    &-fullscreen .ant-fullcalendar-month:hover,
+    &-fullscreen .ant-fullcalendar-date:hover,
+    &-fullscreen .ant-fullcalendar-month-panel-selected-cell .ant-fullcalendar-month,
+    &-fullscreen .ant-fullcalendar-selected-day .ant-fullcalendar-date {
+      background: lighten(@dark-theme-component-background, 5%);
+      color: @dark-theme-text-color;
+    }
+
+    &-fullscreen .ant-fullcalendar-month-panel-current-cell .ant-fullcalendar-month,
+    &-fullscreen .ant-fullcalendar-today .ant-fullcalendar-date {
+      border-top-color: lighten(@dark-theme-component-background, 8%);
+    }
+
+    &-fullscreen .ant-fullcalendar-last-month-cell .ant-fullcalendar-date,
+    &-fullscreen .ant-fullcalendar-next-month-btn-day .ant-fullcalendar-date,
+    &-last-month-cell .ant-fullcalendar-value,
+    &-next-month-btn-day .ant-fullcalendar-value {
+      color: darken(@dark-theme-text-color, 20%);
+    }
+
+    &-selected-day .ant-fullcalendar-value,
+    &-month-panel-selected-cell .ant-fullcalendar-value {
+      background: lighten(@dark-theme-component-background, 5%);
+      color: @dark-theme-text-color;
+    }
+
+    &-today .ant-fullcalendar-value,
+    &-month-panel-current-cell .ant-fullcalendar-value {
+      box-shadow: 0 0 0 1px lighten(@dark-theme-component-background, 25%) inset;
+      background: lighten(@dark-theme-component-background, 25%);
+    }
+
+    &-fullscreen .ant-fullcalendar-month-panel-selected-cell .ant-fullcalendar-value,
+    &-fullscreen .ant-fullcalendar-selected-day .ant-fullcalendar-value {
+      color: @dark-theme-text-color;
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+
+  & .ant-picker-panel-container {
+    background-color: lighten(@dark-theme-component-background, 5%);
+    border-color: lighten(@dark-theme-component-background, 5%);
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-picker-panel,
+  & .ant-picker-panel .ant-picker-footer {
+    border-color: lighten(@dark-theme-component-background, 15%);
+  }
+
+  & .ant-picker-header {
+    border-color: lighten(@dark-theme-component-background, 15%);
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-picker-header button,
+  & .ant-picker-content th,
+  & .ant-picker-cell,
+  & .ant-picker-input > input {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-picker-clear {
+    background-color: lighten(@dark-theme-component-background, 5%);
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner {
+    color: @dark-theme-text-color;
+    background: lighten(@dark-theme-component-background, 20%);
+  }
+
+  & .ant-picker-time-panel-column > li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner:hover {
+    color: @dark-theme-text-color;
+    background: lighten(@dark-theme-component-background, 15%);
+  }
+
+  & .ant-picker-cell:hover:not(.ant-picker-cell-in-view) .ant-picker-cell-inner,
+  & .ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end) .ant-picker-cell-inner {
+    background: lighten(@dark-theme-component-background, 20%);
+  }
+
+  & .ant-picker-calendar,
+  & .ant-picker-calendar-full .ant-picker-panel {
+    background-color: transparent;
+  }
+
+  & .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
+    border-color: lighten(@dark-theme-component-background, 15%);
+  }
+
+  & .ant-time {
+    &-picker-panel,
+    &-picker-icon,
+    &-picker-icon:after {
+      color: @dark-theme-text-color;
+    }
+
+    &-picker-panel-inner {
+      background-color: lighten(@dark-theme-component-background, 5%);
+      .box-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+    }
+
+    &-picker-panel-input-wrap {
+      border-bottom-color: lighten(@dark-theme-component-background, 8%);
+
+      & .ant-time-picker-panel-input {
+        background-color: transparent;
+      }
+
+      & .@{class-prefix}-link,
+      & .@{class-prefix}-link:hover,
+      & .@{class-prefix}-link:focus,
+      & .@{class-prefix}-link.ant-time-picker-panel-clear-btn:after {
+        color: @dark-theme-text-color;
+      }
+    }
+
+    &-picker-input {
+      background-color: fade(@grey-2, 10%);
+      border-color: fade(@grey-2, 10%);
+      color: @dark-theme-text-color;
+
+      &:focus,
+      &:hover {
+        border-color: fade(@grey-3, 10%);
+        .box-shadow(0 0 0 1px rgba(0, 0, 0, 0.1));
+      }
+    }
+
+    &-picker-panel-select {
+      border-left-color: lighten(@dark-theme-component-background, 8%);
+
+      & li:hover {
+        background: lighten(@dark-theme-component-background, 7%);
+      }
+    }
+  }
+
+  li.ant-time-picker-panel-select-option-selected {
+    background: lighten(@dark-theme-component-background, 8%);
+  }
+
+  & .ant-slider {
+    &-mark-text {
+      color: darken(@dark-theme-text-color, 40%);
+    }
+
+    &-mark-text-active {
+      color: @white-color;
+    }
+
+    &-track {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-active {
+      border-color: lighten(@dark-theme-component-background, 5%);
+    }
+  }
+
+  & .ant-radio {
+    color: @dark-theme-text-color;
+
+    &-wrapper {
+      color: @dark-theme-text-color;
+    }
+
+    &-wrapper:hover .ant-radio .ant-radio-inner,
+    &:hover .ant-radio-inner,
+    &-focused .ant-radio-inner {
+      border-color: lighten(@dark-theme-component-background, 20%);
+    }
+
+    &-checked:after {
+      border-color: lighten(@dark-theme-component-background, 20%);
+    }
+
+    &-checked .ant-radio-inner {
+      border-color: lighten(@dark-theme-component-background, 20%);
+    }
+
+    &-disabled + span {
+      color: @dark-theme-text-color;
+    }
+
+    &-button-wrapper {
+      color: lighten(@dark-theme-component-background, 20%);
+      background-color: transparent;
+      border-color: lighten(@dark-theme-component-background, 20%);
+
+      &:hover,
+      &:focus {
+        color: @dark-theme-text-color;
+      }
+
+      &-checked {
+        box-shadow: none;
+        border-color: lighten(@dark-theme-component-background, 50%);
+        color: lighten(@dark-theme-component-background, 50%);
+
+        &:hover,
+        &:focus {
+          color: @dark-theme-text-color;
+        }
+
+        &:first-child {
+          border-color: lighten(@dark-theme-component-background, 50%);
+          color: lighten(@dark-theme-component-background, 50%);
+        }
+      }
+
+      &:not(:first-child):before {
+        background-color: lighten(@dark-theme-component-background, 20%);
+      }
+
+      &-checked:before {
+        background-color: lighten(@dark-theme-component-background, 20%) !important;
+      }
+    }
+  }
+
+  & .@{class-prefix}-radio-group-link-bg-light.ant-radio-group {
+    & .ant-radio-button-wrapper {
+      color: lighten(@dark-theme-component-background, 20%);
+
+      &:hover,
+      &:focus {
+        color: lighten(@dark-theme-component-background, 10%);
+      }
+
+      &.ant-radio-button-wrapper-checked {
+        color: @dark-theme-text-color;
+        background-color: @cyan-color;
+
+        &:hover,
+        &:focus {
+          color: @white-color;
+        }
+      }
+    }
+  }
+
+  & .ant-btn {
+    background-color: darken(@dark-theme-component-background, 5%);
+    border-color: darken(@dark-theme-component-background, 5%);
+    color: @dark-theme-text-color;
+
+    &:hover,
+    &:focus {
+      color: @dark-theme-text-color;
+      background-color: darken(@dark-theme-component-background, 8%);
+      border-color: darken(@dark-theme-component-background, 8%);
+    }
+
+    &-primary {
+      background-color: darken(@dark-theme-component-background, 8%) !important;
+      border-color: darken(@dark-theme-component-background, 8%) !important;
+
+      &:hover,
+      &:focus {
+        background-color: darken(@dark-theme-component-background, 12%) !important;
+        border-color: darken(@dark-theme-component-background, 12%) !important;
+      }
+
+      &.disabled,
+      &:disabled {
+        background-color: darken(@dark-theme-component-background, 10%) !important;
+        border-color: darken(@dark-theme-component-background, 10%) !important;
+      }
+
+      &:not([disabled]):not(.disabled):active,
+      &:not([disabled]):not(.disabled).active {
+        background-color: darken(@dark-theme-component-background, 12%) !important;
+        border-color: darken(@dark-theme-component-background, 12%) !important;
+      }
+    }
+
+    &-danger {
+      color: @danger-color;
+      background-color: transparent;
+      border-color: @danger-color;
+
+      &:hover,
+      &:focus {
+        color: @white-color;
+        background-color: @danger-color;
+        border-color: @danger-color;
+      }
+    }
+
+    &-background-ghost {
+      &.ant-btn-primary {
+        background-color: darken(@dark-theme-component-background, 8%) !important;
+        border-color: darken(@dark-theme-component-background, 8%) !important;
+        color: @white-color !important;
+
+        &:hover,
+        &:focus {
+          background-color: darken(@dark-theme-component-background, 12%) !important;
+          border-color: darken(@dark-theme-component-background, 12%) !important;
+          color: @white-color !important;
+        }
+      }
+    }
+  }
+
+  & .@{class-prefix}-header-search {
+    & .ant-select-selection {
+      background-color: darken(@dark-theme-component-background, 10%);
+      border-color: @border-color;
+      color: @dark-theme-text-color;
+      margin-left: -1px;
+
+      &:focus {
+        color: @dark-theme-text-color;
+        background-color: darken(@dark-theme-component-background, 15%);
+        border-color: @border-color;
+      }
+    }
+
+    & .ant-select-arrow {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .ant-upload {
+    color: @dark-theme-text-color;
+
+    &.ant-upload-drag {
+      background-color: darken(@dark-theme-component-background, 3%);
+      border-color: darken(@dark-theme-component-background, 3%);
+      color: @dark-theme-text-color;
+
+      & p.ant-upload-drag-icon .anticon {
+        color: @dark-theme-text-color;
+      }
+
+      & p.ant-upload-text,
+      & p.ant-upload-hint {
+        color: @dark-theme-text-color;
+      }
+
+      &:not(.ant-upload-disabled):hover {
+        border-color: @dark-theme-border-color;
+      }
+    }
+
+    &-list-item a,
+    &-list-item-info .anticon-loading,
+    &-list-item-info .anticon-paper-clip {
+      color: @dark-theme-text-color;
+    }
+
+    &-list-item:hover .ant-upload-list-item-info {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &.ant-upload-select-picture-card {
+      background-color: darken(@dark-theme-component-background, 3%);
+      border-color: darken(@dark-theme-component-background, 3%);
+
+      &:hover {
+        border-color: @dark-theme-border-color;
+      }
+    }
+  }
+
+  & .ant-switch {
+    color: @white-color;
+
+    &-checked {
+      background-color: darken(@dark-theme-component-background, 5%);
+    }
+  }
+
+  & .@{class-prefix}-bg-grey {
+    background-color: darken(@grey-5, 25%) !important;
+  }
+
+  & .ant-breadcrumb {
+    color: darken(@white-color, 25%);
+
+    &-separator,
+    & > span:last-child {
+      color: darken(@white-color, 25%);
+    }
+  }
+
+  & .ant-dropdown {
+    color: @dark-theme-text-color;
+
+    &-menu-item-selected,
+    &-menu-submenu-title-selected,
+    &-menu-item-selected > a,
+    &-menu-submenu-title-selected > a {
+      background-color: darken(@dark-theme-component-background, 3%);
+      color: @dark-theme-text-color;
+    }
+
+    &-menu {
+      background-color: darken(@dark-theme-component-background, 8%);
+    }
+
+    &-menu-item,
+    &-menu-submenu-title {
+      color: @dark-theme-text-color;
+    }
+
+    &-menu-item:hover,
+    &-menu-submenu-title:hover {
+      background-color: lighten(@dark-theme-component-background, 2%);
+    }
+
+    &-menu-item .ant-dropdown-menu-submenu-arrow:after,
+    &-menu-submenu-title .ant-dropdown-menu-submenu-arrow:after {
+      color: @dark-theme-text-color;
+    }
+
+    &-menu-submenu.ant-dropdown-menu-submenu-disabled .ant-dropdown-menu-submenu-title,
+    &-menu-submenu.ant-dropdown-menu-submenu-disabled .ant-dropdown-menu-submenu-title .ant-dropdown-menu-submenu-arrow::after {
+      color: darken(@dark-theme-text-color, 20%);
+    }
+  }
+
+  & .ant-steps-item {
+    color: @dark-theme-text-color;
+
+    &-finish .ant-steps-item-icon {
+      background-color: @dark-theme-component-background;
+      border-color: @dark-theme-text-color;
+
+      & > .ant-steps-icon {
+        color: @dark-theme-text-color;
+      }
+    }
+
+    &-process .ant-steps-item-icon {
+      background-color: lighten(@dark-theme-component-background, 5%);
+      border-color: lighten(@dark-theme-component-background, 5%);
+
+      & > .ant-steps-icon {
+        color: @dark-theme-text-color;
+      }
+    }
+
+    &-wait .ant-steps-item-icon {
+      background-color: @dark-theme-component-background;
+      border-color: lighten(@dark-theme-component-background, 10%);
+
+      & > .ant-steps-icon {
+        color: lighten(@dark-theme-component-background, 10%);
+      }
+    }
+
+    &-finish > .ant-steps-item-content > .ant-steps-item-description,
+    &-process > .ant-steps-item-content > .ant-steps-item-description,
+    &-wait > .ant-steps-item-content > .ant-steps-item-description {
+      color: darken(@dark-theme-text-color, 20%);
+    }
+
+    &-finish > .ant-steps-item-content > .ant-steps-item-title,
+    &-process > .ant-steps-item-content > .ant-steps-item-title,
+    &-wait > .ant-steps-item-content > .ant-steps-item-title {
+      color: @dark-theme-text-color;
+    }
+
+    &-process > .ant-steps-item-content > .ant-steps-item-title:after,
+    &-wait > .ant-steps-item-content > .ant-steps-item-title:after,
+    &-process > .ant-steps-item-tail:after,
+    &-error > .ant-steps-item-content > .ant-steps-item-title:after {
+      background-color: @dark-theme-border-color;
+    }
+
+    &-finish > .ant-steps-item-content > .ant-steps-item-title:after,
+    &-finish > .ant-steps-item-tail:after {
+      background-color: @dark-theme-text-color;
+    }
+
+    &-error .ant-steps-item-icon {
+      background-color: @dark-theme-component-background;
+    }
+
+    &-finish .ant-steps-item-icon > .ant-steps-icon .ant-steps-icon-dot,
+    &-finish > .ant-steps-item-tail:after,
+    &-process .ant-steps-item-icon > .ant-steps-icon .ant-steps-icon-dot {
+      background: darken(@dark-theme-primary-color, 10%);
+    }
+
+    &-process > .ant-steps-item-tail:after,
+    &-wait > .ant-steps-item-tail:after {
+      background-color: lighten(@dark-theme-component-background, 8%);
+    }
+
+    &-wait .ant-steps-item-icon > .ant-steps-icon .ant-steps-icon-dot {
+      background: lighten(@dark-theme-component-background, 8%);
+    }
+  }
+
+  & .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title,
+  & .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-description,
+  & .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title,
+  & .ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title,
+  & .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-description,
+  & .ant-steps-item-wait > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-description {
+    color: @dark-theme-text-color;
+  }
+
+  & .steps-content {
+    border-color: @dark-theme-border-color;
+    background-color: lighten(@dark-theme-component-background, 5%);
+  }
+
+  & .ant-input-affix-wrapper {
+    color: @dark-theme-text-color;
+    border-color: @dark-theme-border-color;
+    background-color: fade(@grey-2, 10%) !important;
+
+    & .ant-input {
+      background-color: transparent !important;
+    }
+  }
+
+  & .ant-cascader-menu-item-expand .ant-cascader-menu-item-expand-icon,
+  & .ant-cascader-menu-item-loading-icon {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-cascader-menu-item-disabled {
+    color: darken(@dark-theme-text-color, 5%);
+  }
+
+  & .ant-picker-week-panel-row:hover td {
+    background-color: lighten(@dark-theme-component-background, 5%);
+    color: darken(@dark-theme-text-color, 1%);
+  }
+
+  & .ant-picker-cell-disabled::before {
+    background-color: lighten(@dark-theme-component-background, 5%);
+  }
+
+  & .ant-picker-cell-disabled .ant-picker-cell-inner {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner,
+  & .ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner,
+  & .ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+    background-color: darken(@dark-theme-component-background, 5%);
+  }
+
+  & .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected .ant-picker-calendar-date,
+  & .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected:hover .ant-picker-calendar-date,
+  & .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected .ant-picker-calendar-date-today,
+  & .ant-picker-calendar-full .ant-picker-panel .ant-picker-cell-selected:hover .ant-picker-calendar-date-today {
+    background-color: darken(@dark-theme-component-background, 2%);
+  }
+
+  & .ant-picker-cell-in-view.ant-picker-cell-in-range::before,
+  & .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single)::before,
+  & .ant-picker-cell-in-view.ant-picker-cell-range-end:not(.ant-picker-cell-range-end-single)::before {
+    background-color: lighten(@dark-theme-component-background, 10%);
+  }
+
+  & .ant-picker-date-panel .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-start .ant-picker-cell-inner::after,
+  & .ant-picker-date-panel .ant-picker-cell-in-view.ant-picker-cell-in-range.ant-picker-cell-range-hover-end .ant-picker-cell-inner::after {
+    background-color: lighten(@dark-theme-component-background, 5%);
+  }
+
+  & .ant-alert-message,
+  & .ant-anchor,
+  & .ant-anchor-link-title {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-alert-success,
+  & .ant-alert-warning,
+  & .ant-alert-error,
+  & .ant-alert-info {
+
+    & .ant-alert-message {
+      color: @dark-theme-component-background;
+    }
+  }
+
+  & .ant-picker-calendar .ant-picker-panel {
+    background-color: lighten(@dark-theme-component-background, 5%);
+  }
+
+  & .ant-collapse {
+    background-color: lighten(@dark-theme-component-background, 5%);
+    border-color: lighten(@dark-theme-component-background, 10%);
+    color: @dark-theme-text-color;
+
+    &.@{class-prefix}-collapse-custom {
+      background-color: transparent;
+
+      & .ant-collapse-item {
+        background-color: lighten(@dark-theme-component-background, 5%);
+      }
+    }
+
+    & > .ant-collapse-item {
+      border-color: lighten(@dark-theme-component-background, 10%);
+    }
+
+    & .ant-collapse {
+      border-color: lighten(@dark-theme-component-background, 22%);
+
+      & > .ant-collapse-item {
+        border-color: lighten(@dark-theme-component-background, 22%);
+      }
+    }
+
+    & > .ant-collapse-item > .ant-collapse-header {
+      color: @dark-theme-text-color;
+    }
+
+    &-content {
+      color: @dark-theme-text-color;
+      background-color: lighten(@dark-theme-component-background, 12%);
+      border-top-color: lighten(@dark-theme-component-background, 10%);
+    }
+
+    & .ant-collapse-item-disabled > .ant-collapse-header,
+    & .ant-collapse-item-disabled > .ant-collapse-header > .arrow {
+      color: darken(@dark-theme-text-color, 40%);
+    }
+  }
+
+  & .ant-carousel {
+    color: @dark-theme-text-color;
+
+    & .slick-slide {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+  }
+
+  & .ant-tree {
+    color: @dark-theme-text-color;
+    background-color: lighten(@dark-theme-component-background, 5%);
+
+    & .ant-tree-treenode-disabled .ant-tree-node-content-wrapper {
+      color: lighten(@dark-theme-text-color, 5%);
+    }
+
+    & li .ant-tree-node-content-wrapper {
+      color: @dark-theme-text-color;
+    }
+
+    & li.ant-tree-treenode-disabled > span:not(.ant-tree-switcher),
+    & li.ant-tree-treenode-disabled > .ant-tree-node-content-wrapper,
+    & li.ant-tree-treenode-disabled > .ant-tree-node-content-wrapper span {
+      color: darken(@dark-theme-text-color, 40%);
+    }
+
+    & li .ant-tree-node-content-wrapper:hover,
+    & li .ant-tree-node-content-wrapper.ant-tree-node-selected {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+
+    &-checkbox-wrapper:hover .ant-tree-checkbox-inner,
+    &-checkbox:hover .ant-tree-checkbox-inner,
+    &-checkbox-input:focus + .ant-tree-checkbox-inner {
+      border-color: darken(@dark-theme-component-background, 5%);
+    }
+
+    &-checkbox-checked .ant-tree-checkbox-inner,
+    &-checkbox-indeterminate .ant-tree-checkbox-inner {
+      background-color: darken(@dark-theme-component-background, 5%);
+      border-color: darken(@dark-theme-component-background, 5%) !important;
+      color: @dark-theme-text-color;
+    }
+
+    &-show-line .ant-tree-switcher {
+      background-color: darken(@dark-theme-component-background, 5%);
+    }
+
+    & .ant-tree-node-content-wrapper:hover,
+    & .ant-tree-node-content-wrapper.ant-tree-node-selected {
+      background-color: darken(@dark-theme-component-background, 5%);
+      color: @dark-theme-text-color;
+    }
+
+    &.ant-tree-show-line li span.ant-tree-switcher {
+      background: transparent;
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .ant-tag {
+
+    &-checkable {
+      color: @dark-theme-text-color;
+    }
+
+    &-checkable:not(.ant-tag-checkable-checked):hover {
+      color: @white-color;
+    }
+  }
+
+  & .ant-progress {
+    &-text,
+    &-circle .ant-progress-text {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .ant-anchor {
+    &-wrapper {
+      background-color: transparent;
+    }
+
+    &-link-active > .ant-anchor-link-title {
+      color: darken(@dark-theme-text-color, 10%);
+    }
+  }
+
+  & .rdw-editor-wrapper {
+    color: darken(@dark-theme-text-color, 60%);
+    background-color: @component-background;
+
+    & + textarea {
+      color: darken(@dark-theme-text-color, 60%);
+    }
+  }
+
+  & .@{class-prefix}-contact-item:not(:last-child) {
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  .@{class-prefix}-draggable-icon {
+    color: @dark-theme-text-color;
+
+    &:hover,
+    &:focus,
+    &:active {
+      color: @white-color;
+    }
+  }
+
+  & .sweet-alert,
+  & .@{class-prefix}-map-content {
+    color: darken(@dark-theme-text-color, 60%);
+
+    & h1, & h2, & h3, & h4, & h5, & h6, & .h1, & .h2, & .h3, & .h4, & .h5, & .h6 {
+      color: darken(@dark-theme-text-color, 60%);
+    }
+  }
+
+  & .@{class-prefix}-module-side {
+
+    @media screen and (max-width: @screen-md-max) {
+      background-color: @white-color;
+    }
+  }
+
+  & .@{class-prefix}-module-side-header {
+    border-bottom-color: @dark-theme-border-color;
+    background-color: @dark-theme-component-background;
+    color: @dark-theme-text-color;
+  }
+
+  & .@{class-prefix}-module-nav {
+
+    & li .@{class-prefix}-link {
+      color: @dark-theme-text-color;
+    }
+
+    & li .@{class-prefix}-link:hover,
+    & li .@{class-prefix}-link:focus,
+    & li .@{class-prefix}-link.active {
+      color: @white-color;
+    }
+  }
+
+  & .@{class-prefix}-module-box-header {
+    background-color: @dark-theme-component-background;
+    border-bottom-color: @dark-theme-border-color;
+
+    & .@{class-prefix}-drawer-btn {
+      @media screen and (max-width: @screen-md-max) {
+        border-right-color: @dark-theme-border-color;
+      }
+    }
+  }
+
+  & .@{class-prefix}-module-box-content {
+    background-color: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-module-box-topbar,
+  & .@{class-prefix}-module-list-item:not(:last-child) {
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-toolbar-separator {
+    border-left-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-module-sidenav {
+    background-color: @dark-theme-component-background;
+    border-right-color: @dark-theme-border-color;
+  }
+
+  & .rbc-event {
+    background-color: lighten(@dark-theme-component-background, 20%);
+  }
+
+  & .rbc-event.rbc-selected {
+    background-color: darken(@dark-theme-component-background, 10%);
+  }
+
+  & .rbc-slot-selection {
+    background-color: lighten(@dark-theme-component-background, 10%);
+  }
+
+  & .rbc-toolbar button {
+    color: @dark-theme-text-color;
+    border-color: @dark-theme-text-color;
+  }
+
+  & .rbc-toolbar button:active,
+  & .rbc-toolbar button.rbc-active,
+  & .rbc-toolbar button:active:hover,
+  & .rbc-toolbar button.rbc-active:hover,
+  & .rbc-toolbar button:active:focus,
+  & .rbc-toolbar button.rbc-active:focus,
+  & .rbc-toolbar button:focus,
+  & .rbc-toolbar button:hover {
+    color: @dark-theme-primary-color;
+    background-color: @dark-theme-text-color;
+    border-color: @dark-theme-text-color;
+  }
+
+  & .rbc-month-view,
+  & .rbc-time-view,
+  & .rbc-today {
+    background: @dark-theme-component-background;
+  }
+
+  & .rbc-date-cell {
+    & .@{class-prefix}-link {
+      color: @dark-theme-text-color;
+    }
+
+    & .@{class-prefix}-link:hover,
+    & .@{class-prefix}-link:focus {
+      color: @white-color;
+    }
+  }
+
+  & .rbc-off-range-bg {
+    background: lighten(@dark-theme-component-background, 10%);
+
+    & .@{class-prefix}-link {
+      color: darken(@dark-theme-text-color, 40%);
+    }
+
+    & .@{class-prefix}-link:hover,
+    & .@{class-prefix}-link:focus {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .@{class-prefix}-com-calendar-card {
+    border-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-chat-module-box {
+    background-color: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-chat-sidenav {
+    border-right-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-chat-sidenav-header {
+    background-color: lighten(@dark-theme-component-background, 5%);
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-chat-sidenav-content {
+    background-color: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-chat-sidenav-title {
+    color: @dark-theme-text-color;
+  }
+
+  & .@{class-prefix}-chat-tabs-header {
+    background-color: lighten(@dark-theme-component-background, 5%) !important;
+  }
+
+  & .@{class-prefix}-chat-user-item {
+    &:not(:last-child) {
+      border-bottom-color: @dark-theme-border-color;
+    }
+
+    &.active,
+    &:hover {
+      background-color: lighten(@dark-theme-component-background, 3%);
+    }
+  }
+
+  & .@{class-prefix}-chat-info-des {
+    color: @dark-theme-text-color;
+  }
+
+  & .@{class-prefix}-chat-main-header {
+    border-bottom-color: @dark-theme-border-color;
+    background-color: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-chat-main-footer {
+    border-top-color: @dark-theme-border-color;
+    background-color: @dark-theme-component-background;
+  }
+
+  & .@{class-prefix}-chat-item {
+
+    & .@{class-prefix}-bubble {
+      background-color: lighten(@dark-theme-component-background, 2%);
+      border-color: @dark-theme-border-color;
+    }
+
+    &.@{class-prefix}-flex-row-reverse .@{class-prefix}-bubble {
+      background-color: lighten(@dark-theme-component-background, 5%);
+    }
+  }
+
+  & .@{class-prefix}-error-code {
+    color: @dark-theme-text-color;
+    text-shadow: 10px 6px 8px rgba(255, 117, 117, 0.8);
+  }
+
+  & .@{class-prefix}-btn-yellow,
+  & .@{class-prefix}-link.@{class-prefix}-btn-yellow {
+    color: @grey-9 !important;
+    background-color: @yellow-color !important;
+    border-color: @yellow-color !important;
+
+    &:hover,
+    &:focus {
+      color: @white-color !important;
+      background-color: darken(@yellow-color, 10%) !important;
+      border-color: darken(@yellow-color, 10%) !important;
+    }
+
+    &.disabled,
+    &:disabled {
+      background-color: @yellow-color !important;
+      border-color: @yellow-color !important;
+    }
+
+    &:not([disabled]):not(.disabled):active,
+    &:not([disabled]):not(.disabled).active {
+      color: @white-color !important;
+      background-color: darken(@yellow-color, 10%) !important;
+      border-color: darken(@yellow-color, 10%) !important;
+    }
+  }
+
+  & .@{class-prefix}-package {
+    background-color: @white-color;
+    color: @grey-8;
+  }
+
+  & .@{class-prefix}-package-header {
+    & > .@{class-prefix}-price {
+      color: @white-color;
+    }
+
+    &.@{class-prefix}-text-white {
+      color: @grey-8 !important;
+    }
+  }
+
+  & .@{class-prefix}-customizer-item:not(:last-child) {
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  & .ant-layout-sider-dark,
+  & .gx-drawer-sidebar-dark {
+    & .@{class-prefix}-sidebar-notifications {
+      border-bottom-color: @dark-theme-border-color;
+    }
+  }
+
+  & .ant-layout-sider-dark,
+  & .gx-drawer-sidebar-dark {
+    & .@{class-prefix}-app-nav {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .@{class-prefix}-text-grey {
+    color: @dark-theme-text-color !important;
+  }
+
+  & .@{class-prefix}-currentplan-col .@{class-prefix}-bg-dark {
+    background-color: @dark-theme-text-color !important;
+  }
+
+  & .@{class-prefix}-chart-up {
+    color: @green-color;
+  }
+
+  & .@{class-prefix}-bg-geekblue .@{class-prefix}-chart-up,
+  & .@{class-prefix}-overlay-primary .@{class-prefix}-chart-up,
+  & .@{class-prefix}-overlay-pink .@{class-prefix}-chart-down {
+    color: @white-color;
+  }
+
+  & .@{class-prefix}-chart-down {
+    color: @red-6;
+  }
+
+  .@{class-prefix}-text-black {
+    color: @white-color !important;
+  }
+
+  & .@{class-prefix}-algolia-sidebar .ais-HierarchicalMenu {
+    &-list li a {
+      color: @dark-theme-text-color;
+
+      &:hover,
+      &:focus {
+        color: @primary-color;
+      }
+    }
+
+    &-count {
+      color: @dark-theme-text-color;
+    }
+  }
+
+  & .ais-Breadcrumb,
+  & .ais-ClearRefinements,
+  & .ais-CurrentRefinements,
+  & .ais-GeoSearch,
+  & .ais-HierarchicalMenu,
+  & .ais-Hits,
+  & .ais-Results,
+  & .ais-HitsPerPage,
+  & .ais-ResultsPerPage,
+  & .ais-InfiniteHits,
+  & .ais-InfiniteResults,
+  & .ais-Menu,
+  & .ais-MenuSelect,
+  & .ais-NumericMenu,
+  & .ais-NumericSelector,
+  & .ais-Pagination,
+  & .ais-Panel,
+  & .ais-PoweredBy,
+  & .ais-RangeInput,
+  & .ais-RangeSlider,
+  & .ais-RatingMenu,
+  & .ais-RefinementList,
+  & .ais-RefinementList-count,
+  & .ais-SearchBox,
+  & .ais-SortBy,
+  & .ais-Stats,
+  & .ais-ToggleRefinement,
+  & .ais-RatingMenu-count,
+  & .@{class-prefix}-algolia-category-title {
+    color: @dark-theme-text-color;
+  }
+
+  & .ais-SearchBox-input,
+  & .ais-RangeInput-input,
+  & .ais-MenuSelect-select,
+  & .ais-NumericSelector-select,
+  & .ais-HitsPerPage-select,
+  & .ais-ResultsPerPage-select,
+  & .ais-SortBy-select,
+  & .@{class-prefix}-link.ais-Pagination-link:hover,
+  & .@{class-prefix}-link.ais-Pagination-link:focus {
+    color: @dark-theme-primary-color;
+  }
+
+  & .@{class-prefix}-link.ais-Pagination-link--selected:hover,
+  & .@{class-prefix}-link.ais-Pagination-link--selected:focus {
+    color: @white-color;
+  }
+
+  & .ais-RangeInput-submit,
+  & .ais-ClearRefinements-button,
+  & .ais-CurrentRefinements-reset,
+  & .ais-GeoSearch-redo,
+  & .ais-GeoSearch-reset,
+  & .ais-HierarchicalMenu-showMore,
+  & .ais-InfiniteHits-loadMore,
+  & .ais-InfiniteResults-loadMore,
+  & .ais-Menu-showMore,
+  & .ais-RefinementList-showMore {
+    background-color: @dark-theme-text-color;
+    color: @dark-theme-primary-color;
+
+    &:focus,
+    &:hover {
+      background-color: @dark-theme-text-color;
+      color: @dark-theme-primary-color;
+    }
+  }
+
+  & .ais-Breadcrumb-link,
+  & .ais-HierarchicalMenu-link,
+  & .ais-Menu-link,
+  & .ais-Pagination-link,
+  & .ais-RatingMenu-link {
+    color: @dark-theme-text-color;
+
+    &:focus,
+    &:hover {
+      color: @dark-theme-text-color;
+      background-color: @dark-theme-primary-color;
+    }
+  }
+
+  & .ais-Pagination-item--selected .ais-Pagination-link {
+    background-color: @primary-color;
+    border-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-card-profile.@{class-prefix}-card-tabs .ant-card-head,
+  & .@{class-prefix}-featured-item:not(:last-child) {
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  & .@{class-prefix}-follower-list li,
+  & .@{class-prefix}-follower-title {
+    color: @dark-theme-text-color;
+  }
+
+  & .@{class-prefix}-header-horizontal-main .@{class-prefix}-header-notifications li > span {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-dropdown-menu-item > a,
+  & .ant-dropdown-menu-submenu-title > a {
+    color: @dark-theme-text-color;
+  }
+
+  & .ant-dropdown-menu-submenu.ant-dropdown-menu-submenu-disabled .ant-dropdown-menu-submenu-title,
+  & .ant-dropdown-menu-submenu.ant-dropdown-menu-submenu-disabled .ant-dropdown-menu-submenu-title .ant-dropdown-menu-submenu-arrow-icon {
+    color: @dark-theme-text-color;
+    background-color: darken(@dark-theme-secondary-color, 10%);
+  }
+
+  & .ant-dropdown-menu-item > .anticon:first-child,
+  & .ant-dropdown-menu-submenu-title > .anticon:first-child,
+  & .ant-dropdown-menu-item > span > .anticon:first-child,
+  & .ant-dropdown-menu-submenu-title > span > .anticon:first-child {
+    color: @dark-theme-text-color;
+  }
+
+  & .@{class-prefix}-profile-banner {
+    background-color: darken(@dark-theme-secondary-color, 10%);
+  }
+
+  & .@{class-prefix}-text-primary {
+    color: @cyan-color !important;
+
+    &.@{class-prefix}-icon-white {
+      color: @white-color !important;
+    }
+  }
+
+  & .@{class-prefix}-link.@{class-prefix}-text-primary {
+    &:hover,
+    &:focus {
+      color: @cyan-8 !important;
+    }
+  }
+
+  & .@{class-prefix}-bg-primary {
+    background-color: @cyan-color !important;
+  }
+
+  & .@{class-prefix}-link.@{class-prefix}-bg-primary {
+    &:hover,
+    &:focus {
+      background-color: @cyan-8 !important;
+    }
+  }
+
+  & .@{class-prefix}-border-primary {
+    border-color: @cyan-color !important;
+  }
+
+  & .@{class-prefix}-btn-primary,
+  & .@{class-prefix}-link.@{class-prefix}-btn-primary,
+  & .btn-primary {
+    background-color: @cyan-color !important;
+    border-color: @cyan-color !important;
+
+    &:hover,
+    &:focus {
+      background-color: @cyan-8 !important;
+      border-color: @cyan-8 !important;
+    }
+
+    &.disabled,
+    &:disabled {
+      background-color: @cyan-color !important;
+      border-color: @cyan-color !important;
+    }
+
+    &:not([disabled]):not(.disabled):active,
+    &:not([disabled]):not(.disabled).active {
+      background-color: @cyan-8 !important;
+      border-color: @cyan-8 !important;
+    }
+  }
+
+  & .@{class-prefix}-btn-outline-primary,
+  & .@{class-prefix}-link.@{class-prefix}-btn-outline-primary {
+    color: @cyan-color !important;
+    border-color: @cyan-color !important;
+
+    &:hover,
+    &:focus {
+      color: @white-color !important;
+      background-color: @cyan-color !important;
+      border-color: @cyan-color !important;
+    }
+
+    &.disabled,
+    &:disabled {
+      color: @cyan-color !important;
+    }
+  }
+
+  & .@{class-prefix}-badge-primary,
+  & .@{class-prefix}-entry-title:before {
+    background-color: @cyan-color !important;
+  }
+
+  & .@{class-prefix}-bg-white .@{class-prefix}-text-grey {
+    color: @dark-theme-primary-color !important;
+  }
+}
+
+@media screen and (max-width: @screen-md-max) {
+  .dark-theme .@{class-prefix}-popover-horizantal {
+    & .@{class-prefix}-search-bar input[type="search"] {
+      background: none !important;
+
+      &:focus,
+      &:hover {
+        .box-shadow(none);
+      }
+    }
+
+    & .ant-btn {
+      background-color: transparent;
+      border-color: transparent;
+
+      &:hover,
+      &:focus {
+        background-color: transparent;
+        border-color: transparent;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: @screen-sm-max) {
+  .dark-theme .@{class-prefix}-table-responsive .ant-table {
+    border: @dark-theme-border-color;
+
+    &.ant-table-bordered .ant-table-footer {
+      border-top-color: @dark-theme-border-color;
+    }
+  }
+
+  .dark-theme .ant-card-bordered.@{class-prefix}-card-full .@{class-prefix}-table-responsive .ant-table {
+    border-bottom-color: @dark-theme-border-color;
+  }
+
+  .dark-theme .@{class-prefix}-timeline-center .@{class-prefix}-timeline-inverted:before {
+    border-left-color: @dark-theme-border-color;
+  }
+}
+
+@media screen and (max-width: (@screen-xs-max - 100px)) {
+  .dark-theme .ant-input-group.ant-input-group-compact {
+    & .@{class-prefix}-border-lt-xs {
+      border-left-color: @dark-theme-border-color !important;
+    }
+  }
+}

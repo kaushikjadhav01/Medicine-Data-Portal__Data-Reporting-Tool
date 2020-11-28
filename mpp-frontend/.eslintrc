@@ -1,0 +1,5 @@
+{
+  "extends": "umi",
+  "no-script-url": "off",
+  "eslint no-undef": "off"
+}

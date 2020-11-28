@@ -1,0 +1,43 @@
+/*Icon Styles*/
+.@{class-prefix}-icon {
+
+  &-views {
+    position: relative;
+    text-align: center;
+    padding: @card-head-padding;
+    .border-radius(@border-radius-lg);
+    .transition(all 0.3s ease-out);
+    margin-bottom: 15px;
+    height: calc(100% - 15px);
+    .flex-display(flex, column, nowrap);
+    .align-items(center);
+    .justify-content(center);
+
+    & .icon {
+      margin-bottom: 12px;
+      font-size: @h2-font-size;
+      .transition(all 0.3s ease-out);
+      line-height: 1;
+      display: block;
+    }
+
+    &:hover {
+      background-color: @primary-color;
+      cursor: pointer;
+      color: @white-color;
+
+      & .icon {
+        .scale(1.4);
+      }
+    }
+  }
+
+  &-text {
+    display: block;
+    font-size: @font-size-sm;
+  }
+}
+
+.ant-btn-icon-only {
+  padding: 0;
+}

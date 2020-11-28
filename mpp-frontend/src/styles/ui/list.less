@@ -1,0 +1,208 @@
+/*List Styles*/
+.ant-list-vertical {
+  & .ant-list-item-main {
+    min-width: 200px;
+  }
+
+  & .ant-list-item-extra {
+    @media screen and (max-width: (@screen-xs-max - 95px)) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.@{class-prefix}-list-item {
+  & .ant-list-item-extra-wrap {
+    .flex-display(flex, row, wrap);
+    .flex-only(1);
+
+    & .ant-list-item-extra {
+      margin-left: 20px;
+
+      @media screen and (max-width: @screen-xs-max) {
+        margin-left: 0;
+        margin-top: 10px;
+
+        & img {
+          width: 100%;
+        }
+      }
+    }
+
+    @media screen and (max-width: @screen-xs-max) {
+      .flex-display(flex, column, nowrap);
+    }
+  }
+}
+
+.@{class-prefix}-user-list {
+  width: 100%;
+  padding-bottom: 10px;
+  .flex-display(flex, row, wrap);
+
+  &:not(:first-child) {
+    padding-top: 20px;
+
+    @media screen and (max-width: @screen-xs-max) {
+      padding-top: 0;
+    }
+  }
+
+  &.@{class-prefix}-card-list {
+    padding: 30px;
+    background: @component-background;
+    .border-radius(@border-radius-sm);
+    margin-bottom: @gx-card-margin-base;
+    .box-shadow(@gx-card-shadow);
+
+    & .@{class-prefix}-avatar-img {
+      margin-right: 25px;
+    }
+
+    @media screen and (max-width: @screen-sm-max) {
+      padding: 20px;
+    }
+
+    @media screen and (max-width: @screen-xs-max) {
+      margin-bottom: @gx-card-margin-base-res;
+    }
+  }
+
+  & .@{class-prefix}-avatar-img {
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  & h3 {
+    font-weight: @font-weight-medium;
+    margin-bottom: 8px;
+  }
+
+  & .@{class-prefix}-link[class*="gx-meta-"] {
+    display: inline-block;
+    color: @text-color;
+    font-size: @h6-font-size;
+    font-weight: @font-weight-medium;
+  }
+
+  & .@{class-prefix}-link[class*="gx-meta-"] i {
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  & .@{class-prefix}-description {
+    width: calc(100% ~"-" 120px);
+
+    @media screen and (max-width: @screen-xs-max) {
+      width: 100%;
+    }
+  }
+
+  & .@{class-prefix}-btn-list {
+    & li:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
+
+.@{class-prefix}-list-inline {
+  margin-left: -5px;
+  margin-right: -5px;
+  padding-left: 0;
+  list-style: none;
+  & li {
+    padding: 0 5px;
+    display: inline-block;
+  }
+}
+
+.@{class-prefix}-list-inline-lg {
+  margin-left: -10px;
+  margin-right: -10px;
+  padding-left: 0;
+  list-style: none;
+  & li {
+    padding: 0 10px;
+    display: inline-block;
+  }
+}
+
+.@{class-prefix}-card-strip {
+  margin-bottom: 10px;
+
+  &:not(:last-child) {
+    border-bottom: @border-style-base @border-width-base @border-color;
+  }
+}
+
+.@{class-prefix}-card-list {
+
+  & .@{class-prefix}-description {
+    width: calc(100% ~"-" 230px);
+    margin-top: 5px;
+
+    @media screen and (max-width: @screen-sm-max) {
+      width: calc(100% ~"-" 80px);
+    }
+  }
+
+  .@{class-prefix}-card-list-footer {
+    padding-left: 15px;
+    .flex-display(flex, column, wrap);
+    .align-items(center);
+    .justify-content(center);
+    min-width: 150px;
+
+    & .ant-btn {
+      display: block;
+      margin-right: 0;
+      width: 120px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    @media screen and (max-width: @screen-sm-max) {
+      padding-left: 0;
+      min-width: 10px;
+      .flex-display(flex, row, nowrap);
+
+      & .ant-btn {
+        width: auto;
+        margin-right: 12px;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.@{class-prefix}-list-group {
+  list-style: none;
+  padding-left: 0;
+
+  & li {
+    margin-bottom: 6px;
+
+    & i,
+    & .anticon {
+      margin-right: 12px;
+    }
+  }
+}
+
+.@{class-prefix}-dot-list {
+  list-style: none;
+  margin: 0 -3px 10px;
+  padding-left: 0;
+
+  & li {
+    display: inline-block;
+    vertical-align: top;
+    padding: 0 3px;
+  }
+
+  @media screen and (max-width: @screen-xs-max) {
+    margin-bottom: 5px;
+  }
+}

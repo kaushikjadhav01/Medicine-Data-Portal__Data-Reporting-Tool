@@ -1,0 +1,69 @@
+version: '3.7'
+
+services:
+  mpp-backend:
+    build:
+      context: .
+    # command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    command: gunicorn MPP_API.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    volumes:
+      # - ./
+      - static_volume:/static
+      - /etc/localtime:/etc/localtime
+    env_file:
+      - ./MPP_API/.env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./MPP_API/.env.prod
+  
+  # mpp-frontend:
+  #   build:
+  #     context: ./mpp-frontend     
+  #   container_name: mpp-frontend
+  #   ports:
+  #       - "3000:3000"
+  #   volumes: 
+  #       - ./:/mpp-frontend
+  #       - ./node_modules:/mpp-frontend/node_modules
+      
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/static
+    ports:
+      - 8080:80
+    depends_on:
+      - mpp-backend
+      # - mpp-frontend
+  redis:
+    image: "redis:alpine"
+  
+  celery:
+    build: .
+    command: celery -A MPP_API worker -l INFO
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - ./MPP_API/.env.prod
+  
+  celery-beat:
+    build: .
+    command: celery -A MPP_API beat -l INFO
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - ./MPP_API/.env.prod
+volumes:
+  postgres_data:
+  static_volume:

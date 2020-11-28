@@ -1,0 +1,155 @@
+/* Drawer Style */
+.ant-drawer {
+  overflow: hidden;
+
+  &-body {
+    padding: 0;
+  }
+
+  &-content {
+    .@{class-prefix}-drawer-sidebar-dark & {
+      background-color: @nav-dark-bg;
+      color: @nav-dark-text-color;
+    }
+  }
+
+  &-content-wrapper {
+    width: @sidebar-width !important;
+
+    @media screen and (max-width: @screen-md-max) {
+      width: @sidebar-width - 20px !important;
+    }
+
+    .framed-layout & {
+      top: @framed-layout-base;
+      bottom: @framed-layout-base;
+      height: calc(100vh~"-"2 * @framed-layout-base);
+      .border-radius(11px 0 0 11px);
+      overflow: hidden;
+
+      @media screen and (max-width: @screen-md-max) {
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        .border-radius(0) !important;
+      }
+    }
+
+    .ant-drawer-right & {
+      width: @gx-customizer-width !important;
+      padding: 15px;
+      background: @white-color;
+
+      @media screen and (max-width: @screen-md-max) {
+        width: @gx-customizer-width - 70px !important;
+      }
+
+      @media screen and (max-width: @screen-xs-max) {
+        width: @gx-customizer-width - 90px !important;
+      }
+
+      .framed-layout & {
+        top: @framed-layout-base;
+        bottom: @framed-layout-base;
+        height: calc(100vh~"-"2 * @framed-layout-base);
+        .border-radius(0 11px 11px 0);
+        overflow: hidden;
+
+        @media screen and (max-width: @screen-md-max) {
+          top: 0;
+          bottom: 0;
+          height: 100vh;
+          .border-radius(0) !important;
+        }
+      }
+    }
+
+    .framed-layout &,
+    .boxed-layout & {
+      position: absolute;
+    }
+  }
+
+  //&-wrapper-body {
+  //  .framed-layout & {
+  //    height: calc(100%~"-"2 * @framed-layout-base);
+  //  }
+  //}
+
+  .boxed-layout & {
+    max-width: @screen-xl-min + 80px;
+    margin: 0 auto;
+
+    @media screen and (min-width: @screen-xxl-min) {
+      max-width: @screen-xl-min + 300px;
+    }
+  }
+
+  &-open {
+
+    &.ant-drawer-left,
+    &.ant-drawer-right {
+      .framed-layout &,
+      .boxed-layout & {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      }
+    }
+
+    .framed-layout & {
+      width: calc(100%~"-"2 * @framed-layout-base);
+
+      @media screen and (max-width: @screen-md-max) {
+        width: 100%;
+      }
+    }
+  }
+
+  &.ant-drawer-left,
+  &.ant-drawer-right {
+    .boxed-layout & {
+
+      @media screen and (min-width: @screen-xxl-min) {
+        position: absolute;
+      }
+    }
+    .framed-layout & {
+
+      @media screen and (min-width: @screen-md-max) {
+        position: absolute;
+      }
+    }
+  }
+
+  &.ant-drawer-left,
+  &.ant-drawer-right {
+    .framed-layout & {
+
+      @media screen and (max-width: @screen-md-max) {
+        right: 20px;
+        left: 20px;
+        margin: 0;
+      }
+    }
+  }
+
+  &-close {
+    top: -11px;
+
+    &-x {
+      width: @size-30 + 5px;
+      height: @size-30 + 5px;
+      line-height: @size-30 + 5px;
+    }
+  }
+
+  &-mask {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+  }
+}

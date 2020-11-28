@@ -1,0 +1,15 @@
+.status-fields {
+    background-color: #ffffff;
+}
+
+.btn-confirm-green .ant-btn-primary {
+    color: #ffffff !important;
+    background-color: #52c41a !important;
+    border-color: #52c41a !important;
+}
+
+.btn-confirm-red .ant-btn-primary {
+    color: #ffffff !important;
+    background-color: #f44336 !important;
+    border-color: #f44336 !important;
+}

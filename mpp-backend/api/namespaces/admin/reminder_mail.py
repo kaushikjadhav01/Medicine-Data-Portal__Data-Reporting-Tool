@@ -9,11 +9,11 @@ from django.utils.html import strip_tags
 from django.template.loader import render_to_string, get_template
 import os
 from api.models import (
-    User,Partner
+    User,Partner, Quarter
 )
 from api.tasks import send_bulk_email
 from MPP_API.settings import FROM_EMAIL_ID
-from datetime import datetime
+from datetime import datetime, tzinfo
 
 request_body_reminder_mail = openapi.Schema(
     type=openapi.TYPE_OBJECT, 
@@ -58,9 +58,10 @@ class ReminderMailView(APIView):
             template_url = "sales-report"
 
 
-        cut_off_date = os.getenv('CUT_OFF_DATE')
-        cut_off_date=datetime.strptime(cut_off_date,'%d %b %Y')
-        today= datetime.today()
+        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        cut_off_date = q_1.cut_off_date
+        tz_info = cut_off_date.tzinfo
+        today= datetime.now(tz_info)
         no_of_days_to_submit = cut_off_date - today
         no_of_days_to_submit = no_of_days_to_submit.days + 1
 

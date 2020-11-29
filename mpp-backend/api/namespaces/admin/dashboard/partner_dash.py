@@ -46,7 +46,7 @@ class PartnerDashboard(APIView):
                 partner_id=partner_id,
                 quarter_id=q_1,
                 template_type=template_type['template_type']).last()
-            
+            report_status = 'Not Submitted'
             if last_msg:
                 if last_msg.is_partner_message == True:
                     report_status = 'Submitted'

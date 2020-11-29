@@ -14,7 +14,7 @@ import os
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string, get_template
 from django.core.mail import send_mail, EmailMultiAlternatives
-from datetime import datetime
+from datetime import datetime, tzinfo
 
 from MPP_API.settings import quarter_list, INIT_QUARTER_INDEX, INIT_YEAR
 from MPP_API.settings import FROM_EMAIL_ID
@@ -54,9 +54,10 @@ def send_bulk_email(data):
                 template_url = "sales-report"
                 sales_link = str(api_link + 'partner/' + template_url)
 
-        cut_off_date = os.getenv('CUT_OFF_DATE')
-        cut_off_date=datetime.strptime(cut_off_date,'%d %b %Y')
-        today= datetime.today()
+        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        cut_off_date = q_1.cut_off_date
+        tz_info = cut_off_date.tzinfo
+        today= datetime.now(tz_info)
         no_of_days_to_submit = cut_off_date - today
         no_of_days_to_submit = no_of_days_to_submit.days + 1
         

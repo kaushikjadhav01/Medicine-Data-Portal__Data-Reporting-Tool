@@ -9,7 +9,7 @@ from django.utils.html import strip_tags
 from django.template.loader import render_to_string, get_template
 import os
 from api.models import (
-    User,Partner, Quarter
+    User,Partner, Quarter, ProductQuarterDate
 )
 from api.tasks import send_bulk_email
 from MPP_API.settings import FROM_EMAIL_ID

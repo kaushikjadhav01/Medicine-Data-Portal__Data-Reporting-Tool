@@ -19,3 +19,16 @@ Email: abbvie@labs.com Password: samplepass123
 •	**SendGrid** has been used for sending out official emails and **Jenkins** was used for CI/CD of the software.<br>
 •	**Pytest** was also used in the initial phases for unit testing and functional testing of different software modules.<br>
 •	Official version of the application has been hosted on **AWS EC2** and my personal prototype has been hosted on my personal free tier Azure instance.<br>
+
+### Screenshots
+For Screenshots of the system, check out the Sample Use Case Documentation.pdf in this repo or <a href="https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/Sample%20Use%20Case%20Documentation.pdf">click here</a>
+
+
+# Authors
+## Kaushik Jadhav
+<ul>
+<li>Github:https://github.com/kaushikjadhav01</li>
+<li>Medium:https://medium.com/@kaushikjadhav01</li>
+<li>LinkedIn:https://www.linkedin.com/in/kaushikjadhav01/</li>
+<li>Portfolio:http://kaushikjadhav01.github.io/</li>
+</ul>

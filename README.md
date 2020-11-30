@@ -1,7 +1,7 @@
 # Medicine Data Portal
-This repository contains source code of a **prototype version** of an official project I have been working on. It is a Content Management System for a large sized pharma companies which has multiple partner pharma companies. 
+This repository contains source code of a **prototype version** of an official project I have been working on. It is a Content Management System for a large sized pharma company which has multiple partner pharma companies. 
 <br><br>
-The prototype is **hosted live** on my free tier azure instance at: http://mpp-prototype.centralindia.cloudapp.azure.com/ Instance might be slow due to free tier limits. Use following credentails to log in and try out the prototype:
+The prototype is **hosted live** on my personal free tier azure instance at: http://mpp-prototype.centralindia.cloudapp.azure.com/ Instance might be slow due to free tier limits. Use following credentails to log in and try out the prototype:
 <br><br>
 **Admin Credentails:**<br>
 Email: admin@mpp.com Password: samplepass123

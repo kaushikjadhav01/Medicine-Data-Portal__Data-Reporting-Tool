@@ -11,12 +11,21 @@ export const SearchSelect = forwardRef((props, ref) => {
 
     const [optionValue, setOptionValue] = useState(props.value);
     const [editing, setEditing] = useState(true);
-
+    const [productList, setProductList] = useState([])
+    const [productNameList, setProductNameList] = useState([])
     const refContainer = useRef(null);
     const productSelect = useRef(null);
 
     useEffect(() => {
         focus();
+        setProductList(props.colDef.selectValues)
+        if (props.value) {
+            let tempSelectValues = [...props.colDef.selectValues]
+            tempSelectValues.push(props.value)
+            setProductNameList(tempSelectValues)
+        } else {
+            setProductNameList(props.colDef.selectValues);
+        }
     }, []);
 
     useImperativeHandle(ref, () => {
@@ -47,8 +56,7 @@ export const SearchSelect = forwardRef((props, ref) => {
     };
 
     const setValues = () => {
-        const { selectValues } = props.colDef
-        return selectValues.map(val => <Option key={val} >{val}</Option>)
+        return productNameList.map(val => <Option key={val} >{val}</Option>)
     }
 
 
@@ -57,7 +65,13 @@ export const SearchSelect = forwardRef((props, ref) => {
         setEditing(false)
     }
 
-
+    const handleSearch = (value) => {
+        let tempProductList = [...productList]
+        if (!tempProductList.includes(value)) {
+            tempProductList.push(value)
+        }
+        setProductNameList(tempProductList)
+    }
 
     return (
         <div ref={refContainer}
@@ -65,11 +79,14 @@ export const SearchSelect = forwardRef((props, ref) => {
         >
             <Select
                 showSearch
-                mode='tags'
+                // mode='tags'
                 showArrow={true}
+                allowClear
                 placeholder='Enter product name'
                 style={{ width: 200 }}
                 onSelect={handleSelect}
+                onSearch={handleSearch}
+                defaultValue={props.value}
                 // defaultOpen={true}
                 // autoFocus={true}
                 ref={productSelect}

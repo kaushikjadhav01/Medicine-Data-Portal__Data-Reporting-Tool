@@ -1,10 +1,20 @@
-.sidebar-width-200 {
-    width: 200px !important;
+.sidebar-width-250 {
+    width: 250px !important;
 }
 
 .ant-layout-sider .ant-menu-inline .ant-menu-item {
     padding-left: 20px !important;
 }
+
+.ant-layout-sider .ant-menu-submenu>.ant-menu.ant-menu-sub .ant-menu-item {
+    font-size: 12px !important;
+    padding-left: 30px !important;
+}
+
+.ant-menu-dark .ant-menu-item-selected .anticon, .ant-menu-dark .ant-menu-item-selected .anticon+span{
+    color: #FCB514;
+}
+
 
 .gx-site-logo img {
     width: 120px;
@@ -23,6 +33,3 @@
     padding-left: 20px !important;
 }
 
-.ant-layout-sider .ant-menu-submenu>.ant-menu.ant-menu-sub .ant-menu-item {
-    padding-left: 54px !important;
-}

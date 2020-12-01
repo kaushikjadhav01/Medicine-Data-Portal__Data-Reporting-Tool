@@ -22,10 +22,6 @@ const ProductVerificationModal = (props) => {
         setProductNameList(productVerificationList.existing_products.map(value => value.product_name))
     }, [])
 
-    useEffect(() => {
-        console.log('product-list', toBeVerifiedProductList)
-    }, [toBeVerifiedProductList])
-
     const handleVerification = () => {
         verificationForm.validateFields().then(
             values => {

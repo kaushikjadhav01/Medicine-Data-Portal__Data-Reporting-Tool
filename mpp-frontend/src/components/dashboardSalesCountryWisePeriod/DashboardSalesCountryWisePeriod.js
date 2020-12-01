@@ -36,7 +36,6 @@ const DashboardSalesCountryWisePeriod = (props) => {
         <Table className='gx-table-no-bordered mpp-list-table'
           columns={props.columns}
           dataSource={props.data}
-          pagination={{ pageSize: 20 }}
           scroll={{ y: 300 }}
           bordered={false}
           loading={props.loading}

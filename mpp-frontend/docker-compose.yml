@@ -5,8 +5,9 @@ services:
         container_name: frontend
         ports:
             - "80:80"
-            
+            # - "443:443"
         volumes:
             - ./:/frontend
+            #- /nginx/certs:/etc/nginx/certs
             - /frontend/node_modules
 

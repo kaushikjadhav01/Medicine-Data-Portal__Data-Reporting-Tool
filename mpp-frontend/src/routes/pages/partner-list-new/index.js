@@ -278,7 +278,7 @@ const PartnerList = (props) => {
                             columns={setColumns()}
                             dataSource={data}
                             bordered
-                            pagination={{ pageSize: 20 }}
+                            // pagination={{ pageSize: 20 }}
                             loading={!isLoaded}
                         />
                     </Card>

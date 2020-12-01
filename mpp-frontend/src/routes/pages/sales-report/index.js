@@ -5,7 +5,7 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import 'ag-grid-enterprise';
 import IntlMessages from 'util/IntlMessages';
-import { Button, Input, Modal, Popover, Form, Badge, Tooltip, Tabs, Col, Card, InputNumber, Row, Radio, Select, Checkbox } from 'antd';
+import { Button, Input, Modal, Popover, Form, Badge, Tooltip, Tabs, InputNumber, Alert } from 'antd';
 import { MailOutlined, CheckCircleOutlined, CloseCircleOutlined, DownloadOutlined, LeftOutlined } from '@ant-design/icons';
 import AdminNotifications from 'components/AdminNotifications';
 import { monthArray, showMessage, yearList, formulationType, currencyList, statusArray } from '../../../helpers';
@@ -104,7 +104,6 @@ const SalesReport = (props) => {
 
     const setApiValues = (data) => {
         const { country_order, product_order, rows, sales_meta, unread_message_count, pending_product_count } = data;
-
         setCountryOrder(country_order && country_order.length ? country_order : []);
         setCountryDropdown(country_order && country_order.length ? country_order.map(
             value => value.country_name
@@ -227,7 +226,7 @@ const SalesReport = (props) => {
                 cellClassRules: {
                     'error-cell': (params) => {
                         const { value } = params
-                        return (isNaN(value) && (value))
+                        return (isNaN(value) && value !== null && value !== undefined)
                     },
                 },
                 width: 200
@@ -243,7 +242,7 @@ const SalesReport = (props) => {
                 cellClassRules: {
                     'error-cell': (params) => {
                         const { value } = params
-                        return (isNaN(value) && (value))
+                        return (isNaN(value) && value !== null && value !== undefined)
                     },
                 },
                 width: 200
@@ -316,6 +315,11 @@ const SalesReport = (props) => {
                 width: 150
             },
             {
+                headerName: 'Purchaser',
+                field: 'purchaser',
+                width: 200
+            },
+            {
                 headerName: 'Product',
                 field: 'product_name',
                 cellEditor: 'searchSelector',
@@ -323,11 +327,6 @@ const SalesReport = (props) => {
                 suppressKeyboardEvent: (params) => {
                     return suppressEnter(params)
                 },
-                width: 200
-            },
-            {
-                headerName: 'Purchaser',
-                field: 'purchaser',
                 width: 200
             },
             {
@@ -355,7 +354,17 @@ const SalesReport = (props) => {
             {
                 headerName: 'Pack Size',
                 field: 'pack_size',
-                // type: 'valueColumn',
+                type: 'valueColumn',
+                valueParser: (params) => {
+                    const { newValue } = params
+                    return isNaN(newValue) ? newValue : Number(newValue)
+                },
+                cellClassRules: {
+                    'error-cell': (params) => {
+                        const { value } = params
+                        return (isNaN(value) && (value))
+                    },
+                },
                 width: 100
             },
             {
@@ -427,7 +436,6 @@ const SalesReport = (props) => {
             {
                 headerName: 'Gross Sale Price (per pack) (USD)',
                 field: 'gross_sale_price_usd',
-                editable: false,
                 type: 'valueColumn',
                 valueParser: (params) => {
                     const { newValue } = params
@@ -444,7 +452,6 @@ const SalesReport = (props) => {
             {
                 headerName: 'Total Gross Sales Value (USD)',
                 field: 'total_gross_value',
-                editable: false,
                 type: 'valueColumn',
                 valueParser: (params) => {
                     const { newValue } = params
@@ -477,7 +484,6 @@ const SalesReport = (props) => {
             {
                 headerName: 'Total Net Sales Value',
                 field: 'total_value',
-                editable: false,
                 type: 'valueColumn',
                 valueParser: (params) => {
                     const { newValue } = params
@@ -559,79 +565,169 @@ const SalesReport = (props) => {
     }
 
     const checkApiRowNodes = (dataList) => {
-        return !dataList.some(value => checkApiRow(value))
+        if (dataList.some(value => checkApiRow(value).flag)) {
+            let errorData = dataList.filter(val => checkApiRow(val).flag)
+            let errorIndex = dataList.map((val, index) => {
+                if (checkApiRow(val).flag === true) {
+                    return index + 1
+                }
+            }).filter(val => val !== undefined)
+            let apiErrorList = errorData.map((val, index) => ({ errorkeys: checkApiRow(val).errorKey, index: errorIndex[index] }));
+            let errMsg = () => {
+                return (
+                    <div>
+                        <p>Please Check API Table:</p>
+                        {
+                            apiErrorList.map(value => {
+                                return (
+                                    <p>
+                                        <span className='mr-5'>Row no. {value.index}: </span>
+                                        <span>{value.errorkeys.map((val, index) => value.errorkeys.length === (index + 1) ? val : val + ', ')}</span>
+                                    </p>
+                                )
+                            })
+                        }
+                    </div>
+                )
+            }
+
+            Modal.error({
+                title: 'Invalid data!',
+                content: errMsg(),
+            });
+        }
+        return !dataList.some(value => checkApiRow(value).flag)
     }
 
     const checkApiRow = (rowData) => {
-        let flag = false
+        let flag = false;
+        let errorKey = [];
         for (let key in rowData) {
             if (rowData.hasOwnProperty(key)) {
-                if (key === 'year' && ((isNaN(rowData['year']) || !yearDropdown.includes(Number(rowData['year']))) && rowData['year'] !== '')) {
+                if (key === 'year' && ((isNaN(rowData['year']) || !yearDropdown.includes(Number(rowData['year']))) && rowData['year'] !== '' && rowData['year'] !== null)) {
                     flag = true;
-                    break;
-                } else if (key === 'month' && (!monthDropdown.includes(rowData['month']) && rowData['month'] !== '')) {
+                    errorKey.push('Year');
+                } if (key === 'month' && (!monthDropdown.includes(rowData['month']) && rowData['month'] !== '' && rowData['month'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'country_name' && (!countryDropdown.includes(rowData['country_name']) && rowData['country_name'] !== '')) {
+                    errorKey.push('Month');
+                } if (key === 'country_name' && (!countryDropdown.includes(rowData['country_name']) && rowData['country_name'] !== '' && rowData['country_name'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'quantity' && isNaN(rowData['quantity'])) {
+                    errorKey.push('Country');
+                } if (key === 'quantity' && (isNaN(rowData['quantity']) && rowData['quantity'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'total_value' && isNaN(rowData['total_value'])) {
+                    errorKey.push('Quantity');
+                } if (key === 'total_value' && (isNaN(rowData['total_value']) && rowData['total_value'] !== null)) {
                     flag = true
-                    break;
+                    errorKey.push('Total Value');
                 }
             }
         }
-        return flag
+        return { flag, errorKey }
     }
 
     const checkFdfRowNodes = (dataList) => {
-        return !dataList.some(value => checkFdfRow(value))
+        if (dataList.some(value => checkFdfRow(value).flag)) {
+            let errorData = dataList.filter(val => checkFdfRow(val).flag)
+            let errorIndex = dataList.map((val, index) => {
+                if (checkFdfRow(val).flag === true) {
+                    return index + 1
+                }
+            }).filter(val => val !== undefined)
+            let fdfErrorList = errorData.map((val, index) => ({ errorkeys: checkFdfRow(val).errorKey, index: errorIndex[index] }));
+            let errMsg = () => {
+                return (
+                    <div>
+                        <p>Please Check FDF Table:</p>
+                        {
+                            fdfErrorList.map(value => {
+                                return (
+                                    <p>
+                                        <span className='mr-5'>Row no. {value.index}: </span>
+                                        <span>{value.errorkeys.map((val, index) => value.errorkeys.length === (index + 1) ? val : val + ', ')}</span>
+                                    </p>
+                                )
+                            })
+                        }
+                    </div>
+                )
+            }
+
+            Modal.error({
+                title: 'Invalid data!',
+                content: errMsg(),
+            });
+        }
+        return !dataList.some(value => checkFdfRow(value).flag)
     }
 
     const checkFdfRow = (rowData) => {
-        let flag = false
+        let flag = false;
+        let errorKey = [];
         for (let key in rowData) {
             if (rowData.hasOwnProperty(key)) {
-                if (key === 'year' && ((isNaN(rowData['year']) || !yearDropdown.includes(Number(rowData['year']))) && rowData['year'] !== '')) {
+                if (key === 'year' && ((isNaN(rowData['year']) || !yearDropdown.includes(Number(rowData['year']))) && rowData['year'] !== '' && rowData['year'] !== null)) {
                     flag = true;
-                    break;
-                } else if (key === 'month' && (!monthDropdown.includes(rowData['month']) && rowData['month'] !== '')) {
+                    errorKey.push('Year');
+                }
+                if (key === 'month' && (!monthDropdown.includes(rowData['month']) && rowData['month'] !== '' && rowData['month'] !== null)) {
+                    flag = true;
+                    errorKey.push('Month');
+                }
+                if (key === 'country_name' && (!countryDropdown.includes(rowData['country_name']) && rowData['country_name'] !== '' && rowData['country_name'] !== null)) {
+                    flag = true;
+                    errorKey.push('Country');
+                }
+                if (key === 'quantity' && (isNaN(rowData['quantity']) && rowData['quantity'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'country_name' && (!countryDropdown.includes(rowData['country_name']) && rowData['country_name'] !== '')) {
+                    errorKey.push('Quantity');
+                }
+                if (key === 'formulation_md' && (!formulationType.includes(rowData['formulation_md']) && rowData['formulation_md'] !== '' && rowData['formulation_md'] !== null)) {
+                    flag = true;
+                    errorKey.push('Formulation Type');
+                }
+                if (key === 'pack_size' && (isNaN(rowData['pack_size']) && rowData['pack_size'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'quantity' && isNaN(rowData['quantity'])) {
+                    errorKey.push('Pack Size');
+                }
+                if (key === 'currency' && (!Object.keys(currencyList).includes(rowData['currency']) && rowData['currency'] && rowData['currency'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'currency' && (!Object.keys(currencyList).includes(rowData['currency']) && rowData['currency'])) {
+                    errorKey.push('Currency');
+                }
+                if (key === 'gross_sale_price_currency' && (isNaN(rowData['gross_sale_price_currency']) && rowData['gross_sale_price_currency'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'gross_sale_price_currency' && isNaN(rowData['gross_sale_price_currency'])) {
+                    errorKey.push('Gross Sale Price (per pack) (Local Currency)');
+                }
+                if (key === 'usd_exchange_rate' && (isNaN(rowData['usd_exchange_rate']) && rowData['usd_exchange_rate'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'usd_exchange_rate' && isNaN(rowData['usd_exchange_rate'])) {
+                    errorKey.push('Applicable Currency Exchange Rate');
+                }
+                if (key === 'gross_sale_price_usd' && (isNaN(rowData['gross_sale_price_usd']) && rowData['gross_sale_price_usd'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'deductable_expenses' && isNaN(rowData['deductable_expenses'])) {
+                    errorKey.push('Gross Sale Price (per pack) (USD)');
+                }
+                if (key === 'total_gross_value' && (isNaN(rowData['total_gross_value']) && rowData['total_gross_value'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'royalty_percent' && isNaN(rowData['royalty_percent'])) {
+                    errorKey.push('Total Gross Sales Value (USD)');
+                }
+                if (key === 'deductable_expenses' && (isNaN(rowData['deductable_expenses']) && rowData['deductable_expenses'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'royalty_due' && isNaN(rowData['royalty_due'])) {
+                    errorKey.push('Deductable Expenses (USD)');
+                }
+                if (key === 'total_value' && (isNaN(rowData['total_value']) && rowData['total_value'] !== null)) {
                     flag = true
-                    break;
-                } else if (key === 'total_value' && isNaN(rowData['total_value'])) {
+                    errorKey.push('Total Net Sales Value');
+                }
+                if (key === 'royalty_percent' && isNaN(rowData['royalty_percent'])) {
                     flag = true
-                    break;
+                    errorKey.push('Royalty %');
+                }
+                if (key === 'royalty_due' && isNaN(rowData['royalty_due'])) {
+                    flag = true
+                    errorKey.push('Royalty Due');
                 }
             }
         }
-        return flag
+        return { flag, errorKey }
     }
 
     const checkNullRow = (rowData) => {
@@ -682,10 +778,10 @@ const SalesReport = (props) => {
             }
             apiGridApi.deselectAll()
         } else {
-            Modal.error({
-                title: 'Invalid data!',
-                content: 'Please input valid entries!',
-            });
+            // Modal.error({
+            //     title: 'Invalid data!',
+            //     content: 'Please input valid entries!',
+            // });
             apiGridApi.deselectAll()
         }
     }
@@ -725,10 +821,10 @@ const SalesReport = (props) => {
             }
             fdfGridApi.deselectAll()
         } else {
-            Modal.error({
-                title: 'Invalid data!',
-                content: 'Please input valid entries!',
-            });
+            // Modal.error({
+            //     title: 'Invalid data!',
+            //     content: 'Please input valid entries!',
+            // });
             fdfGridApi.deselectAll()
         }
     }
@@ -784,11 +880,6 @@ const SalesReport = (props) => {
                     }))
                 }))
             }
-        } else {
-            Modal.error({
-                title: 'Invalid data!',
-                content: 'Please input valid entries before submitting!',
-            });
         }
     }
 
@@ -948,7 +1039,7 @@ const SalesReport = (props) => {
         const { partner_name, quarter_name, report_status, approval_time, submission_time } = reportDetails;
         if (apiProductOrder.length > 0 || fdfProductOrder.length > 0) {
             return (
-                <div className='gx-mb-4'>
+                <div className={pendingProducts > 0 ? 'gx-mb-2' : 'gx-mb-4'}>
                     <h1 className='title '>{isUserAdmin ? <Tooltip title='Back'><LeftOutlined className='mr-10' onClick={navigateBack} /></Tooltip> : null}Sales Report {isUserAdmin ? <span className='mr-5'>for <span className='text-capitalize'>{partner_name}</span></span> : null}
                         <span className='text-capitalize'>({quarter_name})</span>
                     </h1>
@@ -958,14 +1049,6 @@ const SalesReport = (props) => {
                             {!approval_time && !submission_time ? '' : ' on ' + moment(report_status === 'Submitted' || report_status === 'Resubmitted' ? submission_time : approval_time).format('Do MMM YYYY, hh:mm A')}
                         </span>
                     </h4>
-                    {
-                        isUserAdmin && pendingProducts > 0 ?
-                            <h4 className={isUserAdmin ? 'ml-30' : ''}>Number of products to be verified:&nbsp;
-                            <span className='text-capitalize color-red'> {pendingProducts}</span>
-                                <Button type='link' className='mb-0' onClick={() => viewVerificationModal()}>View Details</Button>
-                            </h4>
-                            : null
-                    }
                 </div>
             )
         } else {
@@ -974,6 +1057,29 @@ const SalesReport = (props) => {
                     <h1 className='title '>{isUserAdmin ? <LeftOutlined className='mr-5' onClick={navigateBack} /> : null}Sales Report {isUserAdmin && partner_name ? <span>for <span className='text-capitalize'>{partner_name}</span></span> : null}
                     </h1>
                 </div>
+            )
+        }
+    }
+
+    const displayProductVerification = () => {
+        if (isUserAdmin && pendingProducts > 0) {
+            return (
+                <Alert
+                    className='ml-30 min-width-600'
+                    message="Product verification pending!"
+                    description={
+                        <div>
+                            <span>
+                                There are
+                                            <span className='text-capitalize color-red ml-5 mr-5'> {pendingProducts}</span>
+                                            products to be verified
+                                            <Button type='link' className='mb-0' onClick={() => viewVerificationModal()}>View Details</Button>
+                            </span>
+                        </div>
+                    }
+                    type="warning"
+                    showIcon
+                />
             )
         }
     }
@@ -1075,11 +1181,29 @@ const SalesReport = (props) => {
                 case 'year':
                     if (!isNaN(newValue) && yearDropdown.includes(Number(newValue))) {
                         rowNode.setDataValue(colDef.field, Number(newValue));
+                    } else {
+                        if (newValue === ' ') {
+                            rowNode.setDataValue(colDef.field, null);
+                        }
+                    }
+                    break;
+                case 'month':
+                    if (newValue === ' ') {
+                        rowNode.setDataValue(colDef.field, null);
+                    }
+                    break;
+                case 'country':
+                    if (newValue === ' ') {
+                        rowNode.setDataValue(colDef.field, null);
                     }
                     break;
                 case 'quantity':
                     if (!isNaN(newValue)) {
-                        rowNode.setDataValue(colDef.field, Number(newValue))
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
                     } else {
                         if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
                             rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
@@ -1088,7 +1212,11 @@ const SalesReport = (props) => {
                     break;
                 case 'total_value':
                     if (!isNaN(newValue)) {
-                        rowNode.setDataValue(colDef.field, Number(newValue))
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
                     } else {
                         if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
                             rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
@@ -1101,47 +1229,82 @@ const SalesReport = (props) => {
         }
     }
 
-    const handleApiPasteEnd = (params) => {
-        if (ApiRowData.filter(val => !isEmpty(val)).some(val => Object.keys(val).length < 2 && Object.values(val).includes(''))) {
-            let tempRowData = [...ApiRowData]
-        }
-    }
-
     const handleFdfCellValueChange = (params) => {
         const { colDef, node, newValue, oldValue, data } = params;
         let rowNode = fdfGridApi.getRowNode(node.id);
         if (newValue !== oldValue) {
-            if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate')) {
-                if (data['gross_sale_price_currency'] === 0 && data['usd_exchange_rate'] === 0) {
-                    rowNode.setDataValue('gross_sale_price_usd', 0)
-                } else {
-                    rowNode.setDataValue('gross_sale_price_usd', Number(data['gross_sale_price_currency'] / data['usd_exchange_rate']));
-                }
-            }
-            if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate') && data.hasOwnProperty('quantity')) {
-                if (data['gross_sale_price_currency'] === 0 && data['usd_exchange_rate'] === 0) {
-                    rowNode.setDataValue('total_gross_value', 0)
-                } else {
-                    rowNode.setDataValue('total_gross_value', Number((data['gross_sale_price_currency'] / data['usd_exchange_rate']) * data['quantity']));
-                }
-            }
-            if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate') && data.hasOwnProperty('quantity') && data.hasOwnProperty('deductable_expenses')) {
-                if (data['gross_sale_price_currency'] === 0 && data['usd_exchange_rate'] === 0) {
-                    rowNode.setDataValue('total_value', Number(0 - data['deductable_expenses']))
-                } else {
-                    rowNode.setDataValue('total_value', Number(((data['gross_sale_price_currency'] / data['usd_exchange_rate']) * data['quantity']) - data['deductable_expenses']));
-                }
+            // if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate')) {
+            //     if ((data['gross_sale_price_currency'] === 0 || data['usd_exchange_rate'] === 0 || data['gross_sale_price_currency'] === null || data['usd_exchange_rate'] === null)) {
+            //         rowNode.setDataValue('gross_sale_price_usd', 0)
+            //     } else {
+            //         rowNode.setDataValue('gross_sale_price_usd', Number(data['gross_sale_price_currency'] / data['usd_exchange_rate']));
+            //     }
+            // }
+            // if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate') && data.hasOwnProperty('quantity')) {
+            //     if (data['gross_sale_price_currency'] === 0 || data['usd_exchange_rate'] === 0 || data['gross_sale_price_currency'] === null || data['usd_exchange_rate'] === null) {
+            //         rowNode.setDataValue('total_gross_value', 0)
+            //     } else {
+            //         rowNode.setDataValue('total_gross_value', Number((data['gross_sale_price_currency'] / data['usd_exchange_rate']) * data['quantity']));
+            //     }
+            // }
+            // if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate') && data.hasOwnProperty('quantity') && data.hasOwnProperty('deductable_expenses')) {
+            //     if (data['gross_sale_price_currency'] === 0 || data['usd_exchange_rate'] === 0 || data['gross_sale_price_currency'] === null || data['usd_exchange_rate'] === null) {
+            //         rowNode.setDataValue('total_value', Number(0 - data['deductable_expenses']))
+            //     } else {
+            //         rowNode.setDataValue('total_value', Number(((data['gross_sale_price_currency'] / data['usd_exchange_rate']) * data['quantity']) - data['deductable_expenses']));
+            //     }
 
-            }
+            // }
             switch (colDef.field) {
                 case 'year':
                     if (!isNaN(newValue) && yearDropdown.includes(Number(newValue))) {
                         rowNode.setDataValue(colDef.field, Number(newValue));
+                    } else {
+                        if (newValue === ' ') {
+                            rowNode.setDataValue(colDef.field, null);
+                        }
+                    }
+                    break;
+                case 'month':
+                    if (newValue === ' ') {
+                        rowNode.setDataValue(colDef.field, null);
+                    }
+                    break;
+                case 'country':
+                    if (newValue === ' ') {
+                        rowNode.setDataValue(colDef.field, null);
+                    }
+                    break;
+                case 'formulation_md':
+                    if (newValue === ' ') {
+                        rowNode.setDataValue(colDef.field, null);
+                    }
+                    break;
+                case 'currency':
+                    if (newValue === ' ') {
+                        rowNode.setDataValue(colDef.field, null);
                     }
                     break;
                 case 'quantity':
                     if (!isNaN(newValue)) {
-                        rowNode.setDataValue(colDef.field, Number(newValue))
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
+                    } else {
+                        if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
+                            rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
+                        }
+                    }
+                    break;
+                case 'pack_size':
+                    if (!isNaN(newValue)) {
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
                     } else {
                         if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
                             rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
@@ -1150,7 +1313,11 @@ const SalesReport = (props) => {
                     break;
                 case 'gross_sale_price_currency':
                     if (!isNaN(newValue)) {
-                        rowNode.setDataValue(colDef.field, Number(newValue))
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
                     } else {
                         if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
                             rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
@@ -1159,7 +1326,37 @@ const SalesReport = (props) => {
                     break;
                 case 'usd_exchange_rate':
                     if (!isNaN(newValue)) {
-                        rowNode.setDataValue(colDef.field, Number(newValue))
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
+                    } else {
+                        if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
+                            rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
+                        }
+                    }
+                    break;
+                case 'gross_sale_price_usd':
+                    if (!isNaN(newValue)) {
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
+                    } else {
+                        if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
+                            rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
+                        }
+                    }
+                    break;
+                case 'total_gross_value':
+                    if (!isNaN(newValue)) {
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
                     } else {
                         if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
                             rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
@@ -1168,7 +1365,24 @@ const SalesReport = (props) => {
                     break;
                 case 'deductable_expenses':
                     if (!isNaN(newValue)) {
-                        rowNode.setDataValue(colDef.field, Number(newValue))
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
+                    } else {
+                        if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
+                            rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
+                        }
+                    }
+                    break;
+                case 'total_value':
+                    if (!isNaN(newValue)) {
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
                     } else {
                         if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
                             rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
@@ -1177,7 +1391,11 @@ const SalesReport = (props) => {
                     break;
                 case 'royalty_percent':
                     if (!isNaN(newValue)) {
-                        rowNode.setDataValue(colDef.field, Number(newValue))
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
                     } else {
                         if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
                             rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
@@ -1186,7 +1404,11 @@ const SalesReport = (props) => {
                     break;
                 case 'royalty_due':
                     if (!isNaN(newValue)) {
-                        rowNode.setDataValue(colDef.field, Number(newValue))
+                        if (newValue === null) {
+                            rowNode.setDataValue(colDef.field, 0)
+                        } else {
+                            rowNode.setDataValue(colDef.field, Number(newValue))
+                        }
                     } else {
                         if (newValue && newValue.indexOf(',') !== -1 && !isNaN(newValue.split(',').join(''))) {
                             rowNode.setDataValue(colDef.field, Number(newValue.split(',').join('')))
@@ -1255,13 +1477,14 @@ const SalesReport = (props) => {
         }))
     }
 
-
-
     return (
         <div>
             <div className='gx-flex-row gx-justify-content-between'>
                 {displayHeader()}
                 {displayCTA()}
+            </div>
+            <div className='gx-flex-row gx-justify-content-between'>
+                {displayProductVerification()}
             </div>
             <Tabs
                 tabPosition='top'
@@ -1310,7 +1533,6 @@ const SalesReport = (props) => {
                                         suppressRowClickSelection={true}
                                         onSelectionChanged={handleApiRowSelection}
                                         onCellValueChanged={handleApiCellValueChange}
-                                        onPasteEnd={handleApiPasteEnd}
                                         frameworkComponents={{
                                             searchSelector: SearchSelect
                                         }}

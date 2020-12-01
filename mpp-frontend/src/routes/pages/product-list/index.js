@@ -114,7 +114,7 @@ const ProductList = (props) => {
                             className='gx-table-responsive mpp-list-table'
                             columns={columns}
                             dataSource={data}
-                            pagination={{ pageSize: 100 }}
+                            // pagination={{ pageSize: 100 }}
                             bordered
                         />
                     </Card>

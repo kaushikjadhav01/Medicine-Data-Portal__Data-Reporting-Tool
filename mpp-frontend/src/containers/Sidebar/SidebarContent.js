@@ -72,19 +72,19 @@ const SidebarContent = (props) => {
           {
             key: 'development-timeline',
             link: '/admin/report/development-timeline',
-            icon: (<i className='icon icon-timeline font-20' />),
+            icon: (<i className='icon icon-timeline font-16' />),
             name_id: 'sidebar.pdt'
           },
           {
             key: 'filing-plans',
             link: '/admin/report/filing-plans',
-            icon: (<FileSearchOutlined className='font-20' />),
+            icon: (<FileSearchOutlined className='font-16' />),
             name_id: 'sidebar.filingPlans'
           },
           {
             key: 'sales-report',
             link: '/admin/report/sales-report',
-            icon: (<BarChartOutlined className='font-20' />),
+            icon: (<BarChartOutlined className='font-16' />),
             name_id: 'sidebar.sales-report'
           }
         ] :
@@ -92,19 +92,19 @@ const SidebarContent = (props) => {
           {
             key: 'development-timeline',
             link: '/partner/development-timeline',
-            icon: (<i className='icon icon-timeline font-20' />),
+            icon: (<i className='icon icon-timeline font-16 mr-10' />),
             name_id: 'sidebar.pdt'
           },
           {
             key: 'filing-plans',
             link: '/partner/filing-plans',
-            icon: (<FileSearchOutlined className='font-20' />),
+            icon: (<FileSearchOutlined className='font-16 mr-10' />),
             name_id: 'sidebar.filingPlans'
           },
           {
             key: 'sales-report',
             link: '/partner/sales-report',
-            icon: (<BarChartOutlined className='font-20' />),
+            icon: (<BarChartOutlined className='font-16 mr-10' />),
             name_id: 'sidebar.sales-report'
           }
         ]
@@ -117,19 +117,19 @@ const SidebarContent = (props) => {
       {
         key: 'profile',
         link: isUserAdmin ? '/admin/profile' : '/partner/profile',
-        icon: (<i className='icon icon-profile font-20' />),
+        icon: (<i className='icon icon-profile font-16 mr-10' />),
         name_id: 'sidebar.profile'
       },
       {
         key: 'settings',
         link: '/admin/settings',
-        icon: (<i className='icon icon-setting font-20' />),
+        icon: (<i className='icon icon-setting font-16 mr-10' />),
         name_id: 'sidebar.settings'
       },
       {
         key: 'change-password',
         link: '/change-password',
-        icon: (<LockOutlined className='font-20' />),
+        icon: (<LockOutlined className='font-16 mr-10' />),
         name_id: 'sidebar.change-password'
       },
     ]
@@ -168,19 +168,19 @@ const SidebarContent = (props) => {
       </div> */}
       <CustomScrollbars className='gx-layout-sider-scrollbar gx-mt-2'>
         <Menu
-          className={navStyle === NAV_STYLE_FIXED ? 'pad-left-25 gx-display-flex-column' : ''}
+          className={navStyle === NAV_STYLE_FIXED ? 'pad-left-25 gx-display-flex-column sidebar-width-250' : ''}
           defaultOpenKeys={[defaultOpenKeys]}
           // selectedKeys={[selectedKeys]}
           selectedKeys={[defaultOpenKeys]}
           theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'}
           mode='inline'>
           {displayMenuItems(getMenuItems().menuItems)}
-          <Menu.SubMenu key='Reports' popupClassName={getNavStyleSubMenuClass(navStyle)}
+          <Menu.SubMenu className='mpp-submenu' key='Reports' popupClassName={getNavStyleSubMenuClass(navStyle)}
             title={<span> <i className='icon icon-folder-o' />
               <span><IntlMessages id='sidebar.reports' /></span></span>}>
             {displayMenuItems(getMenuItems().submenuItems)}
           </Menu.SubMenu>
-          <Menu.SubMenu key='User Profile' popupClassName={getNavStyleSubMenuClass(navStyle)}
+          <Menu.SubMenu className='mpp-submenu' key='User Profile' popupClassName={getNavStyleSubMenuClass(navStyle)}
             title={<span> <i className='icon icon-wall' />
               <span>User Profile</span></span>}>
             {displayMenuItems(getProfileMenuItems())}

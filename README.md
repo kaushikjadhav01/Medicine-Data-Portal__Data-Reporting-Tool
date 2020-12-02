@@ -1,7 +1,7 @@
 # Medicine Data Portal
 This repository contains source code of a **prototype version** of an official project I have been working on. It is a Content Management System for a large sized pharma company which has multiple partner pharma companies. 
 <br><br>
-The prototype is **hosted live** on my personal free tier azure instance at: http://mpp-prototype.centralindia.cloudapp.azure.com/ Instance might be slow due to free tier limits. Use following credentails to log in and try out the prototype:
+The prototype is **hosted live** on my personal free tier aws educate instance at: http://ec2-52-206-47-45.compute-1.amazonaws.com/ Instance might be slow due to free tier limits. Use following credentails to log in and try out the prototype:
 <br><br>
 **Admin Credentails:**<br>
 Email: admin@mpp.com Password: samplepass123
@@ -23,7 +23,7 @@ Admin has the privilege of viewing and downloading Consolidated PDT, Filing Plan
 •	**Nginx** and **Gunicorn** have been used for load balancing of the application and the application has been dockerized using **Docker-Compose** for easy, consistent and cross platform deployment on Cloud Virtual Machine instances.<br>
 •	**SendGrid** has been used for sending out official emails and **Jenkins** was used for CI/CD of the software.<br>
 •	**Pytest** was also used in the initial phases for unit testing and functional testing of different software modules.<br>
-•	Official version of the application has been hosted on **AWS EC2** and my personal prototype has been hosted on my personal free tier Azure instance.<br>
+•	Official version of the application has been hosted on **AWS EC2** and my personal prototype has been hosted on my personal free tier AWS Educate instance.<br>
 
 ## Screenshots
 ![alt text](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/mpp-frontend/src/assets/images/dashboard_ss.png)

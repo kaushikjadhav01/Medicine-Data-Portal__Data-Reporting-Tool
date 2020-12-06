@@ -44,7 +44,7 @@ class AdminDashboardCountry(APIView):
                     \
                     (SELECT DISTINCT ON (PARTNER_ID) PARTNER_ID, TEMPLATE_MESSAGE_ID, TEMPLATE_TYPE,IS_APPROVED\
                     FROM TEMPLATE_MESSAGE\
-                    WHERE TEMPLATE_TYPE = 'sales' AND IS_PARTNER_MESSAGE = 'FALSE'\
+                    WHERE TEMPLATE_TYPE = 'filing plan' AND IS_PARTNER_MESSAGE = 'FALSE'\
                     ORDER BY PARTNER_ID,TEMPLATE_MESSAGE_ID DESC) AS R\
                     \
                     WHERE IS_APPROVED = 'TRUE') AS T\
@@ -93,7 +93,7 @@ class AdminDashboardCountry(APIView):
                     \
                     (SELECT DISTINCT ON (PARTNER_ID) PARTNER_ID, TEMPLATE_MESSAGE_ID, TEMPLATE_TYPE,IS_APPROVED\
                     FROM TEMPLATE_MESSAGE\
-                    WHERE TEMPLATE_TYPE = 'sales' AND IS_PARTNER_MESSAGE = 'FALSE'\
+                    WHERE TEMPLATE_TYPE = 'filing plan' AND IS_PARTNER_MESSAGE = 'FALSE'\
                     ORDER BY PARTNER_ID,TEMPLATE_MESSAGE_ID DESC) AS R\
                     \
                     WHERE IS_APPROVED = 'TRUE') AS T\
@@ -159,7 +159,7 @@ class AdminDashboardCountry(APIView):
                 filing_plans = FilingPlan.objects.filter(country_id=country_id,status__in=allowed_statuses).annotate(partner_id=F('active_product_id__partner_id'),country_name=F('country_id__country_name'),product_id=F('active_product_id__product_id'),product_name=F('active_product_id__product_id__product_name')).values('country_name','product_id','product_name','status','partner_id')
                 if filing_plans:
                     for filing_plan in filing_plans:
-                        approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id=filing_plan['partner_id'],is_partner_message=False,quarter_id=q_1_quarter).last()
+                        approved_partner = TemplateMessage.objects.filter(template_type='filing plan',partner_id=filing_plan['partner_id'],is_partner_message=False,quarter_id=q_1_quarter).last()
                         active_partner=Partner.objects.filter(is_active=True,partner_id=filing_plan['partner_id'])
                         if approved_partner != None and approved_partner.is_approved == True and active_partner.exists():
                             product_id=filing_plan['product_id']

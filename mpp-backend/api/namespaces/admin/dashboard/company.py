@@ -29,24 +29,10 @@ class AdminDashboardCompany(APIView):
         with connection.cursor() as cursor:
             cursor.execute(
                "WITH TEMP AS\
-                \
                 (SELECT PARTNER_ID\
-                FROM\
-                \
-                (SELECT PARTNER_ID\
-                FROM\
-                \
-                (SELECT DISTINCT ON (PARTNER_ID) PARTNER_ID, TEMPLATE_MESSAGE_ID, TEMPLATE_TYPE,IS_APPROVED\
-                FROM TEMPLATE_MESSAGE\
-                WHERE TEMPLATE_TYPE = 'sales' AND IS_PARTNER_MESSAGE = 'FALSE'\
-                ORDER BY PARTNER_ID,TEMPLATE_MESSAGE_ID DESC) AS R\
-                \
-                WHERE IS_APPROVED = 'TRUE') AS T\
-                \
-                JOIN PARTNER USING (PARTNER_ID)\
+                FROM PARTNER\
                 WHERE IS_ACTIVE = TRUE\
                 )\
-                \
                 SELECT PARTNER_ID, COMPANY_NAME,STATUS,coalesce(COUNT,0)\
                 FROM\
                 \

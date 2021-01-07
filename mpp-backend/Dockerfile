@@ -14,6 +14,5 @@ RUN pip install -r requirements.txt
 # copy entrypoint.sh
 # COPY ./entrypoint.sh .
 # COPY ./entrypoint.sh .
-
 # copy project
 COPY . . 

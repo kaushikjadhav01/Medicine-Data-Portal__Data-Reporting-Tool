@@ -20,6 +20,7 @@ const SidebarContent = (props) => {
 
   let { navStyle, themeType, pathname } = useSelector(({ settings }) => settings);
   const [isUserAdmin, setIsUserAdmin] = useState(false);
+  const [isUserStaff, setIsUserStaff] = useState(false);
 
   // const getNoHeaderClass = (navStyle) => {
   //   if (navStyle === NAV_STYLE_NO_HEADER_MINI_SIDEBAR || navStyle === NAV_STYLE_NO_HEADER_EXPANDED_SIDEBAR) {
@@ -38,7 +39,7 @@ const SidebarContent = (props) => {
 
   const getMenuItems = () => {
     return {
-      'menuItems': isUserAdmin ?
+      'menuItems': isUserAdmin || isUserStaff ?
         [
           {
             key: 'dashboard',
@@ -67,7 +68,7 @@ const SidebarContent = (props) => {
             name_id: 'sidebar.dashboard'
           }
         ],
-      'submenuItems': isUserAdmin ?
+      'submenuItems': isUserAdmin || isUserStaff ?
         [
           {
             key: 'development-timeline',
@@ -116,7 +117,7 @@ const SidebarContent = (props) => {
     let menuItems = [
       {
         key: 'profile',
-        link: isUserAdmin ? '/admin/profile' : '/partner/profile',
+        link: isUserAdmin || isUserStaff ? '/admin/profile' : '/partner/profile',
         icon: (<i className='icon icon-profile font-16 mr-10' />),
         name_id: 'sidebar.profile'
       },
@@ -133,7 +134,7 @@ const SidebarContent = (props) => {
         name_id: 'sidebar.change-password'
       },
     ]
-    if (!isUserAdmin) {
+    if (!isUserAdmin && !isUserStaff) {
       menuItems.splice(1, 1)
     }
 
@@ -144,7 +145,7 @@ const SidebarContent = (props) => {
     return itemsArray.map(
       value => (
         <Menu.Item key={value.key}>
-          <Link to={value.link}>
+          <Link id={value.key} to={value.link}>
             {value.icon}
             <span><IntlMessages id={value.name_id} /></span>
           </Link>
@@ -155,7 +156,10 @@ const SidebarContent = (props) => {
 
   useEffect(() => {
     setIsUserAdmin(() => {
-      return getRole() === 'ADMIN'
+      return (getRole() === 'ADMIN')
+    })
+    setIsUserStaff(() => {
+      return (getRole() === 'STAFF')
     })
   }, [])
 
@@ -175,12 +179,12 @@ const SidebarContent = (props) => {
           theme={themeType === THEME_TYPE_LITE ? 'lite' : 'dark'}
           mode='inline'>
           {displayMenuItems(getMenuItems().menuItems)}
-          <Menu.SubMenu className='mpp-submenu' key='Reports' popupClassName={getNavStyleSubMenuClass(navStyle)}
+          <Menu.SubMenu id='side-menu-reports' className='mpp-submenu' key='Reports' popupClassName={getNavStyleSubMenuClass(navStyle)}
             title={<span> <i className='icon icon-folder-o' />
               <span><IntlMessages id='sidebar.reports' /></span></span>}>
             {displayMenuItems(getMenuItems().submenuItems)}
           </Menu.SubMenu>
-          <Menu.SubMenu className='mpp-submenu' key='User Profile' popupClassName={getNavStyleSubMenuClass(navStyle)}
+          <Menu.SubMenu id='side-menu-user-profile' className='mpp-submenu' key='User Profile' popupClassName={getNavStyleSubMenuClass(navStyle)}
             title={<span> <i className='icon icon-wall' />
               <span>User Profile</span></span>}>
             {displayMenuItems(getProfileMenuItems())}

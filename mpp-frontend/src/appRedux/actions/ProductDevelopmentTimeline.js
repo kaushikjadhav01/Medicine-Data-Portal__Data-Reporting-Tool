@@ -4,11 +4,11 @@ import { hideLoader, showLoader } from './Loader';
 import { getPDT, postPDT, adminGetPDT, adminPostPDT, approvePDT, submitPDT, markPDTMessageRead, getPDTReport, downloadpdtReport } from '../../services';
 import { showMessage } from '../../helpers'
 
-export const getPdtData = (onSuccess) => {
+export const getPdtData = (onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: pdtConstants.GET_PDT_REQUEST });
-        getPDT().then(
+        getPDT(quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: pdtConstants.GET_PDT_SUCCESS, data: response ? response : {} });
@@ -45,11 +45,11 @@ export const getAdminPDTReport = (data, onSuccess) => {
     }
 }
 
-export const downloadPDTReport = (filename, onSuccess) => {
+export const downloadPDTReport = (filename, quarter, requestObj, onSuccess) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: pdtConstants.REPORT_DOWNLOAD_PDT_REQUEST });
-        downloadpdtReport().then(response => {
+        downloadpdtReport(quarter, requestObj).then(response => {
             dispatch(hideLoader());
             dispatch({ type: pdtConstants.REPORT_DOWNLOAD_PDT_SUCCESS });
             FileSaver.saveAs(response, filename);
@@ -88,11 +88,11 @@ export const postPdtData = (data, onSuccess) => {
     }
 }
 
-export const getAdminPdtData = (id, onSuccess) => {
+export const getAdminPdtData = (id, onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: pdtConstants.GET_ADMIN_PDT_REQUEST });
-        adminGetPDT(id).then(
+        adminGetPDT(id,quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: pdtConstants.GET_ADMIN_PDT_SUCCESS, data: response ? response : {} });
@@ -110,11 +110,11 @@ export const getAdminPdtData = (id, onSuccess) => {
     }
 }
 
-export const postAdminPdtData = (id, data, onSuccess) => {
+export const postAdminPdtData = (id, data, onSuccess, quarter_name=null) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: pdtConstants.POST_ADMIN_PDT_REQUEST });
-        adminPostPDT(id, data).then(
+        adminPostPDT(id, data, quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: pdtConstants.POST_ADMIN_PDT_SUCCESS });

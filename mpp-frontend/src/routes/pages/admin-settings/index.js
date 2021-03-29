@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button, DatePicker, Form, Card, Col, Row } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { adminGetCutOffDate, adminSetCutOffDate } from '../../../appRedux/actions';
 import { LeftOutlined } from '@ant-design/icons';
 import moment from 'moment';
-
+import { getRole } from '../../../helpers';
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -76,14 +76,14 @@ const AdminSettings = (props) => {
                                         {...config}
                                         label='Set Report submission date'
                                     >
-                                        <DatePicker format='DD-MM-YYYY' />
+                                        <DatePicker format='DD-MM-YYYY' disabled={getRole() === 'ADMIN' ? false : true}/>
                                     </Form.Item>
 
                                     <Form.Item className='flex-d-row-reverse'>
-                                        <Button type='primary' htmlType='submit'>
+                                        <Button type='primary' htmlType='submit' disabled={getRole() === 'ADMIN' ? false : true}>
                                             Save
                                         </Button>
-                                        <Button onClick={navigateToDashboard}>
+                                        <Button onClick={navigateToDashboard} disabled={getRole() === 'ADMIN' ? false : true}>
                                             Cancel
                                         </Button>
                                     </Form.Item>

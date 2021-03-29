@@ -13,3 +13,24 @@
     background-color: #f44336 !important;
     border-color: #f44336 !important;
 }
+
+.quarter-dropdown {
+    font-size: 12px;
+    border-radius: 6%;
+    border-color: lightgray;
+    padding: 10%;
+    outline: none;
+    text-align: left;
+    height: 40px;
+}
+
+.quarter-dropdown-container-admin-pdt {
+    margin-right: 2%;
+}
+
+.quarter-dropdown-container-user-pdt {
+    margin-left: 15px;
+}
+.quarter-dropdown-container-admin-consolidated-pdt{
+    margin-right: 60px;
+}

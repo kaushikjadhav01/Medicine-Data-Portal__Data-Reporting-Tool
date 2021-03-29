@@ -6,11 +6,12 @@ class ProductVerification(models.Model):
     class Meta:
         db_table = "product_verification"
 
-    product_verification_id = models.AutoField(primary_key=True)
+    product_verification_id = models.AutoField(primary_key=True,db_index=True)
     partner_id = models.ForeignKey("api.Partner",on_delete=models.CASCADE, db_column='partner_id',null=True)
     product_name = models.TextField(max_length=200,blank=True)
     quarter_id = models.ForeignKey("api.Quarter",on_delete=models.CASCADE, db_column='quarter_id',null=True)
     is_approved = models.BooleanField(default=None,null=True)
+    sales_report_type = models.CharField(max_length=500,null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

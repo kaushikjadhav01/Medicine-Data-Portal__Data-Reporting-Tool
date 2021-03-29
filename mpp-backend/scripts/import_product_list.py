@@ -9,6 +9,7 @@ def run(path):
     stages_json = json.loads(stages_json)
 
     for row in data:
+        print(row['Product Name'])
         product = Product.objects.create(product_name = row['Product Name'],
                                 category=row['Category'],
                                 therapy_area=row['Therapy'],)

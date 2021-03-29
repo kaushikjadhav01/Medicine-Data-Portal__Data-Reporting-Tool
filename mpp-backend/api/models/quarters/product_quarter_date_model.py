@@ -7,7 +7,7 @@ class ProductQuarterDate(models.Model):
     class Meta:
         db_table = "product_quarter_date"
 
-    product_quarter_date_id = models.AutoField(primary_key=True)
+    product_quarter_date_id = models.AutoField(primary_key=True,db_index=True)
     product_quarter_id = models.ForeignKey("api.ProductQuarter",on_delete=models.CASCADE,db_column='product_quarter_id')
     stage_id = models.ForeignKey("api.Stage",on_delete=models.CASCADE,db_column='stage_id')
     start_date = models.DateField(null=True)

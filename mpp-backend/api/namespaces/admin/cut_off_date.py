@@ -28,7 +28,7 @@ class CutOffDateView(APIView):
 
     def get(self,request):
         
-        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
         cut_off_date = q_1_quarter.cut_off_date
         
         return Response(data={'cut_off_date':cut_off_date},status=status.HTTP_200_OK)
@@ -38,7 +38,7 @@ class CutOffDateView(APIView):
     def post(self,request):
         data = request.data
         cut_off_date = datetime.strptime(data['date'],'%d-%m-%Y')
-        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
         q_1_quarter.cut_off_date=cut_off_date
         q_1_quarter.save()
         return Response(data={'Cut Off Date Set Successfully.'},status=status.HTTP_200_OK)

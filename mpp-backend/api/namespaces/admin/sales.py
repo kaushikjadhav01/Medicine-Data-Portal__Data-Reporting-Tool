@@ -21,28 +21,45 @@ import os
 from MPP_API.settings import FROM_EMAIL_ID
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from django.db.models import F
+from decimal import Decimal
 
 class SalesReportAdminView(APIView):
 
     permission_classes = [IsAdmin]
 
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter(
+            'quarter', openapi.IN_QUERY, 
+            type=openapi.TYPE_STRING, 
+            required=False,
+        )],
+    )
+
     def get(self,request,pk,sales_report_type):
 
-        sales_report_type = sales_report_type.upper()
+        quarter_name_query = None
+        if request.query_params.get('quarter') != None:
+            quarter_name_query = request.query_params.get('quarter')
 
-        stages_json = open("static/stages.json").read()
-        stages_json = json.loads(stages_json)
-        if sales_report_type not in stages_json.keys():
-            return Response(data={'Invalid Stage Type'},status=status.HTTP_400_BAD_REQUEST)
+        quarter_dropdown = list(Quarter.objects.filter().order_by('-quarter_year', '-quarter_index').values_list('quarter_name',flat=True))
+        quarter_dropdown.pop(0)
+
+        sales_report_type = sales_report_type.upper()
         
         partner_id = pk
-        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+
+        if quarter_name_query == None:
+            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
+        else:
+            q_1_quarter = Quarter.objects.filter(quarter_name=quarter_name_query).first()
         
-        rows = SalesReport.objects.filter(partner_id=pk,sales_report_type=sales_report_type,quarter_id=q_1_quarter).order_by('sales_report_id').values(
+        rows = SalesReport.objects.filter(partner_id=pk,sales_report_type=sales_report_type,quarter_id=q_1_quarter).annotate(country_name=F('country_id__country_name')).order_by('sales_report_id').values(
         'sales_report_id',
         'year',
         'month',
         'country_id',
+        'country_name',
         'product_id',
         'purchaser',
         'strength',
@@ -67,10 +84,7 @@ class SalesReportAdminView(APIView):
         country_ids=[]
         product_order=[]
         
-        products = Product.objects.filter(is_active=True).values('product_id','product_name').order_by('product_name')
-        
-        if not products.exists():
-            return Response(data={'No content found. Please add Active Products using POST request'},status=status.HTTP_204_NO_CONTENT)
+        products = Product.objects.filter(is_active=True,category=sales_report_type).values('product_id','product_name').order_by('product_name')
 
         products = [entry for entry in products]
         
@@ -85,13 +99,12 @@ class SalesReportAdminView(APIView):
         countries = Country.objects.values('country_id','country_name').order_by('country_name')
         country_order = [entry for entry in countries]
         
-        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
         approval_time = None
         submission_time = None
 
         last_msg = TemplateMessage.objects.filter(
             partner_id=partner_id,
-            quarter_id=q_1,
+            quarter_id=q_1_quarter,
             template_type="sales").last()
         
         if last_msg:
@@ -109,7 +122,7 @@ class SalesReportAdminView(APIView):
 
         sales_meta = {
             "partner_name":Partner.objects.get(pk=partner_id).company_name,
-            "quarter_name":q_1.quarter_name,
+            "quarter_name":q_1_quarter.quarter_name,
             "report_status":report_status,
             "approval_time":approval_time,
             "submission_time":submission_time
@@ -118,55 +131,108 @@ class SalesReportAdminView(APIView):
         unread_message_count = TemplateMessage.objects.filter(partner_id=partner_id,template_type='sales',is_read=False,is_partner_message=True).count()
         
         # Get messages to send to partner. Convert Queryset to List
-        messages = TemplateMessage.objects.filter(partner_id=partner_id,template_type='sales').values().order_by('-template_message_id')
+        messages = TemplateMessage.objects.filter(partner_id=partner_id,template_type='sales').exclude(quarter_name='Historical Quarter').values().order_by('-template_message_id')
         messages =[message for message in messages]
 
         pending_product_count=ProductVerification.objects.filter(is_approved=None,partner_id=pk).count()
 
         if not rows.exists():
             rows=[]
-            return Response(data={"sales_meta":sales_meta,"no_content":"No content found. Please add Sales data via POST request.","rows":rows,"product_order":product_order,"country_order":country_order,'messages':messages,'unread_message_count':unread_message_count,'pending_product_count':pending_product_count},status=status.HTTP_200_OK)
+            return Response(data={"sales_meta":sales_meta,"quarter_dropdown":quarter_dropdown,"no_content":"No content found. Please add Sales data via POST request.","rows":rows,"product_order":product_order,"country_order":country_order,'messages':messages,'unread_message_count':unread_message_count,'pending_product_count':pending_product_count},status=status.HTTP_200_OK)
         
-        rows = [entry for entry in rows]
-        for row in rows:
-            if row['country_id']:
-                row['country_name'] =  Country.objects.filter(country_id=row['country_id']).values('country_name')[0]['country_name']
-            # try:
-            #     product_id = Product.objects.filter(product_id = row['product_id'],is_active=True).values('product_id')[0]['product_id']
-            # except:
-            #     pass           
-            # row['product_name'] = Product.objects.filter(product_id=product_id).values('product_name')[0]['product_name']
+        rows = [entry if quarter_name_query == None else dict(entry, **{'editable':False}) for entry in rows]
 
-        return Response(data={"sales_meta":sales_meta,"rows":rows,"product_order":product_order,"country_order":country_order,'messages':messages,'unread_message_count':unread_message_count,'pending_product_count':pending_product_count},status=status.HTTP_200_OK)
+        return Response(data={"sales_meta":sales_meta,"rows":rows,"quarter_dropdown":quarter_dropdown,"product_order":product_order,"country_order":country_order,'messages':messages,'unread_message_count':unread_message_count,'pending_product_count':pending_product_count},status=status.HTTP_200_OK)
 
     def post(self,request,pk,sales_report_type):
 
+        quarter_name_query = None
+        if request.query_params.get('quarter') != None:
+            quarter_name_query = request.query_params.get('quarter')
+
         sales_report_type = sales_report_type.upper()
 
-        stages_json = open("static/stages.json").read()
-        stages_json = json.loads(stages_json)
-        if sales_report_type not in stages_json.keys():
-            return Response(data={'Invalid Stage Type'},status=status.HTTP_400_BAD_REQUEST)
-
         partner_id = pk
-        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        if quarter_name_query == None:
+            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
+        else:
+            q_1_quarter = Quarter.objects.filter(quarter_name=quarter_name_query).first()
         
         data = request.data
 
         countries=Country.objects.all()
         if not countries.exists():
             return Response(status=status.HTTP_204_NO_CONTENT)
-
-        # active_products = ActiveProduct.objects.filter(partner_id=partner_id,is_active=True)
-        # if not active_products.exists():
-        #     return Response(status=status.HTTP_204_NO_CONTENT)
         
+        # Remove product verification entries if they are already corrected by user and not in current request
+        product_verification = ProductVerification.objects.filter(partner_id_id=pk,quarter_id=q_1_quarter,sales_report_type=sales_report_type)
+        for product_verification_obj in product_verification:
+            if not any(d.get('product_name',None) == product_verification_obj.product_name for d in data):
+                product_verification_obj.delete()
+
+        existing_rows = SalesReport.objects.filter(partner_id=pk,sales_report_type=sales_report_type,quarter_id=q_1_quarter).annotate(country_name=F('country_id__country_name')).order_by('sales_report_id').values(
+        'sales_report_id',
+        'year',
+        'month',
+        'country_id',
+        'country_name',
+        'purchaser',
+        'strength',
+        'formulation_md',
+        'pack_size',
+        'quantity',
+        'currency',
+        'gross_sale_price_currency',
+        'usd_exchange_rate',
+        'gross_sale_price_usd',
+        'total_gross_value',
+        'deductable_expenses',
+        'total_value',
+        'royalty_percent',
+        'royalty_due',
+        'procurement_end_country',
+        'comments',
+        'product_name'
+        )
+        modified_rows = []
+
+        # twenty_decimal_places = Decimal(10) ** -20
+        if sales_report_type == 'FDF':
+            numeric_fields = ['pack_size','quantity','gross_sale_price_currency','usd_exchange_rate','gross_sale_price_usd','total_gross_value','deductable_expenses','total_value','royalty_percent','royalty_due']
+        elif sales_report_type == 'API':
+            numeric_fields = ['quantity','total_value']
+        
+        # Format POST request so that it can be matched with QuerySet
         for row in data:
+            # Check if row is deleted, that is, if row contains only one element => sales_report_id
+            if len(row) == 1 and 'sales_report_id' in row.keys():
+                modified_rows.append(row)
+            else:
+                if 'product_id' in row.keys():
+                    row.pop('product_id')
+                for field in numeric_fields:
+                    if field in row.keys() and row[field] != None:
+                        row[field]=Decimal(str(round(row[field], 20)))
+        
+        # Match POST request with Queryset and check if any modifications
+        for row in data:
+            if row not in existing_rows:
+                modified_rows.append(row)
+        
+        for row in modified_rows:
             sales_report_type = sales_report_type
+            # row_fields = ['sales_report_id','year','month','country_id','country_name','purchaser','strength','formulation_md','pack_size','quantity','currency','gross_sale_price_currency','usd_exchange_rate','gross_sale_price_usd','total_gross_value','deductable_expenses','total_value','royalty_percent','royalty_due','procurement_end_country','comments','product_name']
+
+            # for field in row_fields:
+            #     if field in row.keys() and row[field] != '':
+            #         globals()[field]=row[field]
+            #     else:
+            #         globals()[field]=None
             sales_report_id=row.get('sales_report_id',None)
             month = row.get('month',None)
             year = row.get('year',None)
             country_id = row.get('country_id',None)
+            country_name = row.get('country_name',None)
             product_name = row.get('product_name',None)
             purchaser = row.get('purchaser',None)
             strength = row.get('strength',None)
@@ -184,14 +250,11 @@ class SalesReportAdminView(APIView):
             royalty_due= row.get('royalty_due',None)
             procurement_end_country= row.get('procurement_end_country',None)
             comments= row.get('comments',None)
-
-            empty_fields = [year,month,country_id,pack_size,quantity,gross_sale_price_currency,usd_exchange_rate,gross_sale_price_usd,total_gross_value,deductable_expenses,total_value,royalty_percent,royalty_due]
-            
             if year == '':
                 year=None
             if month == '':
                 month=None
-            if country_id == '':
+            if country_name == None:
                 country_id=None
             if pack_size == '':
                 pack_size=None
@@ -216,8 +279,6 @@ class SalesReportAdminView(APIView):
             if royalty_due == '':
                 royalty_due=None
             
-
-
             try:
                 row_empty = False
                 if sales_report_type == 'API' and month == None and year == None and country_id == None and product_name == None and purchaser == None and quantity == None and total_value == None:
@@ -239,14 +300,14 @@ class SalesReportAdminView(APIView):
                     active_product_id=ActiveProduct.objects.filter(product_id__product_name=product_name,partner_id_id=pk)
                     if not active_product_id.exists():
                         product_id = None
-                        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+                        # q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
                         product_verification = ProductVerification.objects.filter(partner_id_id=pk,product_name=product_name,quarter_id=q_1_quarter)
                         if product_verification.exists() and product_verification[0].is_approved == False:
                             for product_verification_obj in product_verification:
                                 product_verification_obj.is_approved = None
                                 product_verification_obj.save()
                         if not product_verification.exists() and product_name:
-                            product_verification_obj = ProductVerification.objects.create(partner_id_id=pk,product_name=product_name,quarter_id=q_1_quarter,created_by=request.user.id,updated_by=request.user.id)
+                            product_verification_obj = ProductVerification.objects.create(partner_id_id=pk,product_name=product_name,quarter_id=q_1_quarter,created_by=request.user.id,updated_by=request.user.id,sales_report_type=sales_report_type)
                             product_verification_obj.save()
                     else:
                         product_id=product_id[0]
@@ -274,7 +335,7 @@ class SalesReportAdminView(APIView):
                     product_name=SalesReport.objects.filter(sales_report_id=sales_report_id)
                     if product_name.exists():
                         product_name = product_name.values('product_name')[0]['product_name']
-                        ProductVerification.objects.filter(product_name=product_name,partner_id=partner_id,is_approved=None).delete()
+                        ProductVerification.objects.filter(product_name=product_name,partner_id=partner_id,is_approved=None,sales_report_type=sales_report_type).delete()
                     SalesReport.objects.filter(sales_report_id=sales_report_id).delete()
 
             except SalesReport.DoesNotExist:
@@ -288,12 +349,9 @@ class SalesReportAdminView(APIView):
                     product_name=SalesReport.objects.filter(sales_report_id=sales_report_id)
                     if product_name.exists():
                         product_name=product_name.values('product_name')[0]['product_name']
-                        ProductVerification.objects.filter(product_name=product_name,partner_id=partner_id,is_approved=None).delete()
+                        ProductVerification.objects.filter(product_name=product_name,partner_id=partner_id,is_approved=None,sales_report_type=sales_report_type).delete()
                     SalesReport.objects.filter(sales_report_id=sales_report_id).delete()
                     
-                # elif month == None or year == None or country_id == None or product_name == None or total_value == None or quantity == None or purchaser == None:
-                #     return Response(data={'Missing Fields. Please provide all the fields of the table'},status=status.HTTP_400_BAD_REQUEST)
-
                 else:
                     partner_id = Partner.objects.filter(partner_id=partner_id)[0]
                     country_id = Country.objects.filter(country_id=country_id)
@@ -305,18 +363,17 @@ class SalesReportAdminView(APIView):
                     active_product_id=ActiveProduct.objects.filter(product_id__product_name=product_name,partner_id_id=pk)
                     if not active_product_id.exists():
                         product_id=None
-                        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+                        # q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
                         product_verification = ProductVerification.objects.filter(partner_id_id=pk,product_name=product_name,quarter_id=q_1_quarter)
                         if product_verification.exists() and product_verification[0].is_approved == False:
                             for product_verification_obj in product_verification:
                                 product_verification_obj.is_approved = None
                                 product_verification_obj.save()
                         if not product_verification.exists() and product_name:
-                            product_verification_obj = ProductVerification.objects.create(partner_id_id=pk,product_name=product_name,quarter_id=q_1_quarter,created_by=request.user.id,updated_by=request.user.id)
+                            product_verification_obj = ProductVerification.objects.create(partner_id_id=pk,product_name=product_name,quarter_id=q_1_quarter,created_by=request.user.id,updated_by=request.user.id,sales_report_type=sales_report_type)
                             product_verification_obj.save()
                     else:
                         product_id=product_id[0]
-                    q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
                     SalesReport.objects.create(
                 partner_id=partner_id,
                 quarter_id=q_1_quarter,
@@ -355,57 +412,41 @@ class SalesReportDecisionViewset(viewsets.ModelViewSet):
     permission_classes = [IsAdmin]
     serializer_class = TemplateMessageSerializer
     queryset = TemplateMessage.objects.filter(template_type='sales')
-
-    def perform_create(self, serializer):
-        partner_id=self.request.data['partner_id']
-        message=self.request.data['message']
-        pending_products = ProductVerification.objects.filter(partner_id=partner_id,is_approved=None)
-        if not pending_products.exists():
-            if self.request.data['is_approved'] == True:
-                status = 'Approved'
-            else:
-                status = 'Rejected'
-            template_type = 'Sales'
-            api_link=os.getenv('API_LINK')
-            link = str(api_link+'partner/sales-report')
-        
-            partner_name = Partner.objects.filter(partner_id=partner_id).values_list('company_name',flat=True)[0] 
-            to_email_id = User.objects.filter(id=partner_id).values_list('email',flat=True)[0]
-            from_email_id = FROM_EMAIL_ID
-            email_subject = str(template_type + ' Report has been ' + status)
-        
-
-            html_message = render_to_string('admin_approval.html', {'partner_name': partner_name.capitalize(),'message':message,'status':status,'template_type':template_type,'link':link})
-            plain_message = strip_tags(html_message)
-    
-            send_mail(email_subject, plain_message, from_email_id, [to_email_id], html_message=html_message)
-
-        # Update admin partner list template data when approved
-        template_data = TemplateMessage.objects.filter(partner_id=partner_id,template_type='sales',is_partner_message=True).last()
-        template_data.is_approved=self.request.data['is_approved']
-        template_data.save()
-         
-        quarter_order=[]
-        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-        quarter_name = q_1_quarter.__dict__['quarter_name']
-        serializer.save(quarter_id=q_1_quarter,quarter_name=quarter_name,template_type='sales')
         
     def create(self, serializer):
         partner_id=self.request.data['partner_id']
-        sales_report = SalesReport.objects.filter(partner_id=partner_id).values()
-        disable_decision=False
+        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
+        
+        sales_report = SalesReport.objects.filter(partner_id=partner_id, quarter_id=q_1_quarter).values()
+        disable_decision_api=False
+        disable_decision_fdf=False
         is_approved=self.request.data['is_approved']
         for row in sales_report:
             if row:
                 if row['sales_report_type'] == 'API' and is_approved == True:
-                    if row['year'] == None or row['month'] == None or row['country_id_id'] == None or row['product_name'] == None or row['total_value']==None or row['quantity'] == None or row['purchaser'] == None:
-                        disable_decision=True
+                    try:
+                        if row['country_id_id'] == None:
+                            disable_decision_api=True
+                    except:
+                        disable_decision_api=True
+                    if row['year'] == None or row['month'] == None or row['product_name'] == None or row['total_value']==None or row['quantity'] == None or row['purchaser'] == None:
+                        disable_decision_api=True
                     
                 elif row['sales_report_type'] == 'FDF' and is_approved == True:
-                    if row['year'] == None or row['month'] == None or row['country_id_id'] == None or row['product_name'] == None or row['total_value']==None or row['quantity'] == None or row['purchaser'] == None or row['strength'] == None or row['formulation_md'] == None or row ['pack_size'] == None or row['currency'] == None or row['procurement_end_country'] == None:
-                        disable_decision=True
-        if disable_decision:
-            return Response(data={'Missing fields. Please fill all the fields of both API and FDF sections before submitting'}, status=status.HTTP_400_BAD_REQUEST)
+                    try:
+                        if row['country_id_id'] == None:
+                            disable_decision_fdf=True
+                    except:
+                        disable_decision_fdf=True
+                    if row['year'] == None or row['month'] == None or row['product_name'] == None or row['total_value']==None or row['quantity'] == None or row['purchaser'] == None or row['strength'] == None or row['formulation_md'] == None or row ['pack_size'] == None or row['gross_sale_price_usd'] == None:
+                        disable_decision_fdf=True
+             
+        if disable_decision_api and disable_decision_fdf:
+            return Response(data={'Missing fields. Please fill all the fields of API and FDF sections before submitting'}, status=status.HTTP_400_BAD_REQUEST) 
+        elif disable_decision_api:
+            return Response(data={'Missing fields. Please fill all the fields of API section before submitting'}, status=status.HTTP_400_BAD_REQUEST)
+        elif disable_decision_fdf:
+            return Response(data={'Missing fields. Please fill all the fields of FDF section before submitting'}, status=status.HTTP_400_BAD_REQUEST)
         else:    
             is_approved=self.request.data['is_approved']
             message=self.request.data['message']
@@ -429,12 +470,11 @@ class SalesReportDecisionViewset(viewsets.ModelViewSet):
             from_email_id = FROM_EMAIL_ID
             email_subject = str(template_type + ' Report has been ' + report_status)
         
-            html_message = render_to_string('admin_approval.html', {'partner_name': partner_name.capitalize(),'message':message,'status':report_status,'template_type':template_type,'link':link})
+            html_message = render_to_string('admin_approval.html', {'partner_name': partner_name.capitalize(),'message':message,'status':report_status,'template_type':template_type,'link':link,'api_link':api_link})
             plain_message = strip_tags(html_message)
     
             send_mail(email_subject, plain_message, from_email_id, [to_email_id], html_message=html_message)
         
-            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
             quarter_name = q_1_quarter.__dict__['quarter_name']
             template_message = TemplateMessage.objects.create(partner_id_id=partner_id,is_approved=is_approved,message=message,is_read=False,is_partner_message=False,
             updated_by=partner_id,created_by=partner_id,quarter_id=q_1_quarter,quarter_name=quarter_name,template_type='sales')
@@ -484,11 +524,12 @@ class ProductVerificationAdminView(APIView):
         partner_id=pk
         data=request.data
         message = 'Products Verified'
-        duplicate_checker=[]
+        duplicate_checker={}
         for row in data:
-            if row['product_name'] in duplicate_checker:
-                return Response(data={'Cannot Assign different values for same product'},status=status.HTTP_400_BAD_REQUEST)
-            duplicate_checker.append(row['product_name'])
+            if row['is_approved'] == True:
+                if row['product_name'] in duplicate_checker.keys() and duplicate_checker[row['product_name']] != [row['product_status'],row['category'],row['therapy_area']]:
+                    return Response(data={'Cannot Assign different values for same product'},status=status.HTTP_400_BAD_REQUEST)
+                duplicate_checker[row['product_name']]=[row['product_status'],row['category'],row['therapy_area']]
         for row in data:    
             product_already_exists = Product.objects.filter(product_name=row['product_name'])
             if product_already_exists:
@@ -512,9 +553,11 @@ class ProductVerificationAdminView(APIView):
                         created_by=request.user.id,
                         updated_by=request.user.id
                         )
+                    if row['product_status'] == 'APPROVED' or row['product_status'] == 'FILED' or row['product_status'] == 'DROPPED':
+                        active_product_obj.has_last_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1].quarter_id
                     active_product_obj.save()
                     
-                    quarter_objects = Quarter.objects.filter(is_active=True).order_by('-quarter_id')
+                    quarter_objects = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')
                     product_quarter_obj = ProductQuarter.objects.create(active_product_id=active_product_obj,quarter_id=quarter_objects[0], created_by=request.user.id,updated_by=request.user.id)
                     product_quarter_obj.save()
                     product_quarter_obj = ProductQuarter.objects.create(active_product_id=active_product_obj,quarter_id=quarter_objects[1], created_by=request.user.id,updated_by=request.user.id)
@@ -563,8 +606,10 @@ class ProductVerificationAdminView(APIView):
                             created_by=request.user.id,
                             updated_by=request.user.id
                             )
+                        if row['product_status'] == 'APPROVED' or row['product_status'] == 'FILED' or row['product_status'] == 'DROPPED':
+                            active_product_obj.has_last_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1].quarter_id
                         active_product_obj.save()
-                        quarter_objects = Quarter.objects.filter(is_active=True).order_by('-quarter_id')
+                        quarter_objects = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')
                         product_quarter_obj = ProductQuarter.objects.create(active_product_id=active_product_obj,quarter_id=quarter_objects[0], created_by=request.user.id,updated_by=request.user.id)
                         product_quarter_obj.save()
                         product_quarter_obj = ProductQuarter.objects.create(active_product_id=active_product_obj,quarter_id=quarter_objects[1], created_by=request.user.id,updated_by=request.user.id)

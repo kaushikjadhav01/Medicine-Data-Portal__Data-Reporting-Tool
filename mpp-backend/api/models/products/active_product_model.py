@@ -15,7 +15,7 @@ class ActiveProduct(models.Model):
     class Meta:
         db_table = "active_product"
 
-    active_product_id = models.AutoField(primary_key=True)
+    active_product_id = models.AutoField(primary_key=True,db_index=True)
     partner_id = models.ForeignKey("api.Partner",on_delete=models.CASCADE, db_column='partner_id')
     product_id = models.ForeignKey("api.Product",on_delete=models.CASCADE, db_column='product_id')
     status = models.CharField(max_length=50,choices=STATUS_CHOICES)

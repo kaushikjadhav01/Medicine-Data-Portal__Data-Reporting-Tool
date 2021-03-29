@@ -55,7 +55,7 @@ const ChangePassword = (props) => {
                         ]}
                         name='password'
                     >
-                        <Input.Password placeholder='Password' />
+                        <Input.Password id='cp-password' placeholder='Password' />
                     </FormItem>
 
                     <FormItem
@@ -77,11 +77,11 @@ const ChangePassword = (props) => {
                             }),
                         ]}
                     >
-                        <Input.Password placeholder='Retype New Password' />
+                        <Input.Password id='cp-confirm-password' placeholder='Retype New Password' />
                     </FormItem>
 
                     <FormItem>
-                        <Button type='primary' htmlType='submit'>
+                        <Button id='cp-submit' type='primary' htmlType='submit'>
                             <IntlMessages id='app.userAuth.resetPassword' />
                         </Button>
                     </FormItem>

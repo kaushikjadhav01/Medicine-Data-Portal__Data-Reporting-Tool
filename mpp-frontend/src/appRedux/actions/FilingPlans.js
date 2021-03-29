@@ -4,11 +4,11 @@ import { hideLoader, showLoader } from './Loader';
 import { showMessage } from '../../helpers'
 import { adminGetFilingPlans, adminPostFilingPlans, approveFilingPlans, downloadFilingPlansReport, getFilingPlans, getFilingPlansReport, markFilingPlansMessageRead, postFilingPlans, submitFilingPlans } from '../../services/FilingPlans';
 
-export const getFilingPlansData = (onSuccess) => {
+export const getFilingPlansData = (onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: filingPlansConstants.GET_FILING_PLANS_REQUEST });
-        getFilingPlans().then(
+        getFilingPlans(quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: filingPlansConstants.GET_FILING_PLANS_SUCCESS, data: response ? response : {} });
@@ -45,11 +45,11 @@ export const getAdminFilingPlansReport = (data, onSuccess) => {
     }
 }
 
-export const downloadFilingReport = (filename, onSuccess) => {
+export const downloadFilingReport = (filename, quarter, requestObj, onSuccess) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: filingPlansConstants.REPORT_DOWNLOAD_FILING_PLANS_REQUEST });
-        downloadFilingPlansReport().then(response => {
+        downloadFilingPlansReport(quarter, requestObj).then(response => {
             dispatch(hideLoader());
             dispatch({ type: filingPlansConstants.REPORT_DOWNLOAD_FILING_PLANS_SUCCESS });
             FileSaver.saveAs(response, filename);
@@ -66,11 +66,11 @@ export const downloadFilingReport = (filename, onSuccess) => {
     }
 }
 
-export const postFilingPlansData = (data, onSuccess) => {
+export const postFilingPlansData = (data, onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: filingPlansConstants.POST_FILING_PLANS_REQUEST });
-        postFilingPlans(data).then(
+        postFilingPlans(data, quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: filingPlansConstants.POST_FILING_PLANS_SUCCESS });
@@ -88,11 +88,11 @@ export const postFilingPlansData = (data, onSuccess) => {
     }
 }
 
-export const getAdminFilingPlansData = (id, onSuccess) => {
+export const getAdminFilingPlansData = (id, onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: filingPlansConstants.GET_ADMIN_FILING_PLANS_REQUEST });
-        adminGetFilingPlans(id).then(
+        adminGetFilingPlans(id, quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: filingPlansConstants.GET_ADMIN_FILING_PLANS_SUCCESS, data: response ? response : {} });
@@ -110,11 +110,11 @@ export const getAdminFilingPlansData = (id, onSuccess) => {
     }
 }
 
-export const postAdminFilingPlansData = (id, data, onSuccess) => {
+export const postAdminFilingPlansData = (id, data, onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: filingPlansConstants.POST_ADMIN_FILING_PLANS_REQUEST });
-        adminPostFilingPlans(id, data).then(
+        adminPostFilingPlans(id, data, quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: filingPlansConstants.POST_ADMIN_FILING_PLANS_SUCCESS });

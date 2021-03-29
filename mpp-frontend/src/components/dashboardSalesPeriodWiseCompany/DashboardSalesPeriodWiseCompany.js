@@ -1,16 +1,13 @@
 import React from 'react';
 import Widget from 'components/Widget/index';
-import { Select, Tooltip, Button,Table } from 'antd';
+import { Tooltip, Button,Table } from 'antd';
 import IntlMessages from 'util/IntlMessages';
 import { exportToXLXS } from '../../helpers';
 import { omit } from 'lodash';
 import { DownloadOutlined } from '@ant-design/icons';
-const Option = Select.Option
 
 const DashboardSalesPeriodWiseCompany = (props) => {
-  const handleChange = (value) => {
-    props.updateStatus(value)
-  }
+
   return (
     <Widget styleName='gx-order-history dashboard-min-height'
       title={

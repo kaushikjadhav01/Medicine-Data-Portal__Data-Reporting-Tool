@@ -5,6 +5,10 @@ from .namespaces.account.login import MyTokenObtainPairView
 
 #Clock
 from api.namespaces.clock import Clock
+from api.namespaces.account.test_delete_user import TestDeleteUserView
+from api.namespaces.account.test_set_password import TestSetPasswordView
+from api.namespaces.account.test_partner_id import TestPartnerIdView
+from api.namespaces.account.ses_db import SESDBView
 
 #Account Namespaces
 from .namespaces.account.update import UpdateUserPasswordViewSet
@@ -105,6 +109,13 @@ urlpatterns = [
 
     #Clock
     path('clock/', Clock.as_view()),
+
+    # Test Delete User
+    path('test_delete_user/', TestDeleteUserView.as_view()),
+    path('test_set_password/', TestSetPasswordView.as_view()),
+    path('test_partner_id/', TestPartnerIdView.as_view()),
+    path('ses_db/', SESDBView.as_view()),
+
 
     #Namespaces
     path('account/', include(account.urls)),

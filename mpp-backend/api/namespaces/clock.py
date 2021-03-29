@@ -41,6 +41,8 @@ class Clock(APIView):
         
         quarter = Quarter.objects.create(
             quarter_name=quarter_name,
+            quarter_year=ongoing_quarter.year,
+            quarter_index=ongoing_quarter.index,
             created_by=0,
             updated_by=0
         )
@@ -66,7 +68,7 @@ class Clock(APIView):
         link = str(api_link + 'partner/dashboard')
         email_subject = str('New Quarter has Started')
             
-        html_message = render_to_string('new_quarter_mail.html', {'link':link})
+        html_message = render_to_string('new_quarter_mail.html', {'link':link,'api_link':api_link})
         plain_message = strip_tags(html_message)
 
         to_email_list = []

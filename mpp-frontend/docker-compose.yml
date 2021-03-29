@@ -4,10 +4,16 @@ services:
         build: .
         container_name: frontend
         ports:
-            - "80:80"
+            - "81:81"
             # - "443:443"
         volumes:
             - ./:/frontend
-            #- /nginx/certs:/etc/nginx/certs
             - /frontend/node_modules
-
+            - ./certbot/conf:/etc/letsencrypt
+    # certbot:
+    #     image: certbot/certbot
+    #     restart: unless-stopped
+    #     volumes:
+    #         - ./certbot/conf:/etc/letsencrypt
+    #         - ./certbot/www:/var/www/certbot
+    #     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"    

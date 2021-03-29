@@ -9,7 +9,7 @@ from django.utils.html import strip_tags
 from django.template.loader import render_to_string, get_template
 import os
 from api.models import (
-    User,Partner, Quarter, ProductQuarterDate
+    User,Partner, Quarter
 )
 from api.tasks import send_bulk_email
 from MPP_API.settings import FROM_EMAIL_ID
@@ -57,19 +57,21 @@ class ReminderMailView(APIView):
         elif template_type == "Sales":
             template_url = "sales-report"
 
-
-        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
         cut_off_date = q_1.cut_off_date
-        tz_info = cut_off_date.tzinfo
-        today= datetime.now(tz_info)
-        no_of_days_to_submit = cut_off_date - today
-        no_of_days_to_submit = no_of_days_to_submit.days + 1
+        if cut_off_date != None:
+            tz_info = cut_off_date.tzinfo
+            today= datetime.now(tz_info)
+            no_of_days_to_submit = cut_off_date - today
+            no_of_days_to_submit = no_of_days_to_submit.days + 1
+        else:
+            no_of_days_to_submit=None
 
         link = str(api_link + 'partner/' + template_url)
 
         email_subject = str('Reminder: Please submit your ' + template_type + ' report')
         
-        html_message = render_to_string('partner_reminder.html', {'partner_name': partner_name.capitalize(),'template_type':template_type,'no_of_days_to_submit':no_of_days_to_submit,'link':link})
+        html_message = render_to_string('partner_reminder.html', {'partner_name': partner_name.capitalize(),'template_type':template_type,'no_of_days_to_submit':no_of_days_to_submit,'link':link,'api_link':api_link})
         plain_message = strip_tags(html_message)
         send_mail(email_subject, plain_message, FROM_EMAIL_ID, [partner_email], html_message=html_message)
 
@@ -84,8 +86,8 @@ class BulkReminderMailView(APIView):
     def post(self,request):
         
         data = request.data['data']
-
-        t = send_bulk_email.delay(data)
+        send_bulk_email.delay(data)
+        send_bulk_email.delay(data)
 
         return Response(status=status.HTTP_200_OK)
         

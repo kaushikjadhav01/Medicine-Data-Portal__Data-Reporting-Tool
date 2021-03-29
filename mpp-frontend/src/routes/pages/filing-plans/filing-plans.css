@@ -1,0 +1,39 @@
+.status-fields {
+    background-color: #ffffff;
+}
+
+.btn-confirm-green .ant-btn-primary {
+    color: #ffffff !important;
+    background-color: #52c41a !important;
+    border-color: #52c41a !important;
+}
+
+.btn-confirm-red .ant-btn-primary {
+    color: #ffffff !important;
+    background-color: #f44336 !important;
+    border-color: #f44336 !important;
+}
+
+.quarter-dropdown {
+    font-size: 12px;
+    border-radius: 6%;
+    border-color: lightgray;
+    padding: 10%;
+    outline: none;
+    text-align: left;
+    height: 40px;
+}
+
+.quarter-dropdown-container-admin-filing-plans {
+    margin-right: 20px;
+    margin-left: 40px;
+}
+
+.quarter-dropdown-container-user-filing-plans {
+    margin-right: 20px;
+    margin-left: 50px;
+}
+
+.quarter-dropdown-container-admin-consolidated-filing-plans{
+    margin-right: 60px;
+}

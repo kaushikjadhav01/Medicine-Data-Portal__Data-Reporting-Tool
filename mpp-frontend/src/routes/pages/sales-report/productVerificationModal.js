@@ -7,11 +7,11 @@ import { getAdminProductDetails } from '../../../appRedux/actions/AdminProducts'
 
 
 const ProductVerificationModal = (props) => {
-    const { visible, statusArray, hideVerificationModal, partnerId, setSalesReport } = props;
+    const { visible, statusArray, hideVerificationModal, partnerId, setSalesReport, quarter_name } = props;
 
     const dispatch = useDispatch();
     const [verificationForm] = Form.useForm();
-    const { productVerificationList, isLoaded } = useSelector(({ salesReport }) => salesReport);
+    const { productVerificationList } = useSelector(({ salesReport }) => salesReport);
     const [toBeVerifiedProductList, setToBeVerifiedProductList] = useState([])
     const [productList, setProductList] = useState([])
     const [productNameList, setProductNameList] = useState([])
@@ -30,7 +30,7 @@ const ProductVerificationModal = (props) => {
                     values.active_products.map(value => pick(value, ['product_verification_id', 'product_name', 'is_approved', 'category', 'therapy_area', 'product_status'])),
                     () => {
                         hideVerificationModal()
-                        setSalesReport()
+                        setSalesReport(quarter_name)
                     }
                 ))
             }
@@ -88,11 +88,24 @@ const ProductVerificationModal = (props) => {
             title='Product Verification'
             visible={visible}
             okText='Submit'
-            onCancel={() => { hideVerificationModal() }}
+            onCancel={() => {
+                let errMsg = () => {
+                    return (
+                        <div>
+                            <p>Please note that you still have Unverified Products in the list</p>
+                        </div>
+                    )
+                }
+                Modal.confirm({
+                    title: 'Unverified Products',
+                    content: errMsg(),
+                    onOk: () => { hideVerificationModal() }
+                });
+            }}
             width={900}
             footer={[
-                <Button key='submit' type='primary' onClick={() => { handleVerification() }}>Submit</Button>,
-                <Button key='cancel' onClick={() => { hideVerificationModal() }}>Cancel</Button>
+                <Button id='product-verification-submit' key='submit' type='primary' onClick={() => { handleVerification() }}>Submit</Button>,
+                <Button id='product-verification-cancel' key='cancel' onClick={() => { hideVerificationModal() }}>Cancel</Button>
             ]}
         >
             <Form
@@ -143,8 +156,8 @@ const ProductVerificationModal = (props) => {
                                                             >
                                                                 <Select
                                                                     placeholder='Enter product name'
+                                                                    id={'product-verification-name-' + field.fieldKey}
                                                                     showSearch
-                                                                    // mode='tags'
                                                                     showArrow={true}
                                                                     onSearch={handleProductSearch}
                                                                     onSelect={(value) => handleProductSelect(value, field.key)}
@@ -171,8 +184,8 @@ const ProductVerificationModal = (props) => {
                                                                 ]}
                                                             >
                                                                 <Radio.Group buttonStyle='solid' >
-                                                                    <Radio.Button value={true}>Confirm</Radio.Button>
-                                                                    <Radio.Button value={false}>Reject</Radio.Button>
+                                                                    <Radio.Button id={'product-verification-confirm-' + field.fieldKey} value={true}>Confirm</Radio.Button>
+                                                                    <Radio.Button id={'product-verification-reject-' + field.fieldKey} value={false}>Reject</Radio.Button>
                                                                 </Radio.Group>
                                                             </Form.Item>
                                                         </Col>
@@ -194,8 +207,8 @@ const ProductVerificationModal = (props) => {
                                                                 <Radio.Group
                                                                     disabled={toBeVerifiedProductList && toBeVerifiedProductList[field.fieldKey] && (toBeVerifiedProductList[field.fieldKey].is_approved === false || toBeVerifiedProductList[field.fieldKey].does_product_exist)}
                                                                 >
-                                                                    <Radio value='FDF'>FDF</Radio>
-                                                                    <Radio value='API'>API</Radio>
+                                                                    <Radio id={'product-verification-fdf-' + field.fieldKey} value='FDF'>FDF</Radio>
+                                                                    <Radio id={'product-verification-api-' + field.fieldKey} value='API'>API</Radio>
                                                                 </Radio.Group>
                                                             </Form.Item>
                                                         </Col>
@@ -215,12 +228,13 @@ const ProductVerificationModal = (props) => {
                                                                 ]}
                                                             >
                                                                 <Select
+                                                                    id={'product-verification-region-' + field.fieldKey}
                                                                     placeholder='Select therapy area'
                                                                     disabled={toBeVerifiedProductList && toBeVerifiedProductList[field.fieldKey] && (toBeVerifiedProductList[field.fieldKey].is_approved === false || toBeVerifiedProductList[field.fieldKey].does_product_exist)}
                                                                 >
-                                                                    <Select.Option value='HIV'>HIV</Select.Option >
-                                                                    <Select.Option value='HCV'>HCV</Select.Option >
-                                                                    <Select.Option value='HBV'>HBV</Select.Option >
+                                                                    <Select.Option id={'product-verification-hiv-' + field.fieldKey} value='HIV'>HIV</Select.Option >
+                                                                    <Select.Option id={'product-verification-hcv-' + field.fieldKey} value='HCV'>HCV</Select.Option >
+                                                                    <Select.Option id={'product-verification-hbv-' + field.fieldKey} value='HBV'>HBV</Select.Option >
                                                                 </Select>
                                                             </Form.Item>
                                                         </Col>
@@ -242,11 +256,12 @@ const ProductVerificationModal = (props) => {
                                                                 <Select
                                                                     placeholder='Please select product status'
                                                                     className='product-select'
+                                                                    id={'product-verification-product-status-' + field.fieldKey}
                                                                     disabled={toBeVerifiedProductList && toBeVerifiedProductList[field.fieldKey] && (toBeVerifiedProductList[field.fieldKey].is_approved === false)}
                                                                 >
                                                                     {
                                                                         statusArray && statusArray.length ? statusArray.map(
-                                                                            value => (<Select.Option key={statusArray.indexOf(value)} value={value.id}>{value.name}</Select.Option>)
+                                                                            value => (<Select.Option id={value.id} key={statusArray.indexOf(value)} value={value.id}>{value.name}</Select.Option>)
                                                                         ) : []
                                                                     }
                                                                 </Select>

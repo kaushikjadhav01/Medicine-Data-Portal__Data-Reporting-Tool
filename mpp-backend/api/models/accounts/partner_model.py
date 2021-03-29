@@ -7,11 +7,11 @@ class Partner(models.Model):
     class Meta:
         db_table = "partner"
     
-    partner_id = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,primary_key=True,db_column='partner_id')
+    partner_id = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,primary_key=True,db_column='partner_id',db_index=True)
 
     company_name = models.CharField(max_length=50)
     contact_number = models.CharField(max_length=50)
-    address = models.TextField(max_length=50,null=True)
+    address = models.TextField(max_length=500,null=True)
     region = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
 

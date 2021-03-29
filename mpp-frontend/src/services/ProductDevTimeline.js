@@ -2,14 +2,19 @@ import { config } from '../constants';
 import { authHeader } from '../helpers';
 import { handleResponse } from './handle-response';
 
-export const getPDT = () => {
+export const getPDT = (quarter_name) => {
     const requestOptions = {
         method: 'GET',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    return fetch(`${config.API_URL}/template/pdt/`, requestOptions)
-        .then(handleResponse)
+    if(!quarter_name){
+        return fetch(`${config.API_URL}/template/pdt/`, requestOptions)
+            .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/pdt/?quarter=` + quarter_name, requestOptions)
+            .then(handleResponse)
+    }
 }
 
 export const postPDT = (data) => {
@@ -23,25 +28,36 @@ export const postPDT = (data) => {
         .then(handleResponse)
 }
 
-export const adminGetPDT = (id) => {
+export const adminGetPDT = (id,quarter_name) => {
     const requestOptions = {
         method: 'GET',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    return fetch(`${config.API_URL}/template/pdt/${id}/`, requestOptions)
+    if(!quarter_name){
+        return fetch(`${config.API_URL}/template/pdt/${id}/`, requestOptions)
         .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/pdt/${id}/?quarter=` + quarter_name, requestOptions)
+        .then(handleResponse)
+    }
+    
 }
 
-export const adminPostPDT = (id, data) => {
+export const adminPostPDT = (id, data, quarter_name) => {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     };
 
-    return fetch(`${config.API_URL}/template/pdt/${id}/`, requestOptions)
-        .then(handleResponse)
+    if(!quarter_name){
+        return fetch(`${config.API_URL}/template/pdt/${id}/`, requestOptions)
+            .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/pdt/${id}/?quarter=` + quarter_name, requestOptions)
+            .then(handleResponse)
+    }
 }
 
 export const submitPDT = ({ message }) => {
@@ -112,11 +128,12 @@ export const downloadPDTReport = () => {
         });
 }
 
-export const downloadpdtReport = () => {
+export const downloadpdtReport = (quarter, requestObj) => {
+    requestObj['quarter']=quarter
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
+        body: JSON.stringify(requestObj),
         responseType: 'blob'
     };
 

@@ -1,0 +1,94 @@
+proxy_connect_timeout 7500s;
+proxy_read_timeout 3000s;
+# BE DNS
+server {
+
+    listen 80;
+    server_name api.data-portal.medicinespatentpool.org;
+    access_log  /var/log/nginx/example.log;
+    server_tokens off;
+
+    location / {
+        client_max_body_size 64M;
+        return 301 https://api.data-portal.medicinespatentpool.org$request_uri;
+    }
+    location /api {
+        client_max_body_size 64M;
+        proxy_pass http://mpp-backend:8000/api;
+        proxy_pass_request_headers on;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_redirect off;
+    }
+
+    location /static/ {
+        client_max_body_size 64M;
+        autoindex off;
+        alias /static/;
+    }
+}
+# BE SSL
+server {
+    listen 443 ssl;
+    server_name api.data-portal.medicinespatentpool.org;
+
+    ssl_certificate /etc/letsencrypt/live/data-portal.medicinespatentpool.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/data-portal.medicinespatentpool.org/privkey.pem;
+
+    location / {
+        client_max_body_size 64M;
+        proxy_pass http://mpp-backend:8000/api/swagger/;
+        proxy_pass_request_headers on;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_redirect off;
+    }
+
+    location /api {
+        client_max_body_size 64M;
+        proxy_pass http://mpp-backend:8000/api;
+        proxy_pass_request_headers on;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_redirect off;
+    }
+
+    location /static/ {
+        client_max_body_size 64M;
+        autoindex off;
+        alias /static/;
+    }
+
+}
+# FE DNS
+server {
+  listen        80;
+  server_name   data-portal.medicinespatentpool.org;
+
+  location / {
+    client_max_body_size 64M;
+    return 301 https://data-portal.medicinespatentpool.org$request_uri;
+  }
+}
+# FE SSL
+server {
+    listen 443 ssl;
+    server_name data-portal.medicinespatentpool.org;
+    server_tokens off;
+
+    ssl_certificate /etc/letsencrypt/live/data-portal.medicinespatentpool.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/data-portal.medicinespatentpool.org/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    location / {
+        client_max_body_size 64M;
+        proxy_pass   http://13.127.45.159:81;
+        proxy_set_header    Host                $http_host;
+        proxy_set_header    X-Real-IP           $remote_addr;
+        proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+    }
+}

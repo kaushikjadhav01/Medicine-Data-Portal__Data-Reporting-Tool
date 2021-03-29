@@ -4,6 +4,7 @@ from .accounts.employee_model import Employee,EmployeeSerializer
 from .accounts.template_message_model import TemplateMessage, TemplateMessageSerializer, TemplateSubmissionSerializer
 from .accounts.product_verification_model import ProductVerification
 from .accounts.sales_report_model import SalesReport
+from .accounts.ses_model import SESModel
 from .accounts.nested_serializers import UserNestedSerializer,PartnerNestedSerializer
 
 from .products.product_model import Product,ProductSerializer
@@ -20,3 +21,14 @@ from .filings.country_model import Country,CountrySerializer
 from .filings.filing_plan_model import FilingPlan,FilingPlanSerializer
 
 from .reset_pass_email import *
+
+from .medspal.medspal_records_model import MedspalRecords
+from .medspal.medspal_applications_model import MedspalApplications
+from .medspal.medspal_licenses_model import MedspalLicenses
+from .medspal.medspal_records_summary_model import MedspalRecordsSummary
+from .medspal.medspal_product_brand_name_model import MedspalProductBrandName
+from .medspal.medspal_product_standardized_name_model import MedspalProductStandardizedName
+from .medspal.medspal_originator_model import MedspalOriginator
+from .medspal.medspal_exclusivity_duration_model import MedspalExclusivityDuration
+from .medspal.medspal_exclusivity_started_on_model import MedspalExclusivityStartedOn
+from .medspal.medspal_status_model import MedspalStatus

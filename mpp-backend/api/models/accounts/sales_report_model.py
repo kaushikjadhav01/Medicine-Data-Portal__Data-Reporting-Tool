@@ -21,6 +21,7 @@ FORMULATION_CHOICES = [
 ('Liquid','Liquid'),
 ('Granuels','Granuels'),
 ('Powder for Suspension','Powder for Suspension'),
+('Oral Pellets','Oral Pellets'),
 ('Add more','Add more')
 ]
 
@@ -30,7 +31,7 @@ class SalesReport(models.Model):
     class Meta:
         db_table = "sales_report"
 
-    sales_report_id = models.AutoField(primary_key=True)
+    sales_report_id = models.AutoField(primary_key=True,db_index=True)
     sales_report_type = models.CharField(max_length=500)
     quarter_id = models.ForeignKey("api.Quarter",on_delete=models.CASCADE, db_column='quarter_id',null=True)
     partner_id = models.ForeignKey("api.Partner",on_delete=models.CASCADE, db_column='partner_id')

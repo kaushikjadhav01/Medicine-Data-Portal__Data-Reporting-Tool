@@ -10,6 +10,7 @@ import {
 } from '../../services';
 import { adminDashboardConstants } from '../../constants'
 import { hideLoader, showLoader } from './Loader';
+import { showMessage } from '../../helpers';
 
 export const projectCount = () => {
     return dispatch => {
@@ -331,6 +332,7 @@ export const bulkReminderMail = (data) => {
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: adminDashboardConstants.SEND_BULK_REMINDER_SUCCESS });
+                showMessage('success', 'Reminder sent!')
             }
         ).catch(
             error => {

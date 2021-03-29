@@ -18,7 +18,7 @@ class Product(models.Model):
     class Meta:
         db_table = "product"
 
-    product_id = models.AutoField(primary_key=True)
+    product_id = models.AutoField(primary_key=True,db_index=True)
     product_name = models.CharField(max_length=50)
     category = models.CharField(max_length=50,choices=CATEGORY_CHOICES)
     therapy_area = models.CharField(max_length=50)

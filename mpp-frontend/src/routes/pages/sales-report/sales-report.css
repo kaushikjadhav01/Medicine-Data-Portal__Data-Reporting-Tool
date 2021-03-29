@@ -11,3 +11,21 @@
     margin-right: 10px;
     height: 36px;
 }
+
+.quarter-dropdown {
+    font-size: 12px;
+    border-radius: 6%;
+    border-color: lightgray;
+    padding: 10%;
+    outline: none;
+    text-align: left;
+    height: 40px;
+}
+
+.quarter-dropdown-container-admin-sales {
+    margin-left: 0px;
+}
+
+.quarter-dropdown-container-user-sales {
+    margin-left: 0px;
+}

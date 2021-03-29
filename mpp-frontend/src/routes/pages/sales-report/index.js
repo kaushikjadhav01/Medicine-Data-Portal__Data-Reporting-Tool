@@ -5,11 +5,11 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import 'ag-grid-enterprise';
 import IntlMessages from 'util/IntlMessages';
-import { Button, Input, Modal, Popover, Form, Badge, Tooltip, Tabs, InputNumber, Alert } from 'antd';
+import { Button, Input, Modal, Popover, Form, Badge, Tooltip, Tabs, InputNumber, Alert, Divider } from 'antd';
 import { MailOutlined, CheckCircleOutlined, CloseCircleOutlined, DownloadOutlined, LeftOutlined } from '@ant-design/icons';
 import AdminNotifications from 'components/AdminNotifications';
 import { monthArray, showMessage, yearList, formulationType, currencyList, statusArray } from '../../../helpers';
-import { approveSalesReportData, getAdminApiSalesData, getAdminFdfSalesData, getAdminProductsToBeVerified, getApiSalesData, getFdfSalesData, partnerMarkSalesReportMessageRead, postAdminApiSalesData, postAdminFdfSalesData, postAdminProductsToBeVerified, postApiSalesReportData, postFdfSalesReportData, submitSalesReportData } from '../../../appRedux/actions/SalesReport';
+import { approveSalesReportData, getAdminApiSalesData, getAdminFdfSalesData, getAdminProductsToBeVerified, getApiSalesData, getFdfSalesData, partnerMarkSalesReportMessageRead, postAdminApiSalesData, postAdminFdfSalesData, postApiSalesReportData, postFdfSalesReportData, submitSalesReportData } from '../../../appRedux/actions/SalesReport';
 import { isEmpty, findIndex, has } from 'lodash';
 import moment from 'moment'
 
@@ -18,6 +18,8 @@ import { SearchSelect } from './searchSelect'
 import './sales-report.css'
 import { initRowData, suppressEnter } from './sales-report-util';
 import ProductVerificationModal from './productVerificationModal';
+import { CountrySelect } from './countrySelect';
+import { getRole } from '../../../helpers';
 
 const confirm = Modal.confirm;
 const TabPane = Tabs.TabPane;
@@ -34,6 +36,7 @@ const SalesReport = (props) => {
     const [addFdfRowNumber, setAddFdfRowNumber] = useState(0);
 
     const [isUserAdmin, setIsUserAdmin] = useState(false);
+    const [isUserStaff, setIsUserStaff] = useState(false);
     const [showVerificationModal, setShowVerificationModal] = useState(false);
     const [pendingProducts, setPendingProducts] = useState(0);
     const [partnerId, setPartnerId] = useState(null);
@@ -57,6 +60,10 @@ const SalesReport = (props) => {
     const [monthDropdown, setMonthDropdown] = useState([]);
     const [tabKey, setTabKey] = useState('api');
 
+    const [quarterDropdown, setQuarterDropdown] = useState([])
+    const [quarterDropdownCurrent, setQuarterDropdownCurrent] = useState("Loading...")
+    const [isHistoricQuarter, setIsHistoricQuarter] = useState(false)
+
     const { apiSalesList, fdfSalesList } = useSelector(({ salesReport }) => salesReport);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
@@ -73,32 +80,63 @@ const SalesReport = (props) => {
         if (isFdfInitialized) { addFdfColumns(); }
     }, [isDataReady, isFdfInitialized])
 
+    const changeQuarter = (e) => {
+        if(e.target.value === quarterDropdown[0]){
+            apiGridApi.isHistoricQuarter=false
+            apiGridApi.refreshCells()
+            if(isFdfInitialized){
+                fdfGridApi.isHistoricQuarter=false
+                fdfGridApi.refreshCells()
+            }
+            setIsHistoricQuarter(false)
+            setSalesReport()
+        }else{
+            apiGridApi.isHistoricQuarter=true
+            apiGridApi.refreshCells()
+            if(isFdfInitialized){
+                fdfGridApi.isHistoricQuarter=true
+                fdfGridApi.refreshCells()
+            }
+            setIsHistoricQuarter(true)
+            setSalesReport(e.target.value)
+        }
+    }
+
     const navigateBack = () => {
-        if (isUserAdmin) {
+        if (isUserAdmin || isUserStaff) {
             props.history.push('/admin/partner-list')
         }
     }
 
-    const setSalesReport = () => {
+    const setSalesReport = (quarter_name = null) => {
         const { id } = props.match.params;
         if (id) {
-            setIsUserAdmin(true)
+            setIsUserAdmin(() => {
+                return (getRole() === 'ADMIN')
+            })
+            setIsUserStaff(() => {
+                return (getRole() === 'STAFF')
+            })
             dispatch(getAdminApiSalesData(id, (apiData) => {
                 setApiValues(apiData);
+                setQuarterDropdown(apiData.quarter_dropdown)
+                setQuarterDropdownCurrent(apiData.sales_meta.quarter_name)
                 dispatch(getAdminFdfSalesData(id, (fdfData) => {
                     setFdfValues(fdfData);
                     setIsDataReady(true);
                     setPartnerId(id)
-                }))
-            }))
+                }, quarter_name))
+            }, quarter_name))
         } else {
             dispatch(getApiSalesData((apiData) => {
                 setApiValues(apiData);
+                setQuarterDropdown(apiData.quarter_dropdown)
+                setQuarterDropdownCurrent(apiData.sales_meta.quarter_name)
                 dispatch(getFdfSalesData((fdfData) => {
                     setFdfValues(fdfData);
                     setIsDataReady(true)
-                }))
-            }))
+                }, quarter_name))
+            }, quarter_name))
         }
     }
 
@@ -132,10 +170,12 @@ const SalesReport = (props) => {
     }
 
     const onApiGridReady = (params) => {
+        params.api['isHistoricQuarter']=isHistoricQuarter
         setApiGridApi(params.api);
     }
 
     const onFdfGridReady = (params) => {
+        params.api['isHistoricQuarter']=isHistoricQuarter
         setFdfGridApi(params.api);
         setIsFdfInitialized(true)
     }
@@ -186,19 +226,15 @@ const SalesReport = (props) => {
             {
                 headerName: 'Country',
                 field: 'country_name',
-                cellEditorSelector: (params) => {
-                    return {
-                        component: 'agRichSelect',
-                        params: { values: countryDropdown }
-                    }
-                },
+                cellEditor: 'countrySelector',
+                selectValues: countryDropdown,
                 cellClassRules: {
                     'error-cell': (params) => {
                         const { value } = params
                         return (!countryDropdown.includes(value) && (value))
                     },
                 },
-                width: 150
+                width: 200
             },
             {
                 headerName: 'Purchaser',
@@ -213,7 +249,37 @@ const SalesReport = (props) => {
                 suppressKeyboardEvent: (params) => {
                     return suppressEnter(params)
                 },
-                width: 200
+                width: 200,
+                editable: (params) => {
+                    if(isUserAdmin && params.api.isHistoricQuarter !== true){
+                        return true
+                    }else if(!isUserStaff && apiSalesList.sales_meta.report_status !== 'Approved' && params.api.isHistoricQuarter !== true){
+                        return true
+                    }
+                    else{
+                        return false
+                    }
+                },
+                cellClassRules: {
+                    'non-editable-cell': (params) => {
+                        const { isHistoricQuarter } = params.api
+                        if(!isUserAdmin && apiSalesList.sales_meta.report_status === 'Approved'){
+                            return true
+                        }
+                        else if(!isUserAdmin && isHistoricQuarter){
+                            return true
+                        }
+                        else if(isUserAdmin && params.api.isHistoricQuarter === true){
+                            return true
+                        }
+                        else if(isUserStaff){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                    },
+                },
             },
             {
                 headerName: 'Quantity (Kg)',
@@ -300,19 +366,15 @@ const SalesReport = (props) => {
             {
                 headerName: 'Country',
                 field: 'country_name',
-                cellEditorSelector: (params) => {
-                    return {
-                        component: 'agRichSelect',
-                        params: { values: countryDropdown }
-                    }
-                },
+                cellEditor: 'countrySelector',
+                selectValues: countryDropdown,
                 cellClassRules: {
                     'error-cell': (params) => {
                         const { value } = params
                         return (!countryDropdown.includes(value) && (value))
                     },
                 },
-                width: 150
+                width: 200
             },
             {
                 headerName: 'Purchaser',
@@ -327,7 +389,37 @@ const SalesReport = (props) => {
                 suppressKeyboardEvent: (params) => {
                     return suppressEnter(params)
                 },
-                width: 200
+                width: 200,
+                editable: (params) => {
+                    if(isUserAdmin && params.api.isHistoricQuarter !== true){
+                        return true
+                    }else if(!isUserStaff && apiSalesList.sales_meta.report_status !== 'Approved' && params.api.isHistoricQuarter !== true){
+                        return true
+                    }
+                    else{
+                        return false
+                    }
+                },
+                cellClassRules: {
+                    'non-editable-cell': (params) => {
+                        const { isHistoricQuarter } = params.api
+                        if(!isUserAdmin && apiSalesList.sales_meta.report_status === 'Approved'){
+                            return true
+                        }
+                        else if(!isUserAdmin && isHistoricQuarter){
+                            return true
+                        }
+                        else if(isUserAdmin && params.api.isHistoricQuarter === true){
+                            return true
+                        }
+                        else if(isUserStaff){
+                            return true
+                        }
+                        else{
+                            return false
+                        }
+                    },
+                }
             },
             {
                 headerName: 'Strength',
@@ -576,14 +668,17 @@ const SalesReport = (props) => {
             let errMsg = () => {
                 return (
                     <div>
-                        <p>Please Check API Table:</p>
+                        <p className='mt-20 mb-10'>Please Check API Table</p>
                         {
-                            apiErrorList.map(value => {
+                            apiErrorList.map((value, rowNo) => {
                                 return (
-                                    <p>
-                                        <span className='mr-5'>Row no. {value.index}: </span>
-                                        <span>{value.errorkeys.map((val, index) => value.errorkeys.length === (index + 1) ? val : val + ', ')}</span>
-                                    </p>
+                                    <div>
+                                        <h4 className='mr-5 mt-10'>Row No. {value.index}: </h4>
+                                        <p>{value.errorkeys.map((val, index) => value.errorkeys.length === (index + 1) ? val : val + ', ')}</p>
+                                        {
+                                            apiErrorList.length === (rowNo + 1) ? null : <Divider />
+                                        }
+                                    </div>
                                 )
                             })
                         }
@@ -639,12 +734,15 @@ const SalesReport = (props) => {
                     <div>
                         <p>Please Check FDF Table:</p>
                         {
-                            fdfErrorList.map(value => {
+                            fdfErrorList.map((value, rowNo) => {
                                 return (
-                                    <p>
-                                        <span className='mr-5'>Row no. {value.index}: </span>
-                                        <span>{value.errorkeys.map((val, index) => value.errorkeys.length === (index + 1) ? val : val + ', ')}</span>
-                                    </p>
+                                    <div>
+                                        <h4 className='mr-5 mt-10'>Row No. {value.index}: </h4>
+                                        <p>{value.errorkeys.map((val, index) => value.errorkeys.length === (index + 1) ? val : val + ', ')}</p>
+                                        {
+                                            fdfErrorList.length === (rowNo + 1) ? null : <Divider />
+                                        }
+                                    </div>
                                 )
                             })
                         }
@@ -743,7 +841,7 @@ const SalesReport = (props) => {
         return flag
     }
 
-    const saveApiData = () => {
+    const saveApiData = (quarter_name = null) => {
         let apiData = [];
         apiGridApi.stopEditing();
         apiGridApi.selectAll();
@@ -765,28 +863,28 @@ const SalesReport = (props) => {
             let finalApiData = apiData.filter(val => !isEmpty(val)).filter(val => !checkNullRow(val))
             if (isUserAdmin) {
                 dispatch(postAdminApiSalesData(partnerId, [...deleteApiIds, ...finalApiData], () => {
-                    showMessage('success', 'Data successfully recorded!');
+                    var apiUpdatedRows = finalApiData.length-apiSalesList.rows.length
+                    var apiSuccessMessage = `Data successfully recorded. Total Rows: `+finalApiData.length+(apiUpdatedRows === 0 ? '' :(apiUpdatedRows < 0 ? ', Deleted Rows: '+Math.abs(apiUpdatedRows) : `, Newly Added Rows: `+apiUpdatedRows))
+                    showMessage('success', apiSuccessMessage);
                     setDeleteApiIds([])
-                    setSalesReport()
-                }))
+                    setSalesReport(quarter_name)
+                }, quarter_name))
             } else {
                 dispatch(postApiSalesReportData([...deleteApiIds, ...finalApiData], () => {
-                    showMessage('success', 'Data successfully recorded!');
+                    var apiUpdatedRows = finalApiData.length-apiSalesList.rows.length
+                    var apiSuccessMessage = `Data successfully recorded. Total Rows: `+finalApiData.length+(apiUpdatedRows === 0 ? '' :(apiUpdatedRows < 0 ? ', Deleted Rows: '+Math.abs(apiUpdatedRows) : `, Newly Added Rows: `+apiUpdatedRows))
+                    showMessage('success', apiSuccessMessage);
                     setDeleteApiIds([])
                     setSalesReport()
                 }))
             }
             apiGridApi.deselectAll()
         } else {
-            // Modal.error({
-            //     title: 'Invalid data!',
-            //     content: 'Please input valid entries!',
-            // });
             apiGridApi.deselectAll()
         }
     }
 
-    const saveFdfData = () => {
+    const saveFdfData = (quarter_name = null) => {
         let fdfData = [];
         fdfGridApi.stopEditing();
         fdfGridApi.selectAll();
@@ -808,32 +906,40 @@ const SalesReport = (props) => {
             let finalFdfData = fdfData.filter(val => !isEmpty(val)).filter(value => !checkNullRow(value))
             if (isUserAdmin) {
                 dispatch(postAdminFdfSalesData(partnerId, [...deleteFdfIds, ...finalFdfData], () => {
-                    showMessage('success', 'Data successfully recorded!');
+                    var fdfUpdatedRows = finalFdfData.length-fdfSalesList.rows.length
+                    var fdfSuccessMessage = `Data successfully recorded. Total Rows: `+finalFdfData.length+(fdfUpdatedRows === 0 ? '' :(fdfUpdatedRows < 0 ? ', Deleted Rows: '+Math.abs(fdfUpdatedRows) : `, Newly Added Rows: `+fdfUpdatedRows))
+                    showMessage('success', fdfSuccessMessage);
                     setDeleteFdfIds([])
-                    setSalesReport()
-                }))
+                    setSalesReport(quarter_name)
+                }, quarter_name))
             } else {
                 dispatch(postFdfSalesReportData([...deleteFdfIds, ...finalFdfData], () => {
-                    showMessage('success', 'Data successfully recorded!');
+                    var fdfUpdatedRows = finalFdfData.length-fdfSalesList.rows.length
+                    var fdfSuccessMessage = `Data successfully recorded. Total Rows: `+finalFdfData.length+(fdfUpdatedRows === 0 ? '' :(fdfUpdatedRows < 0 ? ', Deleted Rows: '+Math.abs(fdfUpdatedRows) : `, Newly Added Rows: `+fdfUpdatedRows))
+                    showMessage('success', fdfSuccessMessage);
                     setDeleteFdfIds([])
                     setSalesReport()
                 }))
             }
             fdfGridApi.deselectAll()
         } else {
-            // Modal.error({
-            //     title: 'Invalid data!',
-            //     content: 'Please input valid entries!',
-            // });
             fdfGridApi.deselectAll()
         }
     }
 
     const saveData = () => {
         if (tabKey === 'api') {
-            saveApiData()
+            if (isUserAdmin && isHistoricQuarter){
+                saveApiData(quarterDropdownCurrent)
+            }else{
+                saveApiData()
+            }
         } else {
-            saveFdfData()
+            if (isUserAdmin && isHistoricQuarter){
+                saveFdfData(quarterDropdownCurrent)
+            }else{
+                saveFdfData()
+            }
         }
     }
 
@@ -1021,17 +1127,18 @@ const SalesReport = (props) => {
                             type='primary'
                             onClick={() => { saveData(false) }}
                             className='mb-0 sales-report-btn-save'
-                            disabled={report_status === 'Approved' && !isUserAdmin}
+                            disabled={(isUserAdmin ? false : isUserStaff ? true: isHistoricQuarter ? true : report_status === 'Approved')}
+                            id='sales-save'
                         >
                             Save
                         </Button>
                     </Tooltip>
                     <Tooltip title={<IntlMessages id='report.download' />}>
-                        <Button className='mb-0' onClick={() => downloadExcel()} >
+                        <Button id='sales-download-excel' className='mb-0' onClick={() => downloadExcel()} >
                             <DownloadOutlined />
                         </Button>
                     </Tooltip>
-                </div >
+                </div>
             )
     }
 
@@ -1040,10 +1147,10 @@ const SalesReport = (props) => {
         if (apiProductOrder.length > 0 || fdfProductOrder.length > 0) {
             return (
                 <div className={pendingProducts > 0 ? 'gx-mb-2' : 'gx-mb-4'}>
-                    <h1 className='title '>{isUserAdmin ? <Tooltip title='Back'><LeftOutlined className='mr-10' onClick={navigateBack} /></Tooltip> : null}Sales Report {isUserAdmin ? <span className='mr-5'>for <span className='text-capitalize'>{partner_name}</span></span> : null}
+                    <h1 className='title '>{isUserAdmin || isUserStaff ? <Tooltip title='Back'><LeftOutlined className='mr-10' onClick={navigateBack} /></Tooltip> : null}Sales Report {isUserAdmin || isUserStaff ? <span className='mr-5'>for <span className='text-capitalize'>{partner_name}</span></span> : null}
                         <span className='text-capitalize'>({quarter_name})</span>
                     </h1>
-                    <h4 className={isUserAdmin ? 'ml-30' : ''}>Report Status:&nbsp;
+                    <h4 className={isUserAdmin || isUserStaff ? 'ml-30' : ''}>Report Status:&nbsp;
                         <span className='text-capitalize'> {report_status}</span>
                         <span>
                             {!approval_time && !submission_time ? '' : ' on ' + moment(report_status === 'Submitted' || report_status === 'Resubmitted' ? submission_time : approval_time).format('Do MMM YYYY, hh:mm A')}
@@ -1073,7 +1180,7 @@ const SalesReport = (props) => {
                                 There are
                                             <span className='text-capitalize color-red ml-5 mr-5'> {pendingProducts}</span>
                                             products to be verified
-                                            <Button type='link' className='mb-0' onClick={() => viewVerificationModal()}>View Details</Button>
+                                            <Button id='view-product-verification' type='link' className='mb-0' onClick={() => viewVerificationModal()}>View Details</Button>
                             </span>
                         </div>
                     }
@@ -1087,20 +1194,22 @@ const SalesReport = (props) => {
     const displayCTA = () => {
         if ((apiProductOrder.length > 0 || fdfProductOrder.length > 0)) {
             const { report_status } = reportDetails
-            if (isUserAdmin) {
+            if (isUserAdmin || isUserStaff) {
                 return (
                     <div className='gx-flex-row gx-justify-content-end'>
                         <Button
                             className='gx-btn-success mb-0'
                             onClick={() => showApproveConfirm()}
-                            disabled={pendingProducts > 0}
+                            disabled={pendingProducts > 0 || isHistoricQuarter || isUserStaff}
+                            id='sales-approve'
                         >
                             Approve
                         </Button>
                         <Button
                             className='gx-btn-danger mb-0'
                             onClick={() => showRejectConfirm()}
-                            disabled={pendingProducts > 0}
+                            disabled={pendingProducts > 0 || isHistoricQuarter || isUserStaff}
+                            id='sales-reject'
                         >
                             Reject
                         </Button>
@@ -1108,6 +1217,7 @@ const SalesReport = (props) => {
                             <Popover overlayClassName='gx-popover-horizantal' placement='bottomRight'
                                 content={<AdminNotifications isAdmin={isUserAdmin} data={apiSalesList && apiSalesList.messages ? apiSalesList.messages : fdfSalesList && fdfSalesList.messages ? fdfSalesList.messages : []} />} trigger='click'>
                                 <Button
+                                    id='sales-msg-box'
                                     className='mr-0 mb-0'
                                     onClick={() => dispatch(partnerMarkSalesReportMessageRead(
                                         isUserAdmin ? 'admin' : 'partner',
@@ -1118,7 +1228,15 @@ const SalesReport = (props) => {
                                 </Button>
                             </Popover>
                         </Badge>
-
+                        <div className="quarter-dropdown-container-admin-sales">
+                            <select onChange={changeQuarter} className="quarter-dropdown">
+                                {
+                                    quarterDropdown.map((quarter) => (
+                                        <option value={quarter} className="quarter-dropdown-options">{quarter}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
                     </div>
                 )
             } else {
@@ -1127,7 +1245,8 @@ const SalesReport = (props) => {
                         <Button
                             onClick={() => showSubmitConfirm()}
                             className='gx-btn-success mb-0'
-                            disabled={report_status === 'Approved'}
+                            disabled={(isHistoricQuarter ? true : report_status === 'Approved')}
+                            id='sales-submit'
                         >
                             Submit Report
                         </Button>
@@ -1135,6 +1254,7 @@ const SalesReport = (props) => {
                             <Popover overlayClassName='gx-popover-horizantal' placement='bottomRight'
                                 content={<AdminNotifications isAdmin={isUserAdmin} data={apiSalesList && apiSalesList.messages ? apiSalesList.messages : fdfSalesList && fdfSalesList.messages ? fdfSalesList.messages : []} />} trigger='click'>
                                 <Button
+                                    id='sales-msg-box'
                                     className='mr-0 mb-0'
                                     onClick={() => dispatch(partnerMarkSalesReportMessageRead(
                                         isUserAdmin ? 'admin' : 'partner',
@@ -1145,6 +1265,15 @@ const SalesReport = (props) => {
                                 </Button>
                             </Popover>
                         </Badge>
+                        <div className="quarter-dropdown-container-user-sales">
+                            <select onChange={changeQuarter} className="quarter-dropdown">
+                                {
+                                    quarterDropdown.map((quarter) => (
+                                        <option value={quarter} className="quarter-dropdown-options">{quarter}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
                     </div>
                 )
             }
@@ -1167,14 +1296,14 @@ const SalesReport = (props) => {
             fdfGridApi.exportDataAsExcel({
                 sheetName: 'FDF',
                 fileName: 'sales-report',
-                columnKeys: ['year', 'month', 'country_name', 'product_name', 'purchaser', 'strength', 'formulation_md', 'pack_size', 'quantity', 'currency', 'gross_sale_price_currency', 'usd_exchange_rate', 'gross_sale_price_usd', 'total_gross_value', 'deductable_expenses', 'total_value', 'royalty_percent', 'royalty_due', 'procurement_end_country', 'comments']
+                columnKeys: ['year', 'month', 'country_name', 'purchaser', 'product_name',  'strength', 'formulation_md', 'pack_size', 'quantity', 'currency', 'gross_sale_price_currency', 'usd_exchange_rate', 'gross_sale_price_usd', 'total_gross_value', 'deductable_expenses', 'total_value', 'royalty_percent', 'royalty_due', 'procurement_end_country', 'comments']
             })
             fdfGridApi.deselectAll();
         }
     }
 
     const handleApiCellValueChange = (params) => {
-        const { colDef, node, newValue, oldValue, source } = params;
+        const { colDef, node, newValue, oldValue } = params;
         let rowNode = apiGridApi.getRowNode(node.id);
         if (newValue !== oldValue) {
             switch (colDef.field) {
@@ -1230,31 +1359,10 @@ const SalesReport = (props) => {
     }
 
     const handleFdfCellValueChange = (params) => {
-        const { colDef, node, newValue, oldValue, data } = params;
+        const { colDef, node, newValue, oldValue } = params;
         let rowNode = fdfGridApi.getRowNode(node.id);
         if (newValue !== oldValue) {
-            // if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate')) {
-            //     if ((data['gross_sale_price_currency'] === 0 || data['usd_exchange_rate'] === 0 || data['gross_sale_price_currency'] === null || data['usd_exchange_rate'] === null)) {
-            //         rowNode.setDataValue('gross_sale_price_usd', 0)
-            //     } else {
-            //         rowNode.setDataValue('gross_sale_price_usd', Number(data['gross_sale_price_currency'] / data['usd_exchange_rate']));
-            //     }
-            // }
-            // if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate') && data.hasOwnProperty('quantity')) {
-            //     if (data['gross_sale_price_currency'] === 0 || data['usd_exchange_rate'] === 0 || data['gross_sale_price_currency'] === null || data['usd_exchange_rate'] === null) {
-            //         rowNode.setDataValue('total_gross_value', 0)
-            //     } else {
-            //         rowNode.setDataValue('total_gross_value', Number((data['gross_sale_price_currency'] / data['usd_exchange_rate']) * data['quantity']));
-            //     }
-            // }
-            // if (data && data.hasOwnProperty('gross_sale_price_currency') && data.hasOwnProperty('usd_exchange_rate') && data.hasOwnProperty('quantity') && data.hasOwnProperty('deductable_expenses')) {
-            //     if (data['gross_sale_price_currency'] === 0 || data['usd_exchange_rate'] === 0 || data['gross_sale_price_currency'] === null || data['usd_exchange_rate'] === null) {
-            //         rowNode.setDataValue('total_value', Number(0 - data['deductable_expenses']))
-            //     } else {
-            //         rowNode.setDataValue('total_value', Number(((data['gross_sale_price_currency'] / data['usd_exchange_rate']) * data['quantity']) - data['deductable_expenses']));
-            //     }
-
-            // }
+            
             switch (colDef.field) {
                 case 'year':
                     if (!isNaN(newValue) && yearDropdown.includes(Number(newValue))) {
@@ -1430,7 +1538,7 @@ const SalesReport = (props) => {
     }
 
     const deleteSelectedApiRows = () => {
-        let rowIndexList = apiGridApi.getSelectedNodes().map(value => value.rowIndex);
+        let rowIndexList = apiGridApi.getSelectedNodes().map(value => Number(value.id));
         let tempDeleteIds = [...deleteApiIds];
         let rowData = [...ApiRowData]
         rowIndexList.forEach((value) => {
@@ -1476,7 +1584,6 @@ const SalesReport = (props) => {
             setShowVerificationModal(true)
         }))
     }
-
     return (
         <div>
             <div className='gx-flex-row gx-justify-content-between'>
@@ -1498,7 +1605,7 @@ const SalesReport = (props) => {
                         apiProductDropdown && apiProductDropdown.length ?
                             <div>
                                 <div
-                                    className='ag-theme-balham'
+                                    className='ag-theme-balham ag-scroll-bar-fix'
                                     style={{ height: setReportHeight(), paddingBottom: 20 }}
                                 >
                                     <AgGridReact
@@ -1511,21 +1618,35 @@ const SalesReport = (props) => {
                                             sortable: true,
                                             width: 300,
                                             resizable: true,
-                                            editable: (apiSalesList.sales_meta.report_status !== 'Approved' || isUserAdmin),
-                                            cellClass: (params) => {
-                                                const { data } = params;
-                                                const { report_status } = apiSalesList.sales_meta;
-                                                if (data) {
-                                                    return ((report_status !== 'Approved' || isUserAdmin) ? 'editable-cell' : 'non-editable-cell');
+                                            editable: (params) => {
+                                                if(isUserAdmin){
+                                                    return true
+                                                }else if(!isUserStaff && apiSalesList.sales_meta.report_status !== 'Approved' && params.api.isHistoricQuarter !== true){
+                                                    return true
+                                                }
+                                                else{
+                                                    return false
                                                 }
                                             },
-                                        }}
-                                        columnTypes={{
-                                            valueColumn: {
-                                                valueParser: 'Number(newValue)',
-                                                filter: 'agNumberColumnFilter',
+                                            cellClassRules: {
+                                                'non-editable-cell': (params) => {
+                                                    const { isHistoricQuarter } = params.api
+                                                    if(!isUserAdmin && apiSalesList.sales_meta.report_status === 'Approved'){
+                                                        return true
+                                                    }
+                                                    else if(!isUserAdmin && isHistoricQuarter){
+                                                        return true
+                                                    }
+                                                    else if(isUserStaff){
+                                                        return true
+                                                    }
+                                                    else{
+                                                        return false
+                                                    }
+                                                },
                                             },
                                         }}
+                                        
                                         enableRangeSelection={true}
                                         enableCellChangeFlash={true}
                                         animateRows={true}
@@ -1534,15 +1655,16 @@ const SalesReport = (props) => {
                                         onSelectionChanged={handleApiRowSelection}
                                         onCellValueChanged={handleApiCellValueChange}
                                         frameworkComponents={{
-                                            searchSelector: SearchSelect
+                                            searchSelector: SearchSelect,
+                                            countrySelector: CountrySelect
                                         }}
 
                                     />
                                 </div>
                                 <div className='gx-flex-row'>
-                                    <InputNumber disabled={reportDetails.report_status === 'Approved' && !isUserAdmin} min={0} defaultValue={0} max={10000} onChange={(value) => { setAddApiRowNumber(value) }} />
-                                    <Button type='primary' onClick={addApiRow} disabled={reportDetails.report_status === 'Approved' && !isUserAdmin} > Add Row</Button>
-                                    <Button onClick={deleteSelectedApiRows} disabled={(reportDetails.report_status === 'Approved' && !isUserAdmin) || !areApiRowsSelected} > Delete Selected Rows</Button>
+                                    <InputNumber disabled={(isUserAdmin ? false : isHistoricQuarter ? true : reportDetails.report_status === 'Approved')} min={0} defaultValue={0} max={10000} onChange={(value) => { setAddApiRowNumber(value) }} />
+                                    <Button type='primary' onClick={addApiRow} disabled={(isUserAdmin ? false : isUserStaff ? true : isHistoricQuarter ? true : reportDetails.report_status === 'Approved')} > Add Row</Button>
+                                    <Button onClick={deleteSelectedApiRows} disabled={(isUserAdmin ? false : isUserStaff ? true : isHistoricQuarter ? true : reportDetails.report_status === 'Approved') || !areApiRowsSelected} > Delete Selected Rows</Button>
                                 </div>
                             </div>
                             :
@@ -1553,7 +1675,7 @@ const SalesReport = (props) => {
                     {
                         fdfProductDropdown && fdfProductDropdown.length ?
                             <div>
-                                <div className='ag-theme-balham' style={{ height: setReportHeight(), paddingBottom: 20 }}>
+                                <div className='ag-theme-balham ag-scroll-bar-fix' style={{ height: setReportHeight(), paddingBottom: 20 }}>
                                     <AgGridReact
                                         onGridReady={onFdfGridReady}
                                         columnDefs={FdfColumnDefs}
@@ -1563,20 +1685,33 @@ const SalesReport = (props) => {
                                             filter: true,
                                             sortable: true,
                                             width: 300,
-                                            editable: (apiSalesList.sales_meta.report_status !== 'Approved' || isUserAdmin),
                                             resizable: true,
-                                            cellClass: (params) => {
-                                                const { data } = params;
-                                                const { report_status } = reportDetails;
-                                                if (data) {
-                                                    return ((report_status !== 'Approved' || isUserAdmin) ? 'editable-cell' : 'non-editable-cell');
+                                            editable: (params) => {
+                                                if(isUserAdmin){
+                                                    return true
+                                                }else if(!isUserStaff && apiSalesList.sales_meta.report_status !== 'Approved' && params.api.isHistoricQuarter !== true){
+                                                    return true
                                                 }
-                                            }
-                                        }}
-                                        columnTypes={{
-                                            valueColumn: {
-                                                valueParser: 'Number(newValue)',
-                                                filter: 'agNumberColumnFilter',
+                                                else{
+                                                    return false
+                                                }
+                                            },
+                                            cellClassRules: {
+                                                'non-editable-cell': (params) => {
+                                                    const { isHistoricQuarter } = params.api
+                                                    if(!isUserAdmin && apiSalesList.sales_meta.report_status === 'Approved'){
+                                                        return true
+                                                    }
+                                                    else if(!isUserAdmin && isHistoricQuarter){
+                                                        return true
+                                                    }
+                                                    else if(isUserStaff){
+                                                        return true
+                                                    }
+                                                    else{
+                                                        return false
+                                                    }
+                                                },
                                             },
                                         }}
                                         enableRangeSelection={true}
@@ -1588,14 +1723,15 @@ const SalesReport = (props) => {
                                         onSelectionChanged={handleFdfRowSelection}
                                         onCellValueChanged={handleFdfCellValueChange}
                                         frameworkComponents={{
-                                            searchSelector: SearchSelect
+                                            searchSelector: SearchSelect,
+                                            countrySelector: CountrySelect
                                         }}
                                     />
                                 </div>
                                 <div className='gx-flex-row'>
-                                    <InputNumber disabled={reportDetails.report_status === 'Approved' && !isUserAdmin} min={0} defaultValue={0} max={10000} onChange={(value) => { setAddFdfRowNumber(value) }} />
-                                    <Button type='primary' onClick={addFdfRow} disabled={reportDetails.report_status === 'Approved' && !isUserAdmin} > Add Row</Button>
-                                    <Button onClick={deleteSelectedFdfRows} disabled={(reportDetails.report_status === 'Approved' && !isUserAdmin) || !areFdfRowsSelected} > Delete Selected Rows</Button>
+                                    <InputNumber disabled={(isUserAdmin ? false : isHistoricQuarter ? true : reportDetails.report_status === 'Approved')} min={0} defaultValue={0} max={10000} onChange={(value) => { setAddFdfRowNumber(value) }} />
+                                    <Button type='primary' onClick={addFdfRow} disabled={(isUserAdmin ? false : isUserStaff ? true : isHistoricQuarter ? true : reportDetails.report_status === 'Approved')} > Add Row</Button>
+                                    <Button onClick={deleteSelectedFdfRows} disabled={(isUserAdmin ? false : isUserStaff ? true : isHistoricQuarter ? true : reportDetails.report_status === 'Approved') || !areFdfRowsSelected} > Delete Selected Rows</Button>
                                 </div>
 
                             </div>
@@ -1614,6 +1750,7 @@ const SalesReport = (props) => {
                         partnerId={partnerId}
                         setSalesReport={setSalesReport}
                         statusArray={statusArray}
+                        quarter_name={quarterDropdownCurrent}
                     />
                     : null
             }

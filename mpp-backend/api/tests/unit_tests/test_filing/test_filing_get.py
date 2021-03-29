@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 import json
 import pytest
+
 from api.models import (
     Product,Country
 )
@@ -111,7 +112,7 @@ def test_filing_get_without_data(client,make_partner_with_products_case2,make_co
 
     client.credentials()
     
-    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert response.status_code == status.HTTP_200_OK
 
 
 def test_filing_get_with_data_admin(client,make_partner_with_products_case1,make_countries):

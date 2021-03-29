@@ -140,9 +140,14 @@ class UserNestedSerializer(serializers.ModelSerializer):
             product['created_by'] = curr_user
             product['updated_by'] = curr_user
             active_product = ActiveProduct.objects.create(partner_id=partner,**product)
+            
+            product_status = active_product.status
+            if product_status == 'APPROVED' or product_status == 'FILED' or product_status == 'DROPPED':
+                active_product.has_last_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1].quarter_id
+            active_product.save()
 
             #Assigning the q and q-1 quarter to the newly assigned products
-            quarter_ids = Quarter.objects.filter(is_active=True).order_by('-quarter_id')
+            quarter_ids = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')
             product_quarter = ProductQuarter.objects.create(
                 active_product_id=active_product,
                 quarter_id=quarter_ids[0],
@@ -217,14 +222,31 @@ class UserNestedSerializer(serializers.ModelSerializer):
                 each.is_active = False
                 each.save()
             else:
-                each.status = present_status[each.product_id]
+                old_product_status = each.status
+                new_product_status = present_status[each.product_id]
+
+                each.status = new_product_status
                 each.is_active = True
+                
+                if old_product_status != 'APPROVED' and old_product_status != 'FILED' and old_product_status != 'DROPPED': #new_product_status:
+                    if new_product_status == 'APPROVED' or new_product_status == 'FILED' or new_product_status == 'DROPPED':
+                        each.has_last_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1].quarter_id
+                    else:
+                        each.has_last_quarter = None
+
                 each.save()
 
+
         for each in not_present:
-            active_product = ActiveProduct.objects.create(partner_id=partner,product_id=each,status=not_present_status[each],updated_by=curr_user,created_by=curr_user)
+            product_status = not_present_status[each]
+            active_product = ActiveProduct.objects.create(partner_id=partner,product_id=each,status=product_status,updated_by=curr_user,created_by=curr_user)
+
+            if product_status == 'APPROVED' or product_status == 'FILED' or product_status == 'DROPPED':
+                active_product.has_last_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1].quarter_id
+            active_product.save()
+
             #Assigning the q and q-1 quarter to the newly assigned products
-            quarter_ids = Quarter.objects.filter(is_active=True).order_by('-quarter_id') 
+            quarter_ids = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index') 
             product_quarter = ProductQuarter.objects.create(
                 active_product_id=active_product,
                 quarter_id=quarter_ids[0],

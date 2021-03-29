@@ -5,8 +5,8 @@ WORKDIR /mpp-frontend
 COPY . /mpp-frontend/
 
 # prepare the contiainer for building react
-# RUN yarn install
-# RUN yarn build
+#RUN yarn install
+#RUN yarn build
 
 #prepare nginx
 FROM nginx:1.19.0
@@ -17,5 +17,6 @@ COPY nginx/nginx.conf /etc/nginx/conf.d
 # COPY nginx/certs /etc/nginx/certs
 
 #fire up nginx
+EXPOSE 81
 EXPOSE 80
 CMD ["nginx","-g","daemon off;"]

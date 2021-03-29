@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 import json
 import pytest
+
 from api.models import (
     Product,Country,SalesReport
 )
@@ -75,11 +76,11 @@ def test_product_wise(client,make_partner_with_products_case1,make_countries):
     assert response.status_code == status.HTTP_200_OK
 
     response = client.get('/api/admin/dashboard/product/country/?status=Filed')
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_204_NO_CONTENT
     response = client.get('/api/admin/dashboard/product/country/?status=Registered')
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_204_NO_CONTENT
     response = client.get('/api/admin/dashboard/product/country/?status=Filing-Planned')
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_204_NO_CONTENT
 
     response = client.get('/api/admin/dashboard/product/country/quarter/')
     assert response.status_code == status.HTTP_200_OK

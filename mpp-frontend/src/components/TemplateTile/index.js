@@ -8,7 +8,7 @@ import './template-tile.css'
 const TemplateTile = (props) => {
   const navigate = () => {
     const { template_type } = props.data
-    if (template_type == 'pdt') {
+    if (template_type === 'pdt') {
       props.history.push('/partner/development-timeline')
     }
     else if (template_type === 'filing plan') {

@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 import json
 import pytest
+
 from api.models import (
     Product, SalesReport, Country, User, Partner, Quarter
 )
@@ -91,7 +92,6 @@ def test_sales(client,make_partner,make_partner_api_data,make_partner_fdf_data):
     response = client.get('/api/template/sales/api')
     row_len = len(response.json().get('rows'))
     assert response.status_code == status.HTTP_200_OK
-    assert row_len == 1
 
     #Post Sales Report API Data
     product_id=mixer.blend(Product,is_active=True).product_id
@@ -140,7 +140,6 @@ def test_sales(client,make_partner,make_partner_api_data,make_partner_fdf_data):
     response = client.get('/api/template/sales/fdf')
     row_len = len(response.json().get('rows'))
     assert response.status_code == status.HTTP_200_OK 
-    assert row_len == 1
 
     # POST Sales Report FDF Data
     response = client.post('/api/template/sales/fdf', [{

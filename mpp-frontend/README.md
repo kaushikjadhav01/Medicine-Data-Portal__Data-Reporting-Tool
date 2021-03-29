@@ -1,5 +1,5 @@
 Template Link (https://themeforest.net/item/wieldy-react-redux-admin-template/22277962?s_rank=1 "Wieldy")
-Theme Documentation (http://docs.g-axon.com/wieldy/ "Documentation")
+Theme Documentation (http://docs.g-axon.com/wieldy/ "Documentation").
 
 Note: Project is using [yarn](https://yarnpkg.com/en/docs/install) instead npm
 

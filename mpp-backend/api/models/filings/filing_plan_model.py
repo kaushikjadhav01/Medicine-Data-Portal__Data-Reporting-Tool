@@ -6,10 +6,11 @@ class FilingPlan(models.Model):
     class Meta:
         db_table = "filing_plan"
 
-    filing_plan_id = models.AutoField(primary_key=True)
+    filing_plan_id = models.AutoField(primary_key=True,db_index=True)
     active_product_id = models.ForeignKey("api.ActiveProduct",on_delete=models.CASCADE,db_column='active_product_id')
     country_id = models.ForeignKey("api.Country",on_delete=models.CASCADE,db_column='country_id')
     status = models.CharField(max_length=50,null=True)
+    quarter_id = models.ForeignKey("api.Quarter",on_delete=models.CASCADE, db_column='quarter_id',null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

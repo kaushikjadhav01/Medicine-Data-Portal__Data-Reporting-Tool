@@ -8,7 +8,7 @@ import { findIndex, has } from 'lodash';
 import moment from 'moment';
 
 import './partner-list.css'
-import { showConfirm } from '../../../helpers';
+import { showConfirm, getRole } from '../../../helpers';
 
 const PartnerList = (props) => {
 
@@ -18,8 +18,12 @@ const PartnerList = (props) => {
     const [data, setData] = useState([]);
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef();
+    const [isUserAdmin, setIsUserAdmin] = useState(false);
 
     useEffect(() => {
+        setIsUserAdmin(() => {
+            return (getRole() === 'ADMIN')
+        })
         dispatch(getAdminPartnerList());
     }, [])
 
@@ -157,7 +161,8 @@ const PartnerList = (props) => {
             render: (data) => renderTemplateData(
                 data,
                 () => navigateToPdt(data.partner_id),
-                () => dispatch(adminSendReminder(data.partner_id, 'PDT'))
+                () => dispatch(adminSendReminder(data.partner_id, 'PDT')),
+                'pdt'
             )
         }, {
             title: (<h5 className='mb-0'>Filing Plans</h5>),
@@ -168,7 +173,8 @@ const PartnerList = (props) => {
             render: (data) => renderTemplateData(
                 data,
                 () => navigateToFilingPlans(data.partner_id),
-                () => dispatch(adminSendReminder(data.partner_id, 'Filing Plans'))
+                () => dispatch(adminSendReminder(data.partner_id, 'Filing Plans')),
+                'filing-plans'
             )
         }, {
             title: (<h5 className='mb-0'>Sales Report</h5>),
@@ -179,7 +185,8 @@ const PartnerList = (props) => {
             render: (data) => renderTemplateData(
                 data,
                 () => navigateToSalesReport(data.partner_id),
-                () => dispatch(adminSendReminder(data.partner_id, 'Sales'))
+                () => dispatch(adminSendReminder(data.partner_id, 'Sales')),
+                'sales'
             ),
         }, {
             title: 'Action',
@@ -192,6 +199,8 @@ const PartnerList = (props) => {
                         type='link'
                         className='margin-0'
                         onClick={() => navigateToContent(item)}
+                        id={'edit-partner-' + item.key}
+                        disabled={!isUserAdmin}
                     >
                         <Tooltip title='Edit Partner'>
                             <EditTwoTone twoToneColor='#00AEEF' className='font-20' />
@@ -201,6 +210,8 @@ const PartnerList = (props) => {
                         type='link'
                         className='margin-0'
                         onClick={() => showDeletePartner(item)}
+                        id={'delete-partner-' + item.key}
+                        disabled={!isUserAdmin}
                     >
                         <Tooltip title='Deactivate Partner'>
                             <DeleteTwoTone twoToneColor='#00AEEF' className='font-20' />
@@ -212,9 +223,9 @@ const PartnerList = (props) => {
         return columns
     }
 
-    const renderTemplateData = (data, viewReport, sendReminder) => {
+    const renderTemplateData = (data, viewReport, sendReminder, templateName) => {
         if (has(data, 'is_read')) {
-            const { quarter_name, is_approved, submission_time, updated_at, report_status } = data;
+            const { quarter_name, is_approved, submission_time, updated_at, report_status, partner_id } = data;
             return (
                 <div className='gx-flex-row gx-align-items-center gx-justify-content-center font-20'>
                     <Tooltip title={'For Quarter: ' + quarter_name}>
@@ -236,6 +247,7 @@ const PartnerList = (props) => {
                             className='ml-20'
                             twoToneColor='#00AEEF'
                             onClick={() => viewReport()}
+                            id={'view-' + templateName + '-' + partner_id}
                         />
                     </Tooltip>
                 </div>
@@ -246,7 +258,8 @@ const PartnerList = (props) => {
                     <Tooltip title='Send Reminder'>
                         <BellTwoTone
                             twoToneColor='#00AEEF'
-                            onClick={() => sendReminder()}
+                            onClick={isUserAdmin ? () => sendReminder() : ''}
+                            id={'reminder-' + templateName + '-' + data.partner_id}
                         />
                     </Tooltip>
                 </div>
@@ -266,9 +279,9 @@ const PartnerList = (props) => {
                 <Col span={24}>
                     <div className='gx-flex-row align-items-center'>
                         <h1 className='title gx-mb-4'><IntlMessages id='sidebar.partnerList' /></h1>
-                        <Button onClick={navigateToAddPartner} type='primary' className='gx-ml-auto'>
+                        <Button id='partner-list-add-partner' onClick={navigateToAddPartner} type='primary' className='gx-ml-auto' disabled={!isUserAdmin}>
                             <UsergroupAddOutlined /> <IntlMessages id='partner.list.addPartner' />
-                        </Button>
+                        </Button> 
                     </div>
                 </Col>
                 <Col span={24}>
@@ -278,7 +291,6 @@ const PartnerList = (props) => {
                             columns={setColumns()}
                             dataSource={data}
                             bordered
-                            // pagination={{ pageSize: 20 }}
                             loading={!isLoaded}
                         />
                     </Card>

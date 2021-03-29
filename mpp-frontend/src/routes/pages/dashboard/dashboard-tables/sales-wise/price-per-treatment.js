@@ -13,8 +13,6 @@ export const AdminDashboardTreatmentPeriodSales = (props) => {
     const List = useSelector(state => state.adminDashboard.treatment_period_sales)
     const [period, setPeriod] = useState("period");
 
-    const [showName, setShowName] = useState();
-    const [varName, setVarName] = useState();
 
     useEffect(() => {
         dispatch(treatmentPeriodSales(period))

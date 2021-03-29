@@ -43,11 +43,12 @@ class AdminDashboardSales(APIView):
         
             active_products = ActiveProduct.objects.filter(is_active=True).order_by('active_product_id')
             rows=[]
+            approved_quarters = TemplateMessage.objects.filter(template_type='sales',is_approved=True,is_partner_message=False).values('quarter_id')
+
             for active_product in active_products:
                 product_id = active_product.product_id.product_id
                 partner_id = active_product.partner_id
-                q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-                approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id_id=partner_id,is_partner_message=False,quarter_id=q_1_quarter).last()
+                approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id_id=partner_id,quarter_id__in=approved_quarters,is_partner_message=False).last()
                 active_partner=Partner.objects.filter(is_active=True,partner_id=partner_id)
                 
                 if approved_partner != None and approved_partner.is_approved == True and active_partner.exists():
@@ -68,22 +69,23 @@ class AdminDashboardSales(APIView):
                                     'company_name':key,
                                     'total_value':value
                                 })
-            rows = sorted(rows, key=itemgetter('product_name'))
+            rows = sorted(rows, key=lambda k: (k['product_name'].lower(), k['company_name'].lower()))
 
         if request.query_params['map_with'] == 'product' and request.query_params['for'] == 'country':
             active_products = ActiveProduct.objects.filter(is_active=True).order_by('active_product_id')
             rows=[]
+            approved_quarters = TemplateMessage.objects.filter(template_type='sales',is_approved=True,is_partner_message=False).values('quarter_id')
+
             for active_product in active_products:
                 product_id = active_product.product_id.product_id
                 partner_id = active_product.partner_id
                 
-                q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-                approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id_id=partner_id,is_partner_message=False,quarter_id=q_1_quarter).last()
+                approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id_id=partner_id,is_partner_message=False).last()
                 active_partner=Partner.objects.filter(is_active=True,partner_id=partner_id)
                 
                 if approved_partner != None and approved_partner.is_approved == True and active_partner.exists():
                     product_name = Product.objects.filter(product_id=product_id).values('product_name')[0]['product_name']
-                    sales = SalesReport.objects.filter(sales_report_type='FDF',product_id=product_id,partner_id=partner_id).annotate(country_name=F('country_id__country_name')).values('country_name','quantity','pack_size')
+                    sales = SalesReport.objects.filter(sales_report_type='FDF',product_id=product_id,partner_id=partner_id,quarter_id__in=approved_quarters).annotate(country_name=F('country_id__country_name')).values('country_name','quantity','pack_size')
 
                     if sales:
                         sales_dict = defaultdict(int)
@@ -101,11 +103,11 @@ class AdminDashboardSales(APIView):
                                     'country_name':key,
                                     'total_value':value
                                 })
-            rows = sorted(rows, key=itemgetter('product_name'))
+            rows = sorted(rows, key=lambda k: (k['product_name'].lower(), k['country_name'].lower()))
 
         if request.query_params['map_with'] == 'product' and request.query_params['for'] == 'period':
 
-            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[0]
+            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[0]
 
             query = "WITH TEMP AS\
                     \
@@ -206,13 +208,13 @@ class AdminDashboardSales(APIView):
             for company in companies:
                 company_id = company.partner_id
                 company_name = company.company_name
-                q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-                approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id=company,is_partner_message=False,quarter_id=q_1_quarter).last()
+                approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id=company,is_partner_message=False).last()
+                approved_quarters = TemplateMessage.objects.filter(template_type='sales',is_approved=True,is_partner_message=False).values('quarter_id')
                 active_partner=Partner.objects.filter(is_active=True,partner_id=company)
                 
                 if approved_partner != None and approved_partner.is_approved == True and active_partner.exists():
 
-                    sales = SalesReport.objects.filter(sales_report_type='FDF',partner_id=company,product_id__isnull=False).values('product_name','quantity','pack_size')
+                    sales = SalesReport.objects.filter(sales_report_type='FDF',partner_id=company,quarter_id__in=approved_quarters,product_id__isnull=False).values('product_name','quantity','pack_size')
                     if sales:
                         sales_dict = defaultdict(int)
                         for d in sales:
@@ -228,7 +230,7 @@ class AdminDashboardSales(APIView):
                                     'product_name':key,
                                     'total_value':value
                                 })
-            rows = sorted(rows, key=lambda k: (k['company_name'].lower(), k['product_name']))
+            rows = sorted(rows, key=lambda k: (k['company_name'].lower(), k['product_name'].lower()))
             # rows = sorted(rows, key=itemgetter('company_name')) 
         
         if request.query_params['map_with'] == 'company' and request.query_params['for'] == 'country':
@@ -238,12 +240,12 @@ class AdminDashboardSales(APIView):
                 company_id = company.partner_id
                 company_name = company.company_name
 
-                q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-                approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id=company,is_partner_message=False,quarter_id=q_1_quarter).last()
+                approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id=company,is_partner_message=False).last()
                 active_partner=Partner.objects.filter(is_active=True,partner_id=company)
+                approved_quarters = TemplateMessage.objects.filter(template_type='sales',is_approved=True,is_partner_message=False).values('quarter_id')
                 
                 if approved_partner != None and approved_partner.is_approved == True and active_partner.exists():
-                    sales = SalesReport.objects.filter(sales_report_type='FDF',partner_id=company).annotate(country_name=F('country_id__country_name')).values('country_name','quantity','pack_size')
+                    sales = SalesReport.objects.filter(sales_report_type='FDF',partner_id=company,quarter_id__in=approved_quarters).annotate(country_name=F('country_id__country_name')).values('country_name','quantity','pack_size')
                     if sales:
                         sales_dict = defaultdict(int)
                         for d in sales:
@@ -251,18 +253,20 @@ class AdminDashboardSales(APIView):
                                 sales = d['pack_size']*d['quantity']
                                 sales_dict[d['country_name']] +=sales
                         if sales_dict:
-                            rows.append({
-                                'company_id':company_id.id,
-                                'company_name':company_name,
-                                'country_id':Country.objects.filter(country_name=list(sales_dict.keys())[0]).values('country_id')[0]['country_id'],
-                                'country_name':list(sales_dict.keys())[0],
-                                'total_value':list(sales_dict.values())[0]
-                            })
+                            
+                            for key,value in sales_dict.items():
+                                rows.append({
+                                    'company_id':company_id.id,
+                                    'company_name':company_name,
+                                    'country_id':Country.objects.filter(country_name=key).values('country_id')[0]['country_id'],
+                                    'country_name':key,
+                                    'total_value':value
+                                })
             # rows = sorted(rows, key=itemgetter('company_id'))
             rows = sorted(rows, key=lambda k: (k['company_name'].lower(), k['country_name']))
         if request.query_params['map_with'] == 'company' and request.query_params['for'] == 'period':
             
-            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[0]
+            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[0]
 
             query = "WITH TEMP AS\
                     \
@@ -361,18 +365,17 @@ class AdminDashboardSales(APIView):
         if request.query_params['map_with'] == 'country' and request.query_params['for'] == 'product':
             countries = Country.objects.order_by('country_id')
             rows=[]
+            approved_partners = TemplateMessage.objects.filter(template_type='sales',is_approved=True,is_partner_message=False).values('partner_id')
+            approved_quarters = TemplateMessage.objects.filter(template_type='sales',is_approved=True,is_partner_message=False).values('quarter_id')
+
             for country in countries:
                 country_id = country
                 country_name = country.country_name
-                sales = SalesReport.objects.filter(sales_report_type='FDF',country_id=country,product_id__isnull=False).values('product_name','quantity','pack_size','partner_id')
+                sales = SalesReport.objects.filter(sales_report_type='FDF',country_id=country,product_id__isnull=False,quarter_id__in=approved_quarters,partner_id__in=approved_partners,partner_id__is_active=True).values('product_name','quantity','pack_size','partner_id')
                 if sales:
                     sales_dict = defaultdict(int)
                     for d in sales:
-                        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-                        approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id=d['partner_id'],is_partner_message=False,quarter_id=q_1_quarter).last()
-                        active_partner=Partner.objects.filter(is_active=True,partner_id=d['partner_id'])
-                
-                        if d['pack_size'] and d['quantity'] and approved_partner != None and approved_partner.is_approved == True and active_partner.exists():
+                        if d['pack_size'] and d['quantity']:
                             sales = d['pack_size']*d['quantity']
                             sales_dict[d['product_name']] +=sales
                     if sales_dict:
@@ -385,24 +388,23 @@ class AdminDashboardSales(APIView):
                                 'total_value':value
                             })
             # rows = sorted(rows, key=itemgetter('country_id'))
-            rows = sorted(rows, key=lambda k: (k['country_name'].lower(), k['product_name']))
+            rows = sorted(rows, key=lambda k: (k['country_name'].lower(), k['product_name'].lower()))
 
         if request.query_params['map_with'] == 'country' and request.query_params['for'] == 'company':
             countries = Country.objects.order_by('country_id')
             rows=[]
+            approved_partners = TemplateMessage.objects.filter(template_type='sales',is_approved=True,is_partner_message=False).values('partner_id')
+            approved_quarters = TemplateMessage.objects.filter(template_type='sales',is_approved=True,is_partner_message=False).values('quarter_id')
+            
             for country in countries:
                 country_id = country
                 country_name = country.country_name
 
-                sales = SalesReport.objects.filter(sales_report_type='FDF',country_id=country_id).annotate(company_name=F('partner_id__company_name')).values('company_name','quantity','pack_size','partner_id')
+                sales = SalesReport.objects.filter(sales_report_type='FDF',quarter_id__in=approved_quarters,country_id=country_id,partner_id__in=approved_partners,partner_id__is_active=True).annotate(company_name=F('partner_id__company_name')).values('company_name','quantity','pack_size','partner_id')
                 if sales:
                     sales_dict = defaultdict(int)
-                    for d in sales:
-                        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-                        approved_partner = TemplateMessage.objects.filter(template_type='sales',partner_id=d['partner_id'],is_partner_message=False,quarter_id=q_1_quarter).last()
-                        active_partner=Partner.objects.filter(is_active=True,partner_id=d['partner_id'])
-                
-                        if d['pack_size'] and d['quantity'] and approved_partner != None and approved_partner.is_approved == True and active_partner.exists():
+                    for d in sales:                
+                        if d['pack_size'] and d['quantity']:
                             sales = d['pack_size']*d['quantity']
                             sales_dict[d['company_name']] +=sales
                     if sales_dict:
@@ -414,12 +416,12 @@ class AdminDashboardSales(APIView):
                                 'company_name':key,
                                 'total_value':value
                             })
-            rows = sorted(rows, key=lambda k: (k['country_name'].lower(), k['company_name']))
+            rows = sorted(rows, key=lambda k: (k['country_name'].lower(), k['company_name'].lower()))
             # rows = sorted(rows, key=itemgetter('country_id'))
 
         if request.query_params['map_with'] == 'country' and request.query_params['for'] == 'period': 
             
-            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[0]
+            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[0]
 
             query = "WITH TEMP AS\
                     \
@@ -721,7 +723,7 @@ class AdminDashboardSales(APIView):
 
         if request.query_params['map_with'] == 'price_per_pack' and request.query_params['for'] == 'period':
             
-            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[0]
+            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[0]
 
             query = "WITH TEMP AS\
                     \
@@ -779,7 +781,7 @@ class AdminDashboardSales(APIView):
             '''
             quarter_objects = []
             #Get Active Quarter List
-            active_quarters = Quarter.objects.filter(is_active=True).order_by('-quarter_id')
+            active_quarters = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')
             if not active_quarters.exists():
                 return Response(status=status.HTTP_204_NO_CONTENT)
             for quarter in active_quarters:
@@ -859,7 +861,7 @@ class AdminDashboardSales(APIView):
 
         if request.query_params['map_with'] == 'price_per_treatment' and request.query_params['for'] == 'period':
 
-            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[0]
+            q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[0]
 
             query = "WITH TEMP AS\
                     \
@@ -967,7 +969,7 @@ class AdminDashboardSales(APIView):
         if request.query_params['map_with'] == 'price_per_treatment' and request.query_params['for'] == 'quarter':
             quarter_objects = []
             #Get Active Quarter List
-            active_quarters = Quarter.objects.filter(is_active=True).order_by('-quarter_id')
+            active_quarters = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')
             if not active_quarters.exists():
                 return Response(status=status.HTTP_204_NO_CONTENT)
             for quarter in active_quarters:

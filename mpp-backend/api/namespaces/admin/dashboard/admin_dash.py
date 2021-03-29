@@ -32,6 +32,8 @@ class AdminDashboard(APIView):
     )
     
     def get(self,request):
+
+        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
         
         if request.query_params['type'] == 'all_three_submitted':
             partners = User.objects.filter(role='PARTNER').order_by('partner__company_name')
@@ -54,9 +56,9 @@ class AdminDashboard(APIView):
                             serializer.data[index].pop('email')
                         else:
                             for template_type in template_types:
-                                template_data = TemplateMessage.objects.filter(partner_id=partner_id,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
+                                template_data = TemplateMessage.objects.filter(partner_id=partner_id,quarter_id=q_1,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
                     
-                                q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+                                q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
                                 approval_time = None
                                 submission_time = None
 
@@ -113,9 +115,9 @@ class AdminDashboard(APIView):
                         else:
                             null_count=0
                             for template_type in template_types:
-                                template_data = TemplateMessage.objects.filter(partner_id=partner_id,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
+                                template_data = TemplateMessage.objects.filter(partner_id=partner_id,quarter_id=q_1,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
                     
-                                q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+                                q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
                                 approval_time = None
                                 submission_time = None
 
@@ -181,9 +183,9 @@ class AdminDashboard(APIView):
                             serializer.data[index].pop('email')
                         else:
                             for template_type in template_types:
-                                template_data = TemplateMessage.objects.filter(partner_id=partner_id,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
+                                template_data = TemplateMessage.objects.filter(partner_id=partner_id,quarter_id=q_1,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
                         
-                                q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+                                q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
                                 approval_time = None
                                 submission_time = None
 
@@ -250,16 +252,14 @@ class AdminDashboard(APIView):
                             fp_saved_and_submitted=False
                             sales_saved_and_submitted=False
                             for template_type in template_types:
-                                template_data = TemplateMessage.objects.filter(partner_id=partner_id,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
+                                template_data = TemplateMessage.objects.filter(partner_id=partner_id,quarter_id=q_1,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
 
-                                q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+                                q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
                                 approval_time = None
                                 submission_time = None
                         
                                 if template_type['template_type'] == 'pdt':
                                     pdt = ProductQuarterDate.objects.filter(product_quarter_id__active_product_id__partner_id=partner_id).values('start_date','end_date')
-                                    if partner_id == 76:
-                                        print(pdt)
         
                                     if pdt.exists() and template_data != None:
                                         pdt_saved_and_submitted = True
@@ -280,6 +280,37 @@ class AdminDashboard(APIView):
                                 if pdt_saved_and_submitted and fp_saved_and_submitted and sales_saved_and_submitted:
                                     serializer.data[index].pop('partner')
                                     serializer.data[index].pop('email')
+                                else:
+                                    last_msg = TemplateMessage.objects.filter(
+                                    partner_id=partner_id,
+                                    quarter_id=q_1,
+                                    template_type=template_type['template_type']).last()
+                        
+                                    if last_msg:
+                                        if last_msg.is_partner_message == True:
+                                            report_status = 'Submitted'
+                                            submission_time = last_msg.updated_at
+                                        elif last_msg.is_partner_message == False and last_msg.is_approved == True:
+                                            report_status = 'Approved'
+                                            approval_time = last_msg.updated_at
+                                        elif last_msg.is_partner_message == False and last_msg.is_approved == False:
+                                            report_status = 'Rejected'
+                                            approval_time = last_msg.updated_at
+                                    else:
+                                        report_status = 'Not Submitted'
+
+                                    if template_data:
+                                        template_data['report_status']=report_status
+                                        template_data['approval_time']=approval_time
+                                        template_data['submission_time']=submission_time
+                                        template_data_list.append(template_data)
+                                    else:
+                                        template_data={}
+                                        template_data['template_type']=template_type['template_type']
+                                        template_data['report_status']=report_status
+                                        template_data_list.append(template_data)
+                                    serializer.data[index]['partner']['template_data'] = template_data_list
+
 
                 
                 reponse=list(filter(None, serializer.data))    

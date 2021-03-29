@@ -1,6 +1,6 @@
 import React from 'react';
 import Widget from 'components/Widget/index';
-import { Select, Tooltip, Button,Table } from 'antd';
+import { Tooltip, Button,Table } from 'antd';
 import IntlMessages from 'util/IntlMessages';
 import { exportToXLXS } from '../../helpers';
 import { omit } from 'lodash';

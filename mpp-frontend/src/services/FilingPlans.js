@@ -2,46 +2,67 @@ import { config } from '../constants';
 import { authHeader } from '../helpers';
 import { handleResponse } from './handle-response';
 
-export const getFilingPlans = () => {
+export const getFilingPlans = (quarter_name) => {
     const requestOptions = {
         method: 'GET',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    return fetch(`${config.API_URL}/template/filing/`, requestOptions)
-        .then(handleResponse)
+    if(!quarter_name){
+        return fetch(`${config.API_URL}/template/filing/`, requestOptions)
+            .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/filing/?quarter=` + quarter_name, requestOptions)
+            .then(handleResponse)
+    }
 }
 
-export const postFilingPlans = (data) => {
+export const postFilingPlans = (data, quarter_name) => {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     };
 
-    return fetch(`${config.API_URL}/template/filing/`, requestOptions)
-        .then(handleResponse)
+    if(!quarter_name){
+        return fetch(`${config.API_URL}/template/filing/`, requestOptions)
+            .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/filing/?quarter=` + quarter_name, requestOptions)
+            .then(handleResponse)
+    }
 }
 
-export const adminGetFilingPlans = (id) => {
+export const adminGetFilingPlans = (id, quarter_name) => {
     const requestOptions = {
         method: 'GET',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    return fetch(`${config.API_URL}/template/filing/${id}/`, requestOptions)
+    if(!quarter_name){
+        return fetch(`${config.API_URL}/template/filing/${id}/`, requestOptions)
         .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/filing/${id}/?quarter=` + quarter_name, requestOptions)
+        .then(handleResponse)
+    }
 }
 
-export const adminPostFilingPlans = (id, data) => {
+export const adminPostFilingPlans = (id, data, quarter_name) => {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     };
 
-    return fetch(`${config.API_URL}/template/filing/${id}/`, requestOptions)
-        .then(handleResponse)
+
+    if(!quarter_name){
+        return fetch(`${config.API_URL}/template/filing/${id}/`, requestOptions)
+            .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/filing/${id}/?quarter=` + quarter_name, requestOptions)
+            .then(handleResponse)
+    }
 }
 
 export const submitFilingPlans = ({message}) => {
@@ -88,11 +109,12 @@ export const getFilingPlansReport = (data) => {
         .then(handleResponse)
 }
 
-export const downloadFilingPlansReport = () => {
+export const downloadFilingPlansReport = (quarter, requestObj) => {
+    requestObj['quarter']=quarter
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
+        body: JSON.stringify(requestObj),
         responseType: 'blob'
     };
 

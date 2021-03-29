@@ -1,0 +1,21 @@
+server {
+
+  listen 81;
+  server_name data-portal.medicinespatentpool.org;
+  # ssl_certificate /etc/nginx/certs/fullchain.pem;
+  # ssl_certificate_key /etc/nginx/certs/privkey.pem;
+
+  location / {
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+    try_files $uri $uri/ /index.html;
+    server_name_in_redirect off;
+    proxy_set_header Host $host:$server_port;
+  }
+
+  error_page   500 502 503 504  /50x.html;
+
+  location = /50x.html {
+    root   /usr/share/nginx/html;
+  }
+}

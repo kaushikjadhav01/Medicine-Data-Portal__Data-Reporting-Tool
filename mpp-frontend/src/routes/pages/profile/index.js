@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Table, Row, Col, Button, Tooltip } from 'antd';
+import { Row, Col } from 'antd';
 import About from 'components/profile-userInfo'
-import { getRole, getUserDetails, getUserInfo } from '../../../helpers';
+import { getRole, getUserInfo } from '../../../helpers';
 
 
 const UserProfilePage = (props) => {
 
     const [isUserAdmin, setIsUserAdmin] = useState(false);
+    const [isUserStaff, setIsUserStaff] = useState(false);
     const [userDetails, setUserDetails] = useState({});
 
     useEffect(() => {
         setIsUserAdmin(getRole() === 'ADMIN')
+        setIsUserStaff(getRole() === 'STAFF')
         setUserDetails(getUserInfo())
     }, [])
 
     const setInfoList = () => {
-        if (isUserAdmin) {
+        if (isUserAdmin || isUserStaff) {
             return [
                 {
                     id: 1,
@@ -88,7 +90,7 @@ const UserProfilePage = (props) => {
                     <About aboutList={setInfoList()} />
                 </Col>
             </Row>
-        </div >
+        </div>
     )
 }
 

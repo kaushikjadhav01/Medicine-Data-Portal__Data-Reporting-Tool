@@ -79,7 +79,6 @@ export const SearchSelect = forwardRef((props, ref) => {
         >
             <Select
                 showSearch
-                // mode='tags'
                 showArrow={true}
                 allowClear
                 placeholder='Enter product name'
@@ -87,8 +86,6 @@ export const SearchSelect = forwardRef((props, ref) => {
                 onSelect={handleSelect}
                 onSearch={handleSearch}
                 defaultValue={props.value}
-                // defaultOpen={true}
-                // autoFocus={true}
                 ref={productSelect}
             >
                 {setValues()}

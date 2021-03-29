@@ -14,7 +14,7 @@ import { getAdminPdtData, getPdtData, postAdminPdtData, postPdtData, approvePDTR
 import { showMessage, statusArray } from '../../../helpers';
 import moment from 'moment';
 import { findIndex, isEmpty } from 'lodash'
-
+import { getRole } from '../../../helpers';
 import './pdt.css';
 
 const confirm = Modal.confirm;
@@ -50,12 +50,18 @@ const DevelopmentTimeline = (props) => {
     const [isDataReady, setIsDataReady] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
+    const [isUserStaff, setIsUserStaff] = useState(false);
     const [reportDetails, setReportDetails] = useState({});
     const [quarterEditDetails, setQuarterEditDetails] = useState({});
     const [messageCount, setMessageCount] = useState(0);
     const [partnerId, setPartnerId] = useState(null);
     const [gridApi, setGridApi] = useState({});
     const [rowData, setRowData] = useState(null);
+    const [quarterDropdown, setQuarterDropdown] = useState([])
+    const [quarterDropdownCurrent, setQuarterDropdownCurrent] = useState("Loading...")
+    const [isHistoricQuarter, setIsHistoricQuarter] = useState(false)
+    const [isNotInitial, setIsNotInitial] = useState(false)
+    let [flag, setFlag] = useState(1)
     const [quarterOrder, setQuarterOrder] = useState([]);
     const [columnDefs, setColumnDefs] = useState([
         {
@@ -80,27 +86,39 @@ const DevelopmentTimeline = (props) => {
         }
     }, [isDataReady])
 
+    useEffect(() => {
+        if (isNotInitial) {
+            addQuarter();
+        }
+    }, [flag])
+
     const navigateBack = () => {
-        if (isUserAdmin) {
+        if (isUserAdmin || isUserStaff) {
             props.history.push('/admin/partner-list')
         }
     }
 
-    const setPDT = () => {
+    const setPDT = (quarter_name = null) => {
         const { id } = props.match.params;
         if (id) {
-            setIsUserAdmin(true)
+            setIsUserAdmin(() => {
+                return (getRole() === 'ADMIN')
+            })
+            setIsUserStaff(() => {
+                return (getRole() === 'STAFF')
+            })
             dispatch(getAdminPdtData(id, (data) => {
                 setValues(data)
                 setPartnerId(id)
-            }))
+            }, quarter_name))
         } else {
             dispatch(getPdtData((data) => {
                 setValues(data)
-            }))
+            }, quarter_name))
         }
     }
 
+    
     const setValues = (data) => {
         setRowData(data.rows);
         setQuarterOrder(data.quarter_order);
@@ -108,6 +126,9 @@ const DevelopmentTimeline = (props) => {
         setReportDetails(data.pdt_meta);
         setQuarterEditDetails(data.quarter_editable)
         setShowReport(!isEmpty(data));
+        setQuarterDropdown(data.quarter_dropdown)
+        setQuarterDropdownCurrent(data.quarter_order[0])
+        setFlag(++flag)
     }
 
     const onGridReady = (params) => {
@@ -125,12 +146,12 @@ const DevelopmentTimeline = (props) => {
                 field: 'product_status',
                 width: 150,
                 editable: (params) => {
-                    return params.data.editable && (report_status !== 'Approved' || isUserAdmin)
+                    return params.data.editable && (isUserAdmin ? true : isUserStaff ? false : isHistoricQuarter ? false : report_status !== 'Approved')
                 },
                 cellClass: (params) => {
                     const { data } = params;
                     if (data) {
-                        return (data.editable) && (report_status !== 'Approved' || isUserAdmin) ? 'editable-cell' : 'non-editable-cell'
+                        return (data.editable) && (isUserAdmin ? true : isUserStaff ? false : isHistoricQuarter ? false : report_status !== 'Approved') ? 'editable-cell' : 'non-editable-cell'
                     }
                 },
                 cellEditorSelector: (params) => {
@@ -149,11 +170,11 @@ const DevelopmentTimeline = (props) => {
             {
                 headerName: 'Notes',
                 field: 'notes',
-                editable: (report_status !== 'Approved' || isUserAdmin),
+                editable: isUserAdmin ? true : isUserStaff ? false: isHistoricQuarter ? false : report_status !== 'Approved',
                 cellClass: (params) => {
                     const { data } = params;
                     if (data) {
-                        return (report_status !== 'Approved' || isUserAdmin) ? 'editable-cell' : 'non-editable-cell'
+                        return (isUserAdmin ? true : isUserStaff ? false: isHistoricQuarter ? false : report_status !== 'Approved') ? 'editable-cell' : 'non-editable-cell'
                     }
                 },
                 width: 250,
@@ -166,12 +187,12 @@ const DevelopmentTimeline = (props) => {
                     {
                         headerName: 'Start Date (MM/DD/YYYY)',
                         field: 'start_date_' + quarterOrder[i],
-                        editable: (report_status !== 'Approved' || isUserAdmin) && quarterEditDetails[quarterOrder[i]],
+                        editable: isUserAdmin ? true : isUserStaff ? false: isHistoricQuarter ? false : report_status !== 'Approved',
                         cellEditor: 'datePicker',
                         cellClass: (params) => {
                             const { data } = params;
                             if (data) {
-                                return ((report_status !== 'Approved' || isUserAdmin) && quarterEditDetails[quarterOrder[i]] ? 'editable-cell' : 'non-editable-cell');
+                                return (isUserAdmin ? true : isUserStaff ? false: isHistoricQuarter ? false : report_status !== 'Approved') ? 'editable-cell' : 'non-editable-cell'
                             }
                         },
                         cellClassRules: {
@@ -186,12 +207,12 @@ const DevelopmentTimeline = (props) => {
                     {
                         headerName: 'End Date (MM/DD/YYYY)',
                         field: 'end_date_' + quarterOrder[i],
-                        editable: (report_status !== 'Approved' || isUserAdmin) && quarterEditDetails[quarterOrder[i]],
                         sortable: false,
+                        editable: isUserAdmin ? true : isUserStaff ? false: isHistoricQuarter ? false : report_status !== 'Approved',
                         cellClass: (params) => {
                             const { data } = params;
                             if (data) {
-                                return ((report_status !== 'Approved' || isUserAdmin) && quarterEditDetails[quarterOrder[i]] ? 'editable-cell' : 'non-editable-cell');
+                                return (isUserAdmin ? true : isUserStaff ? false: isHistoricQuarter ? false : report_status !== 'Approved') ? 'editable-cell' : 'non-editable-cell'
                             }
                         },
                         cellClassRules: {
@@ -215,6 +236,7 @@ const DevelopmentTimeline = (props) => {
             }
         });
         handleUndefinedValues();
+        setIsNotInitial(true)
     }
 
     const handleUndefinedValues = () => {
@@ -285,7 +307,11 @@ const DevelopmentTimeline = (props) => {
                 })
             })
             if (isUserAdmin) {
-                dispatch(postAdminPdtData(partnerId, obj, callback()))
+                if (isHistoricQuarter){
+                    dispatch(postAdminPdtData(partnerId, obj, callback(), quarterDropdownCurrent))
+                }else{
+                    dispatch(postAdminPdtData(partnerId, obj, callback()))
+                }
             } else {
                 dispatch(postPdtData(obj, callback()))
             }
@@ -444,10 +470,10 @@ const DevelopmentTimeline = (props) => {
                 const { partner_name, quarter_name, report_status, approval_time, submission_time } = reportDetails;
                 return (
                     <div className='gx-mb-4'>
-                        <h1 className='title '>{isUserAdmin ? <Tooltip title='Back'><LeftOutlined className='mr-10' onClick={navigateBack} /></Tooltip> : null}Product Development Timeline {isUserAdmin ? <span className='mr-5'>for <span className='text-capitalize'>{partner_name}</span></span> : null}
+                        <h1 className='title '>{isUserAdmin || isUserStaff ? <Tooltip title='Back'><LeftOutlined className='mr-10' onClick={navigateBack} /></Tooltip> : null}Product Development Timeline {isUserAdmin || isUserStaff ? <span className='mr-5'>for <span className='text-capitalize'>{partner_name}</span></span> : null}
                             <span className='text-capitalize'>({quarter_name})</span>
                         </h1>
-                        <h4 className={isUserAdmin ? 'ml-30' : ''}>Report Status:&nbsp;
+                        <h4 className={isUserAdmin || isUserStaff ? 'ml-30' : ''}>Report Status:&nbsp;
                             <span className='text-capitalize'> {report_status}</span>
                             <span>
                                 {!approval_time && !submission_time ? '' : ' on ' + moment(report_status === 'Submitted' || report_status === 'Resubmitted' ? submission_time : approval_time).format('Do MMM YYYY, hh:mm A')}
@@ -469,29 +495,36 @@ const DevelopmentTimeline = (props) => {
     const displayCTA = () => {
         if (showReport) {
             const { report_status } = reportDetails
-            if (isUserAdmin) {
+            if (isUserAdmin || isUserStaff) {
                 return (
+                    <>
                     <div className='gx-flex-row'>
                         <Button
                             type='primary'
                             onClick={() => { saveData(false) }}
+                            id='pdt-save'
+                            disabled={isUserStaff}
                         >
                             Save
                         </Button>
                         <Button
                             className='gx-btn-success'
                             onClick={() => showApproveConfirm()}
+                            id='pdt-approve'
+                            disabled={isHistoricQuarter || isUserStaff}
                         >
                             Approve
                         </Button>
                         <Button
                             className='gx-btn-danger'
                             onClick={() => showRejectConfirm()}
+                            id='pdt-reject'
+                            disabled={isHistoricQuarter || isUserStaff}
                         >
                             Reject
                         </Button>
                         <Tooltip title={<IntlMessages id='report.download' />}>
-                            <Button onClick={() => downloadExcel()} >
+                            <Button onClick={() => downloadExcel()} id='pdt-download-excel' >
                                 <DownloadOutlined />
                             </Button>
                         </Tooltip>
@@ -500,6 +533,7 @@ const DevelopmentTimeline = (props) => {
                                 content={<AdminNotifications isAdmin={isUserAdmin} data={pdtList && pdtList.messages ? pdtList.messages : []} />} trigger='click'>
                                 <Button
                                     className='mr-0'
+                                    id='pdt-msg-box'
                                     onClick={() => dispatch(partnerMarkMessageRead(
                                         isUserAdmin ? 'admin' : 'partner',
                                         () => setMessageCount(0)
@@ -510,44 +544,68 @@ const DevelopmentTimeline = (props) => {
                             </Popover>
                         </Badge>
                     </div>
+                    <div className="quarter-dropdown-container-admin-pdt">
+                        <select onChange={changeQuarter} className="quarter-dropdown">
+                            {
+                                quarterDropdown.map((quarter) => (
+                                    <option value={quarter} className="quarter-dropdown-options">{quarter}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                    </>
                 )
             } else {
                 return (
-                    <div className='gx-flex-row'>
-                        <Button
-                            type='primary'
-                            onClick={() => { saveData(false) }}
-                            disabled={report_status === 'Approved'}
-                        >
-                            Save
-                        </Button>
-                        <Button
-                            onClick={() => showSubmitConfirm()}
-                            className='gx-btn-success'
-                            disabled={report_status === 'Approved'}
-                        >
-                            Submit Report
-                        </Button>
-                        <Badge count={messageCount}>
-                            <Popover overlayClassName='gx-popover-horizantal' placement='bottomRight'
-                                content={<AdminNotifications data={pdtList && pdtList.messages ? pdtList.messages : []} />} trigger='click'>
-                                <Button
-                                    className='mr-0'
-                                    onClick={() => dispatch(partnerMarkMessageRead(
-                                        isUserAdmin ? 'admin' : 'partner',
-                                        () => setMessageCount(0)
-                                    ))}
-                                >
-                                    <MailOutlined />
-                                </Button>
-                            </Popover>
-                        </Badge>
-                        <Tooltip title={<IntlMessages id='report.download' />}>
-                            <Button className='mr-0' onClick={() => downloadExcel()} >
-                                <DownloadOutlined />
+                    <>
+                        <div className='gx-flex-row'>
+                            <Button
+                                type='primary'
+                                onClick={() => { saveData(false) }}
+                                disabled={report_status === 'Approved' || isHistoricQuarter}
+                                id='pdt-save'
+                            >
+                                Save
                             </Button>
-                        </Tooltip>
-                    </div>
+                            <Button
+                                onClick={() => showSubmitConfirm()}
+                                className='gx-btn-success'
+                                disabled={report_status === 'Approved' || isHistoricQuarter}
+                                id='pdt-submit'
+                            >
+                                Submit Report
+                            </Button>
+                            <Badge count={messageCount}>
+                                <Popover overlayClassName='gx-popover-horizantal' placement='bottomRight'
+                                    content={<AdminNotifications data={pdtList && pdtList.messages ? pdtList.messages : []} />} trigger='click'>
+                                    <Button
+                                        id='pdt-msg-box'
+                                        className='mr-0'
+                                        onClick={() => dispatch(partnerMarkMessageRead(
+                                            isUserAdmin ? 'admin' : 'partner',
+                                            () => setMessageCount(0)
+                                        ))}
+                                    >
+                                        <MailOutlined />
+                                    </Button>
+                                </Popover>
+                            </Badge>
+                            <Tooltip title={<IntlMessages id='report.download' />}>
+                                <Button id='pdt-download-excel' className='mr-0' onClick={() => downloadExcel()} >
+                                    <DownloadOutlined />
+                                </Button>
+                            </Tooltip>
+                            <div className="quarter-dropdown-container-user-pdt">
+                                <select onChange={changeQuarter} className="quarter-dropdown">
+                                    {
+                                        quarterDropdown.map((quarter) => (
+                                            <option value={quarter} className="quarter-dropdown-options">{quarter}</option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </>
                 )
             }
         } else {
@@ -585,6 +643,25 @@ const DevelopmentTimeline = (props) => {
         return window.innerHeight - 120
     }
 
+    const changeQuarter = (e) => {
+        setColumnDefs([
+            {
+                headerName: 'Products',
+                field: 'product',
+                editable: false,
+                rowGroup: true,
+                hide: true,
+            }
+        ])
+        if (e.target.value !== quarterDropdown[0]){
+            setPDT(e.target.value)
+            setIsHistoricQuarter(true)
+        }else{
+            setPDT()
+            setIsHistoricQuarter(false)
+        }
+    }
+
     return (
         <div>
             <div className='gx-flex-row gx-justify-content-between'>
@@ -593,7 +670,7 @@ const DevelopmentTimeline = (props) => {
             </div>
             {
                 showReport ?
-                    <div className='ag-theme-balham' style={{ height: setReportHeight(), paddingBottom: 20 }}>
+                    <div className='ag-theme-balham ag-scroll-bar-fix' style={{ height: setReportHeight(), paddingBottom: 20 }}>
                         <AgGridReact
                             onGridReady={onGridReady}
                             columnDefs={columnDefs}

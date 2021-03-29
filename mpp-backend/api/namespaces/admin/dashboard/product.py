@@ -7,10 +7,10 @@ from api.helpers.custom_permissions import IsAdmin
 from django.db import connection
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-
+from django.db.models import F, Count
 from MPP_API.settings import quarter_list,quarter_mapping
 from api.models import (
-    ActiveProduct,Product,OngoingQuarter
+    ActiveProduct,Product,OngoingQuarter, FilingPlan
 )
 
 class AdminDashboardProductCompany(APIView):
@@ -160,124 +160,11 @@ class AdminDashboardProductCountry(APIView):
 
         send_data = []
 
-        if request.query_params['status'] == 'Filed':
-            query = "WITH TEMP AS\
-                    \
-                    (SELECT PARTNER_ID\
-                    FROM\
-                    \
-                    (SELECT PARTNER_ID\
-                    FROM\
-                    \
-                    (SELECT DISTINCT ON (PARTNER_ID) PARTNER_ID, TEMPLATE_MESSAGE_ID, TEMPLATE_TYPE,IS_APPROVED\
-                    FROM TEMPLATE_MESSAGE\
-                    WHERE TEMPLATE_TYPE = 'filing plan' AND IS_PARTNER_MESSAGE = 'FALSE'\
-                    ORDER BY PARTNER_ID,TEMPLATE_MESSAGE_ID DESC) AS R\
-                    \
-                    WHERE IS_APPROVED = 'TRUE') AS T\
-                    \
-                    JOIN PARTNER USING (PARTNER_ID)\
-                    WHERE IS_ACTIVE = TRUE\
-                    )\
-                    \
-                    SELECT PRODUCT_ID, PRODUCT_NAME, coalesce(COUNT,0)\
-                    FROM\
-                    \
-                    (SELECT PRODUCT_ID, PRODUCT_NAME, COUNT(DISTINCT(COUNTRY_ID))\
-                    FROM ((ACTIVE_PRODUCT JOIN TEMP USING (PARTNER_ID)) JOIN PRODUCT USING (PRODUCT_ID)) JOIN FILING_PLAN AS FP USING (ACTIVE_PRODUCT_ID)\
-                    WHERE FP.STATUS = 'Filed'\
-                    GROUP BY PRODUCT_ID, PRODUCT_NAME) AS A\
-                    \
-                    NATURAL FULL OUTER JOIN\
-                    \
-                    (SELECT PRODUCT_ID, PRODUCT_NAME  FROM PRODUCT) AS B\
-                    ORDER BY PRODUCT_ID"
+        if request.query_params['status'] != None:
+            send_data = FilingPlan.objects.filter(status=request.query_params['status']).annotate(product_id=F('active_product_id__product_id'),product_name=F('active_product_id__product_id__product_name')).values('product_id','product_name').annotate(count=Count('product_name')).order_by('product_name')
 
-
-        elif request.query_params['status'] == 'Registered':
-            query = "WITH TEMP AS\
-                    \
-                    (SELECT PARTNER_ID\
-                    FROM\
-                    \
-                    (SELECT PARTNER_ID\
-                    FROM\
-                    \
-                    (SELECT DISTINCT ON (PARTNER_ID) PARTNER_ID, TEMPLATE_MESSAGE_ID, TEMPLATE_TYPE,IS_APPROVED\
-                    FROM TEMPLATE_MESSAGE\
-                    WHERE TEMPLATE_TYPE = 'filing plan' AND IS_PARTNER_MESSAGE = 'FALSE'\
-                    ORDER BY PARTNER_ID,TEMPLATE_MESSAGE_ID DESC) AS R\
-                    \
-                    WHERE IS_APPROVED = 'TRUE') AS T\
-                    \
-                    JOIN PARTNER USING (PARTNER_ID)\
-                    WHERE IS_ACTIVE = TRUE\
-                    )\
-                    \
-                    SELECT PRODUCT_ID, PRODUCT_NAME, coalesce(COUNT,0)\
-                    FROM\
-                    \
-                    (SELECT PRODUCT_ID, PRODUCT_NAME, COUNT(DISTINCT(COUNTRY_ID))\
-                    FROM ((ACTIVE_PRODUCT JOIN TEMP USING (PARTNER_ID)) JOIN PRODUCT USING (PRODUCT_ID)) JOIN FILING_PLAN AS FP USING (ACTIVE_PRODUCT_ID)\
-                    WHERE FP.STATUS = 'Registered'\
-                    GROUP BY PRODUCT_ID, PRODUCT_NAME) AS A\
-                    \
-                    NATURAL FULL OUTER JOIN\
-                    \
-                    (SELECT PRODUCT_ID, PRODUCT_NAME  FROM PRODUCT) AS B\
-                    ORDER BY PRODUCT_ID"
-
-
-        elif request.query_params['status'] == 'Filing-Planned':
-            query = "WITH TEMP AS\
-                    \
-                    (SELECT PARTNER_ID\
-                    FROM\
-                    \
-                    (SELECT PARTNER_ID\
-                    FROM\
-                    \
-                    (SELECT DISTINCT ON (PARTNER_ID) PARTNER_ID, TEMPLATE_MESSAGE_ID, TEMPLATE_TYPE,IS_APPROVED\
-                    FROM TEMPLATE_MESSAGE\
-                    WHERE TEMPLATE_TYPE = 'filing plan' AND IS_PARTNER_MESSAGE = 'FALSE'\
-                    ORDER BY PARTNER_ID,TEMPLATE_MESSAGE_ID DESC) AS R\
-                    \
-                    WHERE IS_APPROVED = 'TRUE') AS T\
-                    \
-                    JOIN PARTNER USING (PARTNER_ID)\
-                    WHERE IS_ACTIVE = TRUE\
-                    )\
-                    \
-                    SELECT PRODUCT_ID, PRODUCT_NAME, coalesce(COUNT,0)\
-                    FROM\
-                    \
-                    (SELECT PRODUCT_ID, PRODUCT_NAME, COUNT(DISTINCT(COUNTRY_ID))\
-                    FROM ((ACTIVE_PRODUCT JOIN TEMP USING (PARTNER_ID)) JOIN PRODUCT USING (PRODUCT_ID)) JOIN FILING_PLAN AS FP USING (ACTIVE_PRODUCT_ID)\
-                    WHERE FP.STATUS = 'Filing-Planned'\
-                    GROUP BY PRODUCT_ID, PRODUCT_NAME) AS A\
-                    \
-                    NATURAL FULL OUTER JOIN\
-                    \
-                    (SELECT PRODUCT_ID, PRODUCT_NAME FROM PRODUCT) AS B\
-                    ORDER BY PRODUCT_ID"
-
-        
-        with connection.cursor() as cursor:
-            cursor.execute(
-                query
-            )
-            row = cursor.fetchall()
-
-        for each in row:
-            product_id = each[0]
-            product_name = each[1]
-            count = each[2]
-
-            send_data.append({
-                "product_id":product_id,
-                "product_name":product_name,
-                "count":count
-            })
+        else:
+            send_data = FilingPlan.objects.filter(status='Filed').annotate(product_id=F('active_product_id__product_id'),product_name=F('active_product_id__product_id__product_name')).values('product_id','product_name').annotate(count=Count('product_name')).order_by('product_name')
             
         if len(send_data) < 1:
             return Response(status=status.HTTP_204_NO_CONTENT)

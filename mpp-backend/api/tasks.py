@@ -53,18 +53,20 @@ def send_bulk_email(data):
             elif template_type == "sales":
                 template_url = "sales-report"
                 sales_link = str(api_link + 'partner/' + template_url)
-
-        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-        cut_off_date = q_1.cut_off_date
-        tz_info = cut_off_date.tzinfo
-        today= datetime.now(tz_info)
-        no_of_days_to_submit = cut_off_date - today
-        no_of_days_to_submit = no_of_days_to_submit.days + 1
         
-        html_message = render_to_string('partner_bulk_reminder.html', {'partner_name': company_name.capitalize(), 'no_of_days_to_submit':no_of_days_to_submit,'pdt_link':pdt_link, 'filing_plan_link':filing_plan_link, 'sales_link':sales_link})
+        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
+        cut_off_date = q_1.cut_off_date
+        if cut_off_date != None:
+            tz_info = cut_off_date.tzinfo
+            today= datetime.now(tz_info)
+            no_of_days_to_submit = cut_off_date - today
+            no_of_days_to_submit = no_of_days_to_submit.days + 1
+        else:
+            no_of_days_to_submit=None
+        html_message = render_to_string('partner_bulk_reminder.html', {'partner_name': company_name.capitalize(), 'no_of_days_to_submit':no_of_days_to_submit,'pdt_link':pdt_link, 'filing_plan_link':filing_plan_link, 'sales_link':sales_link,'api_link':api_link})
         plain_message = strip_tags(html_message)
         send_mail(email_subject, plain_message, FROM_EMAIL_ID, [email_id], html_message=html_message)
-
+        
 
 @shared_task
 def next_quarter():
@@ -85,6 +87,8 @@ def next_quarter():
     
     quarter = Quarter.objects.create(
         quarter_name=quarter_name,
+        quarter_year=ongoing_quarter.year,
+        quarter_index=ongoing_quarter.index,
         created_by=0,
         updated_by=0
     )
@@ -109,7 +113,7 @@ def next_quarter():
     link = str(api_link + 'partner/dashboard')
     email_subject = str('New Quarter has Started')
         
-    html_message = render_to_string('new_quarter_mail.html', {'link':link})
+    html_message = render_to_string('new_quarter_mail.html', {'link':link,'api_link':api_link})
     plain_message = strip_tags(html_message)
 
     to_email_list = []

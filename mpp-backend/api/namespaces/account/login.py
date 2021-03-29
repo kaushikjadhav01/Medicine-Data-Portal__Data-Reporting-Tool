@@ -14,7 +14,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'email': self.user.email})
         data.update({'role': self.user.role})
 
-        if self.user.role == 'ADMIN':
+        if self.user.role == 'ADMIN' or self.user.role == 'STAFF':
             data.update({'username': self.user.username})
 
         if self.user.role == 'PARTNER':
@@ -25,7 +25,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
             data.update({'partner': partner.data})
 
 
-        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')
+        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')
         data.update({'curr_quarter':q_1_quarter[1].quarter_name})
 
         return data

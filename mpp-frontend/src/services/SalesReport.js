@@ -2,14 +2,20 @@ import { config } from '../constants';
 import { authHeader } from '../helpers';
 import { handleResponse } from './handle-response';
 
-export const getSalesReport = (type) => {
+export const getSalesReport = (type, quarter_name) => {
     const requestOptions = {
         method: 'GET',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    return fetch(`${config.API_URL}/template/sales/${type}`, requestOptions)
+    if(quarter_name === null){
+        return fetch(`${config.API_URL}/template/sales/${type}`, requestOptions)
         .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/sales/${type}?quarter=` + quarter_name, requestOptions)
+        .then(handleResponse)
+    }
+    
 }
 
 export const postSalesReport = (type, data) => {
@@ -23,25 +29,36 @@ export const postSalesReport = (type, data) => {
         .then(handleResponse)
 }
 
-export const adminGetSalesReport = (type, id) => {
+export const adminGetSalesReport = (type, id, quarter_name) => {
     const requestOptions = {
         method: 'GET',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
     };
 
-    return fetch(`${config.API_URL}/template/sales/${type}/${id}`, requestOptions)
+    if(quarter_name === null){
+        return fetch(`${config.API_URL}/template/sales/${type}/${id}`, requestOptions)
         .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/sales/${type}/${id}?quarter=` + quarter_name, requestOptions)
+        .then(handleResponse)
+    }
+    
 }
 
-export const adminPostSalesReport = (type, id, data) => {
+export const adminPostSalesReport = (type, id, data, quarter_name) => {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     };
 
-    return fetch(`${config.API_URL}/template/sales/${type}/${id}`, requestOptions)
-        .then(handleResponse)
+    if(quarter_name === null){
+        return fetch(`${config.API_URL}/template/sales/${type}/${id}`, requestOptions)
+            .then(handleResponse)
+    }else{
+        return fetch(`${config.API_URL}/template/sales/${type}/${id}?quarter=` + quarter_name, requestOptions)
+            .then(handleResponse)
+    }
 }
 
 export const submitSalesReport = ({ message }) => {
@@ -87,11 +104,11 @@ export const getConsolidatedSalesReport = (type, data) => {
         .then(handleResponse)
 }
 
-export const downloadConsolidatedSalesReport = (type) => {
+export const downloadConsolidatedSalesReport = (type, requestObj) => {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({}),
+        body: JSON.stringify(requestObj),
         responseType: 'blob'
     };
 

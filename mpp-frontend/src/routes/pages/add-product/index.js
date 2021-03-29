@@ -100,7 +100,7 @@ const AddProduct = (props) => {
                                         label='Product Name'
                                         rules={[{ required: true, message: 'Please enter product name!' }]}
                                     >
-                                        <Input />
+                                        <Input id='add-product-name' />
                                     </Form.Item>
                                     <Form.Item
                                         name='category'
@@ -108,8 +108,8 @@ const AddProduct = (props) => {
                                         rules={[{ required: true, message: 'Please select category!' }]}
                                     >
                                         <Radio.Group disabled={editFlag}>
-                                            <Radio value='FDF'>FDF</Radio>
-                                            <Radio value='API'>API</Radio>
+                                            <Radio id='add-product-fdf' value='FDF'>FDF</Radio>
+                                            <Radio id='add-product-api' value='API'>API</Radio>
                                         </Radio.Group>
                                     </Form.Item>
 
@@ -169,18 +169,18 @@ const AddProduct = (props) => {
                                         hasFeedback
                                         rules={[{ required: true, message: 'Please select therapy area!' }]}
                                     >
-                                        <Select placeholder='Please select therapy area'>
-                                            <Option value='HIV'>HIV</Option>
-                                            <Option value='HCV'>HCV</Option>
-                                            <Option value='HBV'>HBV</Option>
+                                        <Select id='add-product-status' placeholder='Please select therapy area'>
+                                            <Option id='add-product-hiv' value='HIV'>HIV</Option>
+                                            <Option id='add-product-hcv' value='HCV'>HCV</Option>
+                                            <Option id='add-product-hbv' value='HBV'>HBV</Option>
                                         </Select>
                                     </Form.Item>
 
                                     <Form.Item className='flex-d-row-reverse'>
-                                        <Button type='primary' htmlType='submit'>
+                                        <Button id='add-product-submit' type='primary' htmlType='submit'>
                                             {editFlag ? 'Edit Product' : 'Add Product'}
                                         </Button>
-                                        <Button onClick={navigateToProductList}>
+                                        <Button id='add-product-cancel' onClick={navigateToProductList}>
                                             Cancel
                                         </Button>
                                     </Form.Item>

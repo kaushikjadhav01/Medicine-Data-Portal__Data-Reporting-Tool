@@ -155,7 +155,7 @@ class AdminDashboardCountry(APIView):
             for country in countries:
                 country_id = country
                 country_name = country.country_name
-                q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+                q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
                 filing_plans = FilingPlan.objects.filter(country_id=country_id,status__in=allowed_statuses).annotate(partner_id=F('active_product_id__partner_id'),country_name=F('country_id__country_name'),product_id=F('active_product_id__product_id'),product_name=F('active_product_id__product_id__product_name')).values('country_name','product_id','product_name','status','partner_id')
                 if filing_plans:
                     for filing_plan in filing_plans:

@@ -1,7 +1,0 @@
-﻿Year,Month,Country,Product,Purchaser,Strength,Formulation Type,Pack Size,Quantity,Currency,"Gross Sale Price (per pack)
-(Local Currency)",Applicable Currency Exchange Rate to USD,"Gross Sale Price (per pack)
-(USD)",Total Gross Sales Value (= Quantity * Gross Sale Price) (USD),"Deductable Expenses 
-(USD)","Total Net sales Value 
-(= Total Gross Sales Value - Deductable Expenses) (USD)",Royalty %,Royalty Due (USD),Procurement Agency End-Country(ies),Comments,Company
-2020,January,India,ATV/r,Cipla,100,Tablet,100,1000,INR,3000,71,340,5400,10,12000,5,2,Vietnam,No comments,Unichem Labs
-2020,February,Armenia,ATV_API,Cipla,50,Granules,80,1200,INR,1200,71,230,6500,20,2421,4,3,Vietnam,No comments,Bluepharma Pvt. Ltd.

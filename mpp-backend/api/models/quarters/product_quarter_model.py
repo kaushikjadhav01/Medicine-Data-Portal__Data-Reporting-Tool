@@ -6,7 +6,7 @@ class ProductQuarter(models.Model):
     class Meta:
         db_table = "product_quarter"
 
-    product_quarter_id = models.AutoField(primary_key=True)
+    product_quarter_id = models.AutoField(primary_key=True,db_index=True)
     active_product_id = models.ForeignKey("api.ActiveProduct",on_delete=models.CASCADE,db_column='active_product_id')
     quarter_id = models.ForeignKey("api.Quarter",on_delete=models.CASCADE, db_column='quarter_id')
     

@@ -12,6 +12,8 @@ import { showMessage } from '../../../helpers';
 import { approveFilingPlansReport, getAdminFilingPlansData, getFilingPlansData, partnerMarkFilingPlansMessageRead, postAdminFilingPlansData, postFilingPlansData, submitFilingPlansReport } from '../../../appRedux/actions/FilingPlans';
 import moment from 'moment';
 import { findIndex, isEmpty } from 'lodash';
+import './filing-plans.css';
+import { getRole } from '../../../helpers';
 
 const confirm = Modal.confirm;
 
@@ -19,16 +21,21 @@ const FilingPlans = (props) => {
     const [isDataReady, setIsDataReady] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [isUserAdmin, setIsUserAdmin] = useState(false);
+    const [isUserStaff, setIsUserStaff] = useState(false);
     const [messageCount, setMessageCount] = useState(0);
     const [partnerId, setPartnerId] = useState(null);
     const [gridApi, setGridApi] = useState({});
-    const [columnApi, setColumnApi] = useState({});
     const [rowData, setRowData] = useState(null);
     const [productList, setProductList] = useState([]);
     const [reportDetails, setReportDetails] = useState({});
     const [apiStatusArray, setApiStatusArray] = useState([]);
     const [fdfStatusArray, setFdfStatusArray] = useState([]);
     const [columnDefs, setColumnDefs] = useState([
+        {
+            headerName: 'Sr.No',
+            valueGetter: 'node.rowIndex + 1',
+            width: 100
+        },
         {
             headerName: 'Country',
             field: 'country',
@@ -38,6 +45,11 @@ const FilingPlans = (props) => {
     const plansList = useSelector(({ filingPlans }) => filingPlans.plansList);
     const [form] = Form.useForm();
     const dispatch = useDispatch();
+    const [quarterDropdown, setQuarterDropdown] = useState([])
+    const [quarterDropdownCurrent, setQuarterDropdownCurrent] = useState("Loading...")
+    const [isHistoricQuarter, setIsHistoricQuarter] = useState(false)
+    const [isNotInitial, setIsNotInitial] = useState(false)
+    let [flag, setFlag] = useState(1)
 
     useEffect(() => {
         setFilingPlans()
@@ -51,25 +63,35 @@ const FilingPlans = (props) => {
             addProduct();
         }
     }, [isDataReady])
+    useEffect(() => {
+        if (isNotInitial) {
+            addProduct();
+        }
+    }, [flag])
 
     const navigateBack = () => {
-        if (isUserAdmin) {
+        if (isUserAdmin || isUserStaff) {
             props.history.push('/admin/partner-list')
         }
     }
 
-    const setFilingPlans = () => {
+    const setFilingPlans = (quarter_name = null) => {
         const { id } = props.match.params;
         if (id) {
-            setIsUserAdmin(true)
+            setIsUserAdmin(() => {
+                return (getRole() === 'ADMIN')
+            })
+            setIsUserStaff(() => {
+                return (getRole() === 'STAFF')
+            })
             dispatch(getAdminFilingPlansData(id, (data) => {
                 setValues(data)
                 setPartnerId(id)
-            }))
+            },quarter_name))
         } else {
             dispatch(getFilingPlansData((data) => {
                 setValues(data)
-            }))
+            },quarter_name))
         }
     }
 
@@ -92,22 +114,32 @@ const FilingPlans = (props) => {
         setApiStatusArray(data.status_dropdown['API'])
         setFdfStatusArray(data.status_dropdown['FDF'])
         setShowReport(!isEmpty(data))
+        setQuarterDropdown(data.quarter_dropdown)
+        setQuarterDropdownCurrent(data.filing_meta.quarter_name)
+        setFlag(++flag)
     }
 
     const onGridReady = (params) => {
         setGridApi(params.api);
-        setColumnApi(params.columnApi)
         setIsDataReady(true)
     }
 
     const addProduct = () => {
         const { report_status } = reportDetails;
-        const column = [...columnDefs];
+        let column;
+        if(!isNotInitial){
+            column = [...columnDefs];
+        }
+        else{
+            column = columnDefs.slice(0,2);
+        }
+        
+        
         productList.forEach((value) => {
             const obj = {
                 headerName: value.product_name,
                 field: value.product_name,
-                editable: isUserAdmin || report_status !== 'Approved',
+                editable: isUserAdmin ? true : isUserStaff ? false : isHistoricQuarter ? false : report_status !== 'Approved',
                 cellEditorSelector: (params) => {
                     return {
                         component: 'agRichSelect',
@@ -117,7 +149,7 @@ const FilingPlans = (props) => {
                 cellClass: (params) => {
                     const { data } = params;
                     if (data) {
-                        return ((report_status !== 'Approved' || isUserAdmin) ? 'editable-cell' : 'non-editable-cell');
+                        return ((isUserAdmin ? true : isUserStaff ? false : isHistoricQuarter ? false : report_status !== 'Approved') ? 'editable-cell' : 'non-editable-cell');
                     }
                 },
                 cellClassRules: {
@@ -135,6 +167,7 @@ const FilingPlans = (props) => {
         })
         setColumnDefs(column)
         gridApi.setColumnDefs(column)
+        setIsNotInitial(true)
     }
 
     const checkDataValues = (dataList) => {
@@ -169,7 +202,11 @@ const FilingPlans = (props) => {
                 })
             })
             if (isUserAdmin) {
-                dispatch(postAdminFilingPlansData(partnerId, obj, callback()))
+                if (isHistoricQuarter){
+                    dispatch(postAdminFilingPlansData(partnerId, obj, callback(), quarterDropdownCurrent))
+                }else{
+                    dispatch(postAdminFilingPlansData(partnerId, obj, callback()))
+                }
             } else {
                 dispatch(postFilingPlansData(obj, callback()))
             }
@@ -337,10 +374,10 @@ const FilingPlans = (props) => {
                 const { partner_name, quarter_name, report_status, approval_time, submission_time } = reportDetails;
                 return (
                     <div className='gx-mb-4'>
-                        <h1 className='title '>{isUserAdmin ? <Tooltip title='Back'><LeftOutlined className='mr-10' onClick={navigateBack} /></Tooltip> : null}Filing Plans {isUserAdmin ? <span className='mr-5'>for <span className='text-capitalize'>{partner_name}</span></span> : null}
+                        <h1 className='title '>{isUserAdmin || isUserStaff ? <Tooltip title='Back'><LeftOutlined className='mr-10' onClick={navigateBack} /></Tooltip> : null}Filing Plans {isUserAdmin || isUserStaff ? <span className='mr-5'>for <span className='text-capitalize'>{partner_name}</span></span> : null}
                             <span className='text-capitalize'>({quarter_name})</span>
                         </h1>
-                        <h4 className={isUserAdmin ? 'ml-30' : ''}>Report Status:&nbsp;
+                        <h4 className={isUserAdmin || isUserStaff ? 'ml-30' : ''}>Report Status:&nbsp;
                             <span className='text-capitalize'> {report_status}</span>
                             <span>
                                 {!approval_time && !submission_time ? '' : ' on ' + moment(report_status === 'Submitted' || report_status === 'Resubmitted' ? submission_time : approval_time).format('Do MMM YYYY, hh:mm A')}
@@ -363,29 +400,35 @@ const FilingPlans = (props) => {
     const displayCTA = () => {
         if (showReport) {
             const { report_status } = reportDetails
-            if (isUserAdmin) {
+            if (isUserAdmin || isUserStaff) {
                 return (
                     <div className='gx-flex-row'>
                         <Button
                             type='primary'
                             onClick={() => { saveData(false) }}
+                            id='filing-save'
+                            disabled={isUserStaff}
                         >
                             Save
                         </Button>
                         <Button
                             className='gx-btn-success'
                             onClick={() => showApproveConfirm()}
+                            id='filing-approve'
+                            disabled={isHistoricQuarter || isUserStaff}
                         >
                             Approve
                         </Button>
                         <Button
                             className='gx-btn-danger'
                             onClick={() => showRejectConfirm()}
+                            id='filing-reject'
+                            disabled={isHistoricQuarter || isUserStaff}
                         >
                             Reject
                         </Button>
                         <Tooltip title={<IntlMessages id='report.download' />}>
-                            <Button onClick={() => downloadExcel()} >
+                            <Button onClick={() => downloadExcel()} id='filing-download-excel'>
                                 <DownloadOutlined />
                             </Button>
                         </Tooltip>
@@ -393,6 +436,7 @@ const FilingPlans = (props) => {
                             <Popover overlayClassName='gx-popover-horizantal' placement='bottomRight'
                                 content={<AdminNotifications isAdmin={isUserAdmin} data={plansList && plansList.messages ? plansList.messages : []} />} trigger='click'>
                                 <Button
+                                id='filing-msg-box'
                                     className='mr-0'
                                     onClick={() => dispatch(partnerMarkFilingPlansMessageRead(
                                         isUserAdmin ? 'admin' : 'partner',
@@ -403,6 +447,15 @@ const FilingPlans = (props) => {
                                 </Button>
                             </Popover>
                         </Badge>
+                        <div className="quarter-dropdown-container-admin-filing-plans">
+                        <select onChange={changeQuarter} className="quarter-dropdown">
+                            {
+                                quarterDropdown.map((quarter) => (
+                                    <option value={quarter} className="quarter-dropdown-options">{quarter}</option>
+                                ))
+                            }
+                        </select>
+                        </div>
                     </div>
                 )
             } else {
@@ -411,14 +464,16 @@ const FilingPlans = (props) => {
                         <Button
                             type='primary'
                             onClick={() => { saveData(false) }}
-                            disabled={report_status === 'Approved'}
+                            disabled={report_status === 'Approved' || isHistoricQuarter}
+                            id='filing-save'
                         >
                             Save
                         </Button>
                         <Button
                             onClick={() => showSubmitConfirm()}
                             className='gx-btn-success'
-                            disabled={report_status === 'Approved'}
+                            disabled={report_status === 'Approved' || isHistoricQuarter}
+                            id='filing-submit'
                         >
                             Submit Report
                         </Button>
@@ -426,6 +481,7 @@ const FilingPlans = (props) => {
                             <Popover overlayClassName='gx-popover-horizantal' placement='bottomRight'
                                 content={<AdminNotifications isAdmin={isUserAdmin} data={plansList && plansList.messages ? plansList.messages : []} />} trigger='click'>
                                 <Button
+                                id='filing-msg-box'
                                     className='mr-0'
                                     onClick={() => dispatch(partnerMarkFilingPlansMessageRead(
                                         isUserAdmin ? 'admin' : 'partner',
@@ -437,10 +493,19 @@ const FilingPlans = (props) => {
                             </Popover>
                         </Badge>
                         <Tooltip title={<IntlMessages id='report.download' />}>
-                            <Button className='mr-0' onClick={() => downloadExcel()} >
+                            <Button className='mr-0' onClick={() => downloadExcel()} id='filing-download-excel'>
                                 <DownloadOutlined />
                             </Button>
                         </Tooltip>
+                        <div className="quarter-dropdown-container-user-filing-plans">
+                                <select onChange={changeQuarter} className="quarter-dropdown">
+                                    {
+                                        quarterDropdown.map((quarter) => (
+                                            <option value={quarter} className="quarter-dropdown-options">{quarter}</option>
+                                        ))
+                                    }
+                                </select>
+                        </div>
                     </div>
                 )
             }
@@ -462,6 +527,18 @@ const FilingPlans = (props) => {
         return window.innerHeight - 120
     }
 
+    const changeQuarter = (e) => {
+        setColumnDefs(columnDefs.slice(0,2))
+        if (e.target.value !== quarterDropdown[0]){
+            setFilingPlans(e.target.value)
+            setIsHistoricQuarter(true)
+        }else{
+            setFilingPlans()
+            setIsHistoricQuarter(false)
+        }
+    }
+
+
     return (
         <div>
             <div className='gx-flex-row gx-justify-content-between'>
@@ -470,7 +547,7 @@ const FilingPlans = (props) => {
             </div>
             {
                 showReport ?
-                    <div className='ag-theme-balham' style={{ height: setReportHeight(), paddingBottom: 20 }}>
+                    <div className='ag-theme-balham ag-scroll-bar-fix' style={{ height: setReportHeight(), paddingBottom: 20 }}>
                         <AgGridReact
                             onGridReady={onGridReady}
                             columnDefs={columnDefs}

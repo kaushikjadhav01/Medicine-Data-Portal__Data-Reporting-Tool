@@ -1,0 +1,21 @@
+version: '3'
+services:
+    frontend:
+        build: 
+          context: .
+          dockerfile: Dockerfile.prod
+        container_name: frontend
+        ports:
+            - "81:81"
+            # - "443:443"
+        volumes:
+            - ./:/frontend
+            - /frontend/node_modules
+            - ./certbot-prod/conf:/etc/letsencrypt
+    # certbot:
+    #     image: certbot/certbot
+    #     restart: unless-stopped
+    #     volumes:
+    #         - ./certbot-prod/conf:/etc/letsencrypt
+    #         - ./certbot-prod/www:/var/www/certbot
+    #     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"    

@@ -13,11 +13,11 @@ const UserProfile = (props) => {
 
   const userMenuOptions = (
     <ul className='gx-user-popover'>
-      <li onClick={() => { getRole() === 'ADMIN' ? props.history.push('/admin/profile') : props.history.push('/partner/profile') }}>
+      <li onClick={() => { (getRole() === 'ADMIN' || getRole() === 'STAFF') ? props.history.push('/admin/profile') : props.history.push('/partner/profile') }}>
         Profile
       </li>
       {
-        getRole() === 'ADMIN' ?
+        (getRole() === 'ADMIN' || getRole() === 'STAFF') ?
           <li onClick={() => { props.history.push('/admin/settings') }}>
             Settings
           </li> :

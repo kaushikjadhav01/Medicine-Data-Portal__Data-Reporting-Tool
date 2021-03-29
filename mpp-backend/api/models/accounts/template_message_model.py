@@ -6,7 +6,7 @@ class TemplateMessage(models.Model):
     class Meta:
         db_table = "template_message"
 
-    template_message_id = models.AutoField(primary_key=True)
+    template_message_id = models.AutoField(primary_key=True,db_index=True)
     partner_id = models.ForeignKey("api.Partner",on_delete=models.CASCADE, db_column='partner_id')
     message = models.TextField(max_length=200,blank=True,null=True)
     template_type = models.CharField(max_length=50)

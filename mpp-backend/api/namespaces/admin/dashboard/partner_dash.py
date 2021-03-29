@@ -26,8 +26,8 @@ class PartnerDashboard(APIView):
         for template_type in template_types:
             template_data = TemplateMessage.objects.filter(partner_id=partner_id,template_type=template_type['template_type'],is_partner_message=True).values('template_type','is_read','is_approved','quarter_id','quarter_name','created_at','updated_at').last()
                     
-            q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
-            # last_month_of_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[0].quarter_name[4:]
+            q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
+            # last_month_of_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[0].quarter_name[4:]
             approval_time = None
             submission_time = None
             # if last_month_of_quarter == "Dec 2020":

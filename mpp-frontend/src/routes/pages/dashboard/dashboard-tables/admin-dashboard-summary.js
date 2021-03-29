@@ -5,7 +5,7 @@ import { adminDashboardSummary, bulkReminderMail } from '../../../../appRedux/ac
 import { Table, Col, Button, Select, Tooltip } from 'antd';
 import Widget from 'components/Widget/index';
 import { BarChartOutlined, BellOutlined, FileSearchOutlined } from '@ant-design/icons';
-import { getQuarter } from '../../../../helpers';
+import { getQuarter, getRole } from '../../../../helpers';
 
 const { Option } = Select
 
@@ -19,6 +19,7 @@ export const AdminDashboardSummary = (props) => {
     const [data, setData] = useState([]);
     const [columns, setColumns] = useState();
     const [showName, setShowName] = useState();
+    const [isUserAdmin, setIsUserAdmin] = useState(false);
 
     useEffect(() => {
         dispatch(adminDashboardSummary(type))
@@ -29,6 +30,9 @@ export const AdminDashboardSummary = (props) => {
     }, [type])
 
     useEffect(() => {
+        setIsUserAdmin(() => {
+            return (getRole() === 'ADMIN')
+        })
         if (isLoaded) {
             let columnData, rowData = []
             if (type === 'all_three_submitted') {
@@ -257,7 +261,7 @@ export const AdminDashboardSummary = (props) => {
                                     type='primary'
                                     className='mb-0'
                                     onClick={sendEmail}
-                                    disabled={!isLoaded}
+                                    disabled={!isLoaded || !isUserAdmin}
                                 >
                                     <BellOutlined /> Send Reminder
                                 </Button>

@@ -14,10 +14,6 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-#FROM_EMAIL_ID = 'noreply@somehost.local'
-FROM_EMAIL_ID = os.getenv('FROM_EMAIL_ID')
-
-# CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_TIMEZONE = 'Asia/Kolkata'
 
@@ -56,6 +52,8 @@ else:
 
 ALLOWED_HOSTS =[address for address in os.getenv('ALLOWED_HOSTS').split(" ")]
 
+# Password Token expiry, 1460 Hours = 2 months
+DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME=1460
 # Cloudwatch Logging
 LOGGING = {
     'version': 1,
@@ -136,7 +134,7 @@ DATABASES = {
         'HOST':os.getenv('HOST'),
         'PORT':os.getenv('PORT'),
         'TEST':{
-            'NAME':'test_mpp_database',
+            'NAME':'mpp_database_test',
         },
     }
 }
@@ -188,7 +186,9 @@ EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+FROM_EMAIL_ID = os.getenv('FROM_EMAIL_ID')
 #DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 REST_FRAMEWORK = {
@@ -250,3 +250,4 @@ SWAGGER_SETTINGS = {
       }
    },
 }
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

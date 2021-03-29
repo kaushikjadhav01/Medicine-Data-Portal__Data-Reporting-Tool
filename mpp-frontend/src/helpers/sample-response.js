@@ -26,7 +26,8 @@ export const formulationType = [
     'Tablet',
     'Granules',
     'Liquid',
-    'Powder for suspension'
+    'Powder for suspension',
+    'Oral pellets'
 ]
 
 export const currencyList = {

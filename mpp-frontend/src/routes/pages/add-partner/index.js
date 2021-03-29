@@ -135,6 +135,7 @@ const AddPartner = (props) => {
                 showSearch
                 optionFilterProp='children'
                 filterOption={true}
+                id='partner-countrylist'
             >
                 {
                     setCountryCodeListOptions()
@@ -226,6 +227,7 @@ const AddPartner = (props) => {
                                             showSearch
                                             optionFilterProp='children'
                                             filterOption={true}
+                                            id='partner-region'
                                         >
                                             {
                                                 countryList.map(
@@ -277,6 +279,7 @@ const AddPartner = (props) => {
                                                                                     <Select
                                                                                         placeholder='Please select product'
                                                                                         className='product-select'
+                                                                                        id={'partner-product-' + field.fieldKey}
                                                                                         showSearch
                                                                                         optionFilterProp='children'
                                                                                         filterOption={true}
@@ -303,10 +306,14 @@ const AddPartner = (props) => {
                                                                                         },
                                                                                     ]}
                                                                                 >
-                                                                                    <Select placeholder='Please select product status' className='product-select'>
+                                                                                    <Select
+                                                                                        placeholder='Please select product status'
+                                                                                        className='product-select'
+                                                                                        id={'partner-product-status-' + field.fieldKey}
+                                                                                    >
                                                                                         {
                                                                                             statusArray && statusArray.length ? statusArray.map(
-                                                                                                value => (<Option key={statusArray.indexOf(value)} value={value.id}>{value.name}</Option>)
+                                                                                                value => (<Option key={statusArray.indexOf(value)} id={value.id} value={value.id}>{value.name}</Option>)
                                                                                             ) : []
                                                                                         }
                                                                                     </Select>
@@ -334,6 +341,7 @@ const AddPartner = (props) => {
                                                                     add();
                                                                 }}
                                                                 className='ml-20 width-60'
+                                                                id='partner-add-product'
                                                             >
                                                                 <PlusOutlined /> Add Product
                                                             </Button>
@@ -434,6 +442,7 @@ const AddPartner = (props) => {
                                                             onClick={() => {
                                                                 add();
                                                             }}
+                                                            id='partner-add-product'
                                                             style={{ width: '60%' }}
                                                         >
                                                             <PlusOutlined /> Add people
@@ -445,10 +454,10 @@ const AddPartner = (props) => {
                                     </Form.List>
 
                                     <Form.Item className='flex-d-row-reverse'>
-                                        <Button type='primary' htmlType='submit'>
+                                        <Button id='add-partner-save' type='primary' htmlType='submit'>
                                             {editFlag ? 'Save' : 'Add Partner'}
                                         </Button>
-                                        <Button onClick={navigateToPartnerList} >
+                                        <Button id='add-partner-cancel' onClick={navigateToPartnerList} >
                                             Cancel
                                         </Button>
                                     </Form.Item>

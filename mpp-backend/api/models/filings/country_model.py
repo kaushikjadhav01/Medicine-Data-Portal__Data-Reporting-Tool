@@ -6,7 +6,7 @@ class Country(models.Model):
     class Meta:
         db_table = "country"
 
-    country_id = models.AutoField(primary_key=True)
+    country_id = models.AutoField(primary_key=True,db_index=True)
     country_name = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
 

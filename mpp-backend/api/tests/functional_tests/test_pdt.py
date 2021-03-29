@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 import json
 import pytest
+
 from api.models import (
     User,Product,Stage,Quarter
 )
@@ -80,7 +81,7 @@ def test_pdt_user(client,make_partner_with_products_case1):
     product2_stage1 = Stage.objects.filter(product_id=make_partner_with_products_case1[1].product_id)[0]
     product3_stage1 = Stage.objects.filter(product_id=make_partner_with_products_case1[2].product_id)[0]
     
-    q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+    q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
 
     response = client.post('/api/template/pdt/', {
         make_partner_with_products_case1[0].product_id:{
@@ -156,7 +157,7 @@ def test_pdt_admin(client,make_partner_with_products_case1):
     product2_stage1 = Stage.objects.filter(product_id=make_partner_with_products_case1[1].product_id)[0]
     product3_stage1 = Stage.objects.filter(product_id=make_partner_with_products_case1[2].product_id)[0]
     
-    q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+    q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
 
     response = client.post('/api/template/pdt/' + str(partner_id) + '/', {
         make_partner_with_products_case1[0].product_id:{

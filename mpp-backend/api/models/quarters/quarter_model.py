@@ -8,6 +8,8 @@ class Quarter(models.Model):
 
     quarter_id = models.AutoField(primary_key=True)
     quarter_name = models.CharField(max_length=50)
+    quarter_year = models.IntegerField(default=0)
+    quarter_index = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     cut_off_date = models.DateTimeField(null=True)
 

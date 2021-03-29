@@ -35,11 +35,25 @@ class FillingView(APIView):
         product_type = {}
         FDF_status_dropdown = ["0","Filed","Registered","Filing-Planned"]
         API_status_dropdown = ["0","Filed","Registered"]
+        previous_quarter=None
+        ordered_quarter_list = list(Quarter.objects.order_by('-quarter_year', '-quarter_index'))
+        if request.query_params.get('quarter') != None:
+            quarter_name = request.query_params.get('quarter')
+            quarter_obj = Quarter.objects.filter(quarter_name=quarter_name)[0]
+            if len(ordered_quarter_list) > 1:
+                q_1_quarter_index = ordered_quarter_list.index(quarter_obj)
+                ongoing_quarter = ordered_quarter_list[q_1_quarter_index-1]
+            else:
+                ongoing_quarter=ordered_quarter_list[0] 
+        else:
+            ongoing_quarter = ordered_quarter_list[0]
+            quarter_obj = ordered_quarter_list[1]
+            if len(ordered_quarter_list) >= 3:
+                previous_quarter = ordered_quarter_list[2]
 
-        ongoing_quarter = OngoingQuarter.objects.all().first()
         if ongoing_quarter != None:
-            curr_index = ongoing_quarter.index
-            curr_year = ongoing_quarter.year
+            curr_index = ongoing_quarter.quarter_index
+            curr_year = ongoing_quarter.quarter_year
 
             temp = quarter_mapping[quarter_list[curr_index]] + "-" + str(curr_year)[-2:]
             FDF_status_dropdown.append(temp)
@@ -55,14 +69,15 @@ class FillingView(APIView):
                 temp = quarter_mapping[quarter_list[curr_index]] + "-" + str(curr_year)[-2:]
                 FDF_status_dropdown.append(temp)
                 API_status_dropdown.append(temp)
+
                 
         countries = Country.objects.filter(is_active=True).order_by('country_name')
         if not countries.exists():
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        active_products = ActiveProduct.objects.filter(partner_id=partner_id,is_active=True).order_by('active_product_id')
-        if not active_products.exists():
-            return Response(status=status.HTTP_204_NO_CONTENT)
+        active_products = ActiveProduct.objects.filter(partner_id=partner_id,is_active=True,product_id__category='FDF',productquarter__quarter_id=quarter_obj).order_by('active_product_id')
+        # if not active_products.exists():
+        #     return Response(status=status.HTTP_204_NO_CONTENT)
 
         for country in countries:
             data = {}
@@ -82,8 +97,16 @@ class FillingView(APIView):
 
                 filing_plan = FilingPlan.objects.filter(
                     active_product_id=active_product,
-                    country_id=country
+                    country_id=country,
+                    quarter_id=quarter_obj
                 ).first()
+                
+                if filing_plan == None and previous_quarter != None:
+                    filing_plan = FilingPlan.objects.filter(
+                        active_product_id=active_product,
+                        country_id=country,
+                        quarter_id=previous_quarter
+                    ).first()
 
                 if filing_plan != None:
                     data[product.product_name] = filing_plan.status
@@ -97,7 +120,7 @@ class FillingView(APIView):
         messages = TemplateMessage.objects.filter(partner_id=partner_id,template_type='filing plan').values().order_by('-template_message_id')
         messages =[message for message in messages]
 
-        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
         # filing_status = False
         # template_status = TemplateMessage.objects.filter(
         #     partner_id=partner_id,
@@ -135,7 +158,7 @@ class FillingView(APIView):
 
         last_msg = TemplateMessage.objects.filter(
             partner_id=partner_id,
-            quarter_id=q_1,
+            quarter_id=quarter_obj,
             template_type="filing plan").last()
         
         if last_msg:
@@ -153,7 +176,7 @@ class FillingView(APIView):
 
         filing_meta = {
             "partner_name":Partner.objects.get(pk=partner_id).company_name,
-            "quarter_name":q_1.quarter_name,
+            "quarter_name":quarter_obj.quarter_name,
             "report_status":report_status,
             "approval_time":approval_time,
             "submission_time":submission_time
@@ -167,12 +190,25 @@ class FillingView(APIView):
                 "product_type":product_type[product_name]
             })
 
-        return Response(data={"filing_meta":filing_meta,"rows":rows,"product_details":product_details,"status_dropdown":{"FDF":FDF_status_dropdown,"API":API_status_dropdown},'messages':messages,'unread_message_count':unread_message_count},status=status.HTTP_200_OK)
+        quarter_dropdown = list(Quarter.objects.filter().order_by('-quarter_year', '-quarter_index').values_list('quarter_name',flat=True))
+        quarter_dropdown.pop(0)
+
+        filing_plan_quarters = list(FilingPlan.objects.filter(active_product_id__partner_id=partner_id).values_list('quarter_id__quarter_name',flat=True).distinct())
+        current_quarter = quarter_dropdown[0]
+        for quarter in quarter_dropdown[:]:
+            if quarter not in filing_plan_quarters and quarter != current_quarter:
+                quarter_dropdown.remove(quarter)
+        
+        if not active_products.exists():
+            return Response(data={"filing_meta":filing_meta},status=status.HTTP_200_OK)
+
+        return Response(data={"filing_meta":filing_meta,"rows":rows,"product_details":product_details,"status_dropdown":{"FDF":FDF_status_dropdown,"API":API_status_dropdown},'messages':messages,'unread_message_count':unread_message_count,'quarter_dropdown':quarter_dropdown},status=status.HTTP_200_OK)
 
 
     def post(self,request):
         partner_id = request.user.id
         data = request.data
+        q_1 = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
 
         countries = Country.objects.all()
         if not countries.exists():
@@ -196,7 +232,7 @@ class FillingView(APIView):
                     continue
 
                 try:
-                    obj = FilingPlan.objects.get(active_product_id=active_product,country_id=country)
+                    obj = FilingPlan.objects.get(active_product_id=active_product,country_id=country,quarter_id=q_1)
                     obj.status = data[country_id][product_id]
                     obj.updated_by = request.user.id
                     obj.save()
@@ -206,6 +242,7 @@ class FillingView(APIView):
                         active_product_id = active_product,
                         country_id = country,
                         status = data[country_id][product_id],
+                        quarter_id=q_1,
                         created_by=request.user.id,
                         updated_by=request.user.id
                     )
@@ -240,14 +277,17 @@ class FilingPlanSubmissionViewset(viewsets.ModelViewSet):
 
         now = datetime.datetime.now()
 
-        disguised_email = partner_name.capitalize() + " <" + from_email_id + ">"
+        import re
+        from_email_address = re.search('<(.*)>', from_email_id).group(1)
+        disguised_email = partner_name.capitalize() + " <" + from_email_address + ">"
+        
 
-        html_message = render_to_string('partner_submission.html', {'message':message,'partner_name': partner_name.capitalize(),'template_type':template_type,'link':link, 'now':now})
+        html_message = render_to_string('partner_submission.html', {'message':message,'partner_name': partner_name.capitalize(),'template_type':template_type,'link':link, 'now':now,'api_link':api_link})
         plain_message = strip_tags(html_message)
         send_mail(email_subject, plain_message, disguised_email, to_email_ids, html_message=html_message)
         
         quarter_order=[]
-        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
         quarter_name = q_1_quarter.__dict__['quarter_name']
 
         partner = Partner.objects.filter(partner_id=self.request.user.id)[0]

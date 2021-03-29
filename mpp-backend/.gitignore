@@ -4,10 +4,23 @@
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
 .coverage
-
+certbot
+certbot-prod
+certbot-renew.sh
 # Environment variable files
 MPP_API/.env.prod
 MPP_API/.env.dev
+MPP_API/.env.local
+
+# Sensitive CSV files
+scripts/Medspal_Product_Name_Acronyms.csv
+scripts/countries_not_in_medspal.csv
+scripts/country_list.csv
+scripts/new_sales_countries.csv
+scripts/new_sales_product.csv
+scripts/product_list.csv
+scripts/sales_report_api.csv
+scripts/sales_report_fdf.csv
 
 # Pytest
 .coverage

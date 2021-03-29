@@ -4,11 +4,11 @@ import { hideLoader, showLoader } from './Loader';
 import { showMessage } from '../../helpers'
 import { getConsolidatedSalesReport, getSalesReport, downloadConsolidatedSalesReport, postSalesReport, adminGetSalesReport, adminPostSalesReport, approveSalesReport, submitSalesReport, markSalesReportMessageRead, getProductsToBeVerified, postProductsToBeVerified } from '../../services';
 
-export const getApiSalesData = (onSuccess) => {
+export const getApiSalesData = (onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: salesReportConstants.GET_API_SALES_REPORT_REQUEST });
-        getSalesReport('api').then(
+        getSalesReport('api', quarter_name).then(
             response => {
                 dispatch({ type: salesReportConstants.GET_API_SALES_REPORT_SUCCESS, data: response ? response : {} });
                 if (onSuccess) {
@@ -25,11 +25,11 @@ export const getApiSalesData = (onSuccess) => {
     }
 }
 
-export const getFdfSalesData = (onSuccess) => {
+export const getFdfSalesData = (onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: salesReportConstants.GET_FDF_SALES_REPORT_REQUEST });
-        getSalesReport('fdf').then(
+        getSalesReport('fdf', quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: salesReportConstants.GET_FDF_SALES_REPORT_SUCCESS, data: response ? response : {} });
@@ -85,11 +85,11 @@ export const getAdminConsolidatedFdfReport = (data, onSuccess) => {
     }
 }
 
-export const downloadApiSalesReport = (filename, onSuccess) => {
+export const downloadApiSalesReport = (filename, apiRequestObj,onSuccess) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: salesReportConstants.DOWNLOAD_API_SALES_REPORT_REQUEST });
-        downloadConsolidatedSalesReport('api').then(response => {
+        downloadConsolidatedSalesReport('api', apiRequestObj).then(response => {
             dispatch(hideLoader());
             dispatch({ type: salesReportConstants.DOWNLOAD_API_SALES_REPORT_SUCCESS });
             FileSaver.saveAs(response, filename);
@@ -106,11 +106,11 @@ export const downloadApiSalesReport = (filename, onSuccess) => {
     }
 }
 
-export const downloadFdfSalesReport = (filename, onSuccess) => {
+export const downloadFdfSalesReport = (filename, fdfRequestObj, onSuccess) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: salesReportConstants.DOWNLOAD_FDF_SALES_REPORT_REQUEST });
-        downloadConsolidatedSalesReport('fdf').then(response => {
+        downloadConsolidatedSalesReport('fdf', fdfRequestObj).then(response => {
             dispatch(hideLoader());
             dispatch({ type: salesReportConstants.DOWNLOAD_FDF_SALES_REPORT_SUCCESS });
             FileSaver.saveAs(response, filename);
@@ -171,11 +171,11 @@ export const postFdfSalesReportData = (data, onSuccess) => {
     }
 }
 
-export const getAdminApiSalesData = (id, onSuccess) => {
+export const getAdminApiSalesData = (id, onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: salesReportConstants.GET_ADMIN_API_SALES_REPORT_REQUEST });
-        adminGetSalesReport('api', id).then(
+        adminGetSalesReport('api', id, quarter_name).then(
             response => {
                 dispatch({ type: salesReportConstants.GET_ADMIN_API_SALES_REPORT_SUCCESS, data: response ? response : {} });
                 if (onSuccess) {
@@ -192,11 +192,11 @@ export const getAdminApiSalesData = (id, onSuccess) => {
     }
 }
 
-export const getAdminFdfSalesData = (id, onSuccess) => {
+export const getAdminFdfSalesData = (id, onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: salesReportConstants.GET_ADMIN_FDF_SALES_REPORT_REQUEST });
-        adminGetSalesReport('fdf', id).then(
+        adminGetSalesReport('fdf', id, quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: salesReportConstants.GET_ADMIN_FDF_SALES_REPORT_SUCCESS, data: response ? response : {} });
@@ -214,11 +214,11 @@ export const getAdminFdfSalesData = (id, onSuccess) => {
     }
 }
 
-export const postAdminApiSalesData = (id, data, onSuccess) => {
+export const postAdminApiSalesData = (id, data, onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: salesReportConstants.POST_ADMIN_API_SALES_REPORT_REQUEST });
-        adminPostSalesReport('api', id, data).then(
+        adminPostSalesReport('api', id, data, quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: salesReportConstants.POST_ADMIN_API_SALES_REPORT_SUCCESS });
@@ -236,11 +236,11 @@ export const postAdminApiSalesData = (id, data, onSuccess) => {
     }
 }
 
-export const postAdminFdfSalesData = (id, data, onSuccess) => {
+export const postAdminFdfSalesData = (id, data, onSuccess, quarter_name) => {
     return dispatch => {
         dispatch(showLoader());
         dispatch({ type: salesReportConstants.POST_ADMIN_FDF_SALES_REPORT_REQUEST });
-        adminPostSalesReport('fdf', id, data).then(
+        adminPostSalesReport('fdf', id, data, quarter_name).then(
             response => {
                 dispatch(hideLoader());
                 dispatch({ type: salesReportConstants.POST_ADMIN_FDF_SALES_REPORT_SUCCESS });
@@ -295,6 +295,9 @@ export const submitSalesReportData = (data, onSuccess) => {
             }
         ).catch(
             error => {
+                if (onSuccess) {
+                    onSuccess()
+                }
                 dispatch(hideLoader());
                 dispatch({ type: salesReportConstants.SUBMIT_SALES_REPORT_FAILURE });
                 showMessage('error', error.toString());

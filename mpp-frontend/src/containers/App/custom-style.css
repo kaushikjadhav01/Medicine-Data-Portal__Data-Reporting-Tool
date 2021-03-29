@@ -228,3 +228,9 @@ a:hover {
 .gx-login-header img {
     max-width: 50%;
 }
+
+.ag-scroll-bar-fix{
+    border: solid 1px transparent;
+    border-color: #ffffff;
+    /* border-color: var(--ag-border-color, #bdc3c7); */
+}

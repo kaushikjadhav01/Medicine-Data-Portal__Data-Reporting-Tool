@@ -10,6 +10,7 @@ class User(AbstractUser):
     ROLE_CHOICES = [
         ('ADMIN','ADMIN'),
         ('PARTNER','PARTNER'),
+        ('STAFF','STAFF'),
     ]
 
     class Meta:

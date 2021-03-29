@@ -23,7 +23,7 @@ const Login = (props) => {
   const navigatePostLogin = () => {
     let user = JSON.parse(localStorage.getItem('user'));
     if (user) {
-      if (user.role === roleConstants.ADMIN) {
+      if (user.role === roleConstants.ADMIN || user.role === roleConstants.STAFF) {
         props.history.push('/admin/dashboard');
       } else {
         props.history.push('/partner/dashboard');
@@ -73,7 +73,7 @@ const Login = (props) => {
             <Link className='gx-login-form-forgot gx-ml-auto float-right' to='/reset-password'><IntlMessages id='app.userAuth.forgotPassword' /></Link>
           </div>
           <FormItem className='gx-text-center'>
-            <Button className='gx-img-fluid-full' type='primary' htmlType='submit'>
+            <Button id='app-btn-login' className='gx-img-fluid-full' type='primary' htmlType='submit'>
               <IntlMessages id='app.userAuth.login' />
             </Button>
           </FormItem>

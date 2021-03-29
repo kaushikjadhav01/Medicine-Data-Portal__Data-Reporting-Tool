@@ -18,13 +18,28 @@ from api.models import (
 import datetime, os
 from django.template.defaultfilters import date
 from MPP_API.settings import FROM_EMAIL_ID
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from django.db.models import Count
 
 
 class PDTView(APIView):
 
     permission_classes = [IsAuthenticated, IsPartner]
 
+    @swagger_auto_schema(manual_parameters=[
+        openapi.Parameter(
+            'quarter', openapi.IN_QUERY, 
+            type=openapi.TYPE_STRING, 
+            required=False,
+        )],
+    )
+
     def get(self,request):
+
+        quarter_name_query = None
+        if request.query_params.get('quarter') != None:
+            quarter_name_query = request.query_params.get('quarter')
 
         partner_id = request.user.id
         
@@ -33,31 +48,58 @@ class PDTView(APIView):
         quarter_objects = []
         quarter_editable = {}
 
+        quarter_dropdown = list(Quarter.objects.filter().order_by('-quarter_year', '-quarter_index').values_list('quarter_name',flat=True))
+        quarter_dropdown.pop(0)
+
+        pdt_quarters = list(ProductQuarterDate.objects.filter(product_quarter_id__active_product_id__partner_id=partner_id).values_list('product_quarter_id__quarter_id__quarter_name',flat=True).distinct())
+        current_quarter = quarter_dropdown[0]
+        for quarter in quarter_dropdown[:]:
+            if quarter not in pdt_quarters and quarter != current_quarter:
+                quarter_dropdown.remove(quarter)
+
         #Get Active Quarter List
-        active_quarters = Quarter.objects.filter(is_active=True).order_by('-quarter_id')
-        if not active_quarters.exists():
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        for quarter in active_quarters:
-            quarter_order.append(quarter.quarter_name)
-            quarter_objects.append(quarter)
+        if quarter_name_query == None:
 
-        quarter_order.pop(0)
-        latest_quarter = quarter_objects.pop(0)
+            active_quarters = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')
+            if not active_quarters.exists():
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            for quarter in active_quarters:
+                quarter_order.append(quarter.quarter_name)
+                quarter_objects.append(quarter)
+            quarter_order.pop(0)
+            latest_quarter = quarter_objects.pop(0)
 
+        else:
+
+            active_quarters = Quarter.objects.filter(quarter_name=quarter_name_query)
+            if not active_quarters.exists():
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            quarter_order.append(active_quarters.first().quarter_name)
+            quarter_objects.append(active_quarters.first())
+            latest_quarter = None
+
+        quarter_order=quarter_order[0:2]
         for each in quarter_order:
             quarter_editable[each] = True
         quarter_editable[quarter_order[-1]] = False
         
         #Get Active Products for that Partner Id
-        active_products = ActiveProduct.objects.filter(partner_id=partner_id,is_active=True).order_by('active_product_id')
+        if quarter_name_query == None:
+            active_products = ActiveProduct.objects.filter(partner_id=partner_id,is_active=True).order_by('active_product_id')
+        else:
+            active_products = ActiveProduct.objects.filter(partner_id=partner_id).order_by('active_product_id')
         if not active_products.exists():
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         for active_product in active_products:
             
             if active_product.has_last_quarter != None:
-                if active_quarters[1].quarter_id > active_product.has_last_quarter:
-                    continue
+                if quarter_name_query == None:
+                    if active_quarters[1].quarter_id > active_product.has_last_quarter:
+                        continue
+                else:
+                   if active_quarters[0].quarter_id > active_product.has_last_quarter:
+                        continue
 
             product = active_product.product_id
             product_status = active_product.status
@@ -65,10 +107,15 @@ class PDTView(APIView):
             product_name = product.product_name
             
             #Get all the quarters assigned to that product
-            product_quarters = ProductQuarter.objects.filter(active_product_id=active_product)
+            if quarter_name_query == None:
+                product_quarters = ProductQuarter.objects.filter(active_product_id=active_product)
+            else:
+                product_quarters = ProductQuarter.objects.filter(active_product_id=active_product,quarter_id=active_quarters[0].quarter_id)
+                if not product_quarters:
+                    continue
             
             #Get all the stages for that product
-            stages = Stage.objects.filter(product_id=product).order_by('description')
+            stages = Stage.objects.filter(product_id=product)
 
             flag = 0
             editable = True
@@ -87,7 +134,7 @@ class PDTView(APIView):
                     "product_id":product.product_id,
                     "stage_id":stage.stage_id,
                 }
-                print(temp)
+                
                 flag = 1
 
                 #Get notes for that stage
@@ -101,7 +148,7 @@ class PDTView(APIView):
                     if quarter == latest_quarter:
                         continue
 
-                    if quarter.is_active:
+                    if quarter.is_active or quarter_name_query != None:
 
                         quarter_name = quarter.quarter_name
 
@@ -185,7 +232,7 @@ class PDTView(APIView):
             "submission_time":submission_time
         }
 
-        return Response(data={'pdt_meta':pdt_meta,'quarter_order':quarter_order,'quarter_editable':quarter_editable,'rows':rows,'messages':messages,'unread_message_count':unread_message_count},status=status.HTTP_200_OK)
+        return Response(data={'pdt_meta':pdt_meta,'quarter_dropdown':quarter_dropdown,'quarter_order':quarter_order,'quarter_editable':quarter_editable,'rows':rows,'messages':messages,'unread_message_count':unread_message_count},status=status.HTTP_200_OK)
 
     
     def post(self,request):
@@ -210,7 +257,9 @@ class PDTView(APIView):
                 active_product.status = product_status
 
                 if product_status == 'APPROVED' or product_status == 'FILED' or product_status == 'DROPPED':
-                    active_product.has_last_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1].quarter_id
+                    active_product.has_last_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1].quarter_id
+                else:
+                    active_product.has_last_quarter = None
 
                 active_product.save()
 
@@ -308,14 +357,16 @@ class PDTSubmissionViewset(viewsets.ModelViewSet):
         
         now = datetime.datetime.now()
         
-        disguised_email = partner_name.capitalize() + " <" + from_email_id + ">"
+        import re
+        from_email_address = re.search('<(.*)>', from_email_id).group(1)
+        disguised_email = partner_name.capitalize() + " <" + from_email_address + ">"
 
-        html_message = render_to_string('partner_submission.html', {'message':message,'partner_name': partner_name.capitalize(),'template_type':template_type,'link':link, 'now':now})
+        html_message = render_to_string('partner_submission.html', {'message':message,'partner_name': partner_name.capitalize(),'template_type':template_type,'link':link, 'now':now,'api_link':api_link})
         plain_message = strip_tags(html_message)
         send_mail(email_subject, plain_message, disguised_email, to_email_ids, html_message=html_message)
         
         quarter_order=[]
-        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_id')[1]
+        q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]
         quarter_name = q_1_quarter.__dict__['quarter_name']
 
         partner = Partner.objects.filter(partner_id=self.request.user.id)[0]

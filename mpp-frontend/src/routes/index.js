@@ -20,23 +20,23 @@ import ConsolidatedSalesReport from "./pages/report-sales-report";
 import UserProfilePage from "./pages/profile";
 import AdminSettings from "./pages/admin-settings";
 
-const AdminDashboardPage = Auth(AdminDashboard, [roleConstants.ADMIN, roleConstants.PARTNER]);
+const AdminDashboardPage = Auth(AdminDashboard, [roleConstants.ADMIN, roleConstants.STAFF,roleConstants.PARTNER]);
 const PartnerDashboardPage = Auth(PartnerDashboard, [roleConstants.PARTNER]);
-const ChangePasswordPage = Auth(ChangePassword, [roleConstants.ADMIN, roleConstants.PARTNER]);
-const AdminProfilePage = Auth(UserProfilePage, [roleConstants.ADMIN]);
+const ChangePasswordPage = Auth(ChangePassword, [roleConstants.ADMIN, roleConstants.STAFF, roleConstants.PARTNER]);
+const AdminProfilePage = Auth(UserProfilePage, [roleConstants.ADMIN, roleConstants.STAFF]);
 const PartnerProfilePage = Auth(UserProfilePage, [roleConstants.PARTNER]);
-const PartnerListNewPage = Auth(PartnerListNew, [roleConstants.ADMIN]);
-const AddPartnerPage = Auth(AddPartner, [roleConstants.ADMIN]);
-const PartnerPerformancePage = Auth(PartnerPerformance, [roleConstants.ADMIN]);
-const ProductListPage = Auth(ProductList, [roleConstants.ADMIN]);
-const AddProductPage = Auth(AddProduct, [roleConstants.ADMIN]);
-const DevelopmentTimelinePage = Auth(DevelopmentTimeline, [roleConstants.PARTNER, roleConstants.ADMIN]);
-const FilingPlansPage = Auth(FilingPlans, [roleConstants.PARTNER, roleConstants.ADMIN]);
-const SalesReportPage = Auth(SalesReport, [roleConstants.PARTNER, roleConstants.ADMIN]);
-const PDTReportPage = Auth(PDTReport, [roleConstants.ADMIN]);
-const FilingPlansReportPage = Auth(FilingPlansReport, [roleConstants.ADMIN]);
-const ConsolidatedSalesReportPage = Auth(ConsolidatedSalesReport, [roleConstants.ADMIN]);
-const AdminSettingsPage = Auth(AdminSettings, [roleConstants.ADMIN]);
+const PartnerListNewPage = Auth(PartnerListNew, [roleConstants.ADMIN, roleConstants.STAFF]);
+const AddPartnerPage = Auth(AddPartner, [roleConstants.ADMIN, roleConstants.STAFF]);
+const PartnerPerformancePage = Auth(PartnerPerformance, [roleConstants.ADMIN, roleConstants.STAFF]);
+const ProductListPage = Auth(ProductList, [roleConstants.ADMIN, roleConstants.STAFF]);
+const AddProductPage = Auth(AddProduct, [roleConstants.ADMIN, roleConstants.STAFF]);
+const DevelopmentTimelinePage = Auth(DevelopmentTimeline, [roleConstants.PARTNER, roleConstants.ADMIN, roleConstants.STAFF]);
+const FilingPlansPage = Auth(FilingPlans, [roleConstants.PARTNER, roleConstants.ADMIN, roleConstants.STAFF]);
+const SalesReportPage = Auth(SalesReport, [roleConstants.PARTNER, roleConstants.ADMIN, roleConstants.STAFF]);
+const PDTReportPage = Auth(PDTReport, [roleConstants.ADMIN, roleConstants.STAFF]);
+const FilingPlansReportPage = Auth(FilingPlansReport, [roleConstants.ADMIN, roleConstants.STAFF]);
+const ConsolidatedSalesReportPage = Auth(ConsolidatedSalesReport, [roleConstants.ADMIN, roleConstants.STAFF]);
+const AdminSettingsPage = Auth(AdminSettings, [roleConstants.ADMIN, roleConstants.STAFF]);
 
 
 

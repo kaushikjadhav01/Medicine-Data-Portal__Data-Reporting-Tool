@@ -4,7 +4,7 @@ import { Card, Table, Row, Col, Button, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteAdminProduct, getAdminProductList } from '../../../appRedux/actions';
 import { DeleteTwoTone, EditTwoTone, MedicineBoxOutlined } from '@ant-design/icons';
-import { showConfirm } from '../../../helpers';
+import { showConfirm, getRole } from '../../../helpers';
 
 const ProductList = (props) => {
 
@@ -13,8 +13,12 @@ const ProductList = (props) => {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [filteredInfo, setFilteredInfo] = useState({});
+    const [isUserAdmin, setIsUserAdmin] = useState(false);
 
     useEffect(() => {
+        setIsUserAdmin(() => {
+            return (getRole() === 'ADMIN')
+        })
         dispatch(getAdminProductList(true));
     }, [])
 
@@ -72,6 +76,8 @@ const ProductList = (props) => {
                     type='link'
                     className='margin-0'
                     onClick={() => navigateToEditProduct(item)}
+                    id={'edit-product-' + item.key}
+                    disabled={!isUserAdmin}
                 >
                     <Tooltip title='Edit Product'>
                         <EditTwoTone twoToneColor='#00AEEF' className='font-20' />
@@ -81,6 +87,8 @@ const ProductList = (props) => {
                     type='link'
                     className='margin-0'
                     onClick={() => showDeleteProduct(item)}
+                    id={'delete-product-' + item.key}
+                    disabled={!isUserAdmin}
                 >
                     <Tooltip title='Deactivate Product'>
                         <DeleteTwoTone twoToneColor='#00AEEF' className='font-20' />
@@ -103,7 +111,7 @@ const ProductList = (props) => {
                 <Col span={24}>
                     <div className='gx-flex-row align-items-center'>
                         <h1 className='title gx-mb-4'><IntlMessages id='sidebar.productList' /></h1>
-                        <Button type='primary' className='gx-ml-auto' onClick={navigateToAddProduct} >
+                        <Button id='add-product-btn' type='primary' className='gx-ml-auto' onClick={navigateToAddProduct} disabled={!isUserAdmin}>
                             <MedicineBoxOutlined /> <IntlMessages id='product.list.addProduct' />
                         </Button>
                     </div>
@@ -114,7 +122,6 @@ const ProductList = (props) => {
                             className='gx-table-responsive mpp-list-table'
                             columns={columns}
                             dataSource={data}
-                            // pagination={{ pageSize: 100 }}
                             bordered
                         />
                     </Card>

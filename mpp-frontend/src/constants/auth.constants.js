@@ -24,5 +24,6 @@ export const authConstants = {
 
 export const roleConstants = {
     ADMIN: 'ADMIN',
-    PARTNER: 'PARTNER'
+    PARTNER: 'PARTNER',
+    STAFF: 'STAFF'
 }

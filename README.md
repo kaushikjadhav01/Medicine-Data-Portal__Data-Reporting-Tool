@@ -27,7 +27,7 @@ Admin has the privilege of viewing and downloading Consolidated PDT, Filing Plan
 •	Official version of the application has been hosted on **AWS EC2** and my personal prototype has been hosted on my personal free tier AWS Educate instance.<br>
 
 ## Screenshots
-![alt text](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/mpp-frontend/src/assets/images/dashboard_ss.png)
+![alt text](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/screenshots/dashboard_ss.png)
 For Screenshots of the system, check out the Sample Use Case Documentation.pdf in this repo or <a href="https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/Sample%20Use%20Case%20Documentation.pdf">click here</a>
 
 

@@ -11,6 +11,7 @@ certbot-renew.sh
 MPP_API/.env.prod
 MPP_API/.env.dev
 MPP_API/.env.local
+mppenv1
 
 # Sensitive CSV files
 scripts/Medspal_Product_Name_Acronyms.csv

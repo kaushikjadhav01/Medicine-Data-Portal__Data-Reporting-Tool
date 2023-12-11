@@ -21,3 +21,4 @@ pytest-dotenv==0.5.2
 PyJWT==1.7.1
 pytest-rerunfailures==9.1.1
 pandas
+whitenoise

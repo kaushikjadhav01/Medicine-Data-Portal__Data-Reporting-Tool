@@ -10,7 +10,7 @@ Medicine Patent Pool - Reporting System - Backend
 7. Place your environment variables file in MPP_API folder and specify it's name in **load_dotenv** inside **settings.py** file. eg: load_dotenv('MPP_API/.env.dev')
 8. Delete all files except **__init__.py** from **api\migrations** folder (if any present) 
 9. Run commands: 
-- `python manage.py makemigrations`
+- `python manage.py makemigrations api` or `python manage.py makemigrations`
 - `python manage.py migrate`
 10. Create superuser/admin account and keep **Role=ADMIN** when prompted -> run `python manage.py createsuperuser`
 11. Go to api/namespaces/clock.py, comment out permission_classes. Call the **api/clock/** endpoint to add a quarter in the system (entire step yet to be automated). Go back and uncomment the line you just commented. You can change the quarter name to be added by going in the api\namespaces\clock.py file and changing the quarter_name in the Quarter.objects.create() command

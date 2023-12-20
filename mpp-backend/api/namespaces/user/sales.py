@@ -465,7 +465,7 @@ class SalesReportSubmissionViewset(viewsets.ModelViewSet):
 
             html_message = render_to_string('partner_submission.html', {'message':message,'partner_name': partner_name.capitalize(),'template_type':template_type,'link':link, 'now':now,'api_link':api_link})
             plain_message = strip_tags(html_message)
-            send_mail(email_subject, plain_message, disguised_email, to_email_ids, html_message=html_message)
+            # send_mail(email_subject, plain_message, disguised_email, to_email_ids, html_message=html_message)
             
             quarter_name = q_1_quarter.__dict__['quarter_name']
             template_message = TemplateMessage.objects.create(partner_id_id=partner_id,is_approved=None,message=message,is_partner_message=True,

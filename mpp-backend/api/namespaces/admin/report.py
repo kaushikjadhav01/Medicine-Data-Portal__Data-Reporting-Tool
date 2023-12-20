@@ -159,7 +159,7 @@ class PDTReportView(APIView):
                 .groupby(['product_quarter_id__active_product_id__product_id__product_name','product_quarter_id__active_product_id__status','stage_id__description','product_quarter_id__active_product_id__productnotes__description'])
                 .agg(dict)
                 .reset_index()
-                .to_dict('r'))
+                .to_dict('records'))
             
             for item in pdt_obj:
                 pdt_dict = {

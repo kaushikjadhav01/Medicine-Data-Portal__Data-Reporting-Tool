@@ -65,7 +65,7 @@ def send_bulk_email(data):
             no_of_days_to_submit=None
         html_message = render_to_string('partner_bulk_reminder.html', {'partner_name': company_name.capitalize(), 'no_of_days_to_submit':no_of_days_to_submit,'pdt_link':pdt_link, 'filing_plan_link':filing_plan_link, 'sales_link':sales_link,'api_link':api_link})
         plain_message = strip_tags(html_message)
-        send_mail(email_subject, plain_message, FROM_EMAIL_ID, [email_id], html_message=html_message)
+        # send_mail(email_subject, plain_message, FROM_EMAIL_ID, [email_id], html_message=html_message)
         
 
 @shared_task

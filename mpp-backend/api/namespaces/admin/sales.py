@@ -473,7 +473,7 @@ class SalesReportDecisionViewset(viewsets.ModelViewSet):
             html_message = render_to_string('admin_approval.html', {'partner_name': partner_name.capitalize(),'message':message,'status':report_status,'template_type':template_type,'link':link,'api_link':api_link})
             plain_message = strip_tags(html_message)
     
-            send_mail(email_subject, plain_message, from_email_id, [to_email_id], html_message=html_message)
+            # send_mail(email_subject, plain_message, from_email_id, [to_email_id], html_message=html_message)
         
             quarter_name = q_1_quarter.__dict__['quarter_name']
             template_message = TemplateMessage.objects.create(partner_id_id=partner_id,is_approved=is_approved,message=message,is_read=False,is_partner_message=False,

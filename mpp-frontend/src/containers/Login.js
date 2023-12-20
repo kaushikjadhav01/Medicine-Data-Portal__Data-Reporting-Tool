@@ -42,6 +42,7 @@ const Login = (props) => {
 
   return (
     <div className='gx-login-container'>
+    <a href="http://ec2-3-91-83-56.compute-1.amazonaws.com:8000/api/swagger"><button type='button' className='btn' style={{position: 'absolute', right:20, top:20, color: 'white', background: 'green'}}>Swagger Link</button></a>
       <div className='gx-login-content'>
         <div className='gx-login-header gx-text-center'>
           <img className='mb-30' src={require('assets/images/logo-white.png')} alt='mpp' title='mpp' />
@@ -60,11 +61,11 @@ const Login = (props) => {
             name='email'
           >
             <Input prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder='Email' />
+              placeholder='admin@mdd.com or partner@mdd.com' />
           </FormItem>
           <FormItem rules={[{ required: true, message: <IntlMessages id='error.password_required' /> }]} name='password'>
             <Input.Password prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder='Password' />
+              placeholder='Demopass@123' />
           </FormItem>
           <div className='gx-flex-row align-items-baseline'>
             <FormItem name='remember' valuePropName='checked'>

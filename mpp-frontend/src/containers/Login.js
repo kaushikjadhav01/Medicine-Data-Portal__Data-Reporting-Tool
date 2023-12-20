@@ -61,7 +61,7 @@ const Login = (props) => {
             name='email'
           >
             <Input prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder='admin@mdd.com or partner@mdd.com' />
+              placeholder='admin@mdp.com or partner@mdp.com' />
           </FormItem>
           <FormItem rules={[{ required: true, message: <IntlMessages id='error.password_required' /> }]} name='password'>
             <Input.Password prefix={<LockOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}

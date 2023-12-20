@@ -17,6 +17,7 @@ Medicine Patent Pool - Reporting System - Backend
 12. Import Product List from csv file using command: `python manage.py runscript import_product_list --script-args <path_to_csv>`
 13. Import Country List from csv file using command: `python manage.py runscript import_countries --script-args <path_to_csv>`
 14. (Optional Step) Import Sales Report, if any, from csv using command `python manage.py runscript import_sales_report --script-args <path_to_csv> <type_of_sales_report = API or FDF>`
+15. Restore db dumps in db/db_dump folder using `pg_restore -h <host rds dns> -p 5432 --no-owner --no-privileges --role=postgres -U postgres -d <db_name> <path_to_dump>`
 
 ### Run BE:
 1. Run local server using: `python manage.py runserver`

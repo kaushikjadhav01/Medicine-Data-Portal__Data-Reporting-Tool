@@ -291,7 +291,7 @@ class FilingPlanDecisionViewset(viewsets.ModelViewSet):
         html_message = render_to_string('admin_approval.html', {'partner_name': partner_name.capitalize(),'message':message,'status':status,'template_type':template_type,'link':link,'api_link':api_link})
         plain_message = strip_tags(html_message)
     
-        send_mail(email_subject, plain_message, from_email_id, [to_email_id], html_message=html_message)
+        # send_mail(email_subject, plain_message, from_email_id, [to_email_id], html_message=html_message)
 
         # Update admin partner list template data when approved
         template_data = TemplateMessage.objects.filter(partner_id=partner_id,template_type='filing plan',is_partner_message=True).last()

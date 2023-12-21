@@ -39,16 +39,17 @@ const AdminDashboard = (props) => {
                 tabPosition='top'
                 type='card'
             >
-                <TabPane tab='Summary' key='1'>
-                    <Row>
-                        <AdminDashboardSummary history={props.history} />
-                    </Row>
-                </TabPane>
-                <TabPane tab='Product / Project' key='2'>
+                <TabPane tab='Product / Project' key='1'>
                     <Row>
                         <AdminDashboardProjectCount />
                         <AdminDashboardProductCompanyCount />
                         <AdminDashboardCompanyCount />
+                    </Row>
+                </TabPane>
+
+                <TabPane tab='Summary' key='2'>
+                    <Row>
+                        <AdminDashboardSummary history={props.history} />
                     </Row>
                 </TabPane>
 

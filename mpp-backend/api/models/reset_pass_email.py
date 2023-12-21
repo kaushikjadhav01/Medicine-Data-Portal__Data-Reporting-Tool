@@ -23,6 +23,6 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 
     html_message = render_to_string('reset_password_email.html', {'partner_name': partner_name.capitalize(),'token':reset_password_token.key,'api_link':api_link})
     plain_message = strip_tags(html_message)    
-    send_mail(email_subject, plain_message, from_email_id, to_email_id, html_message=html_message)
+    # send_mail(email_subject, plain_message, from_email_id, to_email_id, html_message=html_message)
 
    

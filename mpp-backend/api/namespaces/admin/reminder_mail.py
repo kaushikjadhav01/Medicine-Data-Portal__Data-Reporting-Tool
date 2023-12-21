@@ -73,7 +73,7 @@ class ReminderMailView(APIView):
         
         html_message = render_to_string('partner_reminder.html', {'partner_name': partner_name.capitalize(),'template_type':template_type,'no_of_days_to_submit':no_of_days_to_submit,'link':link,'api_link':api_link})
         plain_message = strip_tags(html_message)
-        send_mail(email_subject, plain_message, FROM_EMAIL_ID, [partner_email], html_message=html_message)
+        # send_mail(email_subject, plain_message, FROM_EMAIL_ID, [partner_email], html_message=html_message)
 
         return Response(status=status.HTTP_200_OK)
 

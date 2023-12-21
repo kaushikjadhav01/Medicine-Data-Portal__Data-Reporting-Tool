@@ -10,13 +10,14 @@ Medicine Patent Pool - Reporting System - Backend
 7. Place your environment variables file in MPP_API folder and specify it's name in **load_dotenv** inside **settings.py** file. eg: load_dotenv('MPP_API/.env.dev')
 8. Delete all files except **__init__.py** from **api\migrations** folder (if any present) 
 9. Run commands: 
-- `python manage.py makemigrations`
+- `python manage.py makemigrations api` or `python manage.py makemigrations`
 - `python manage.py migrate`
 10. Create superuser/admin account and keep **Role=ADMIN** when prompted -> run `python manage.py createsuperuser`
 11. Go to api/namespaces/clock.py, comment out permission_classes. Call the **api/clock/** endpoint to add a quarter in the system (entire step yet to be automated). Go back and uncomment the line you just commented. You can change the quarter name to be added by going in the api\namespaces\clock.py file and changing the quarter_name in the Quarter.objects.create() command
 12. Import Product List from csv file using command: `python manage.py runscript import_product_list --script-args <path_to_csv>`
 13. Import Country List from csv file using command: `python manage.py runscript import_countries --script-args <path_to_csv>`
 14. (Optional Step) Import Sales Report, if any, from csv using command `python manage.py runscript import_sales_report --script-args <path_to_csv> <type_of_sales_report = API or FDF>`
+15. Restore db dumps in db/db_dump folder using `pg_restore -h <host rds dns> -p 5432 --no-owner --no-privileges --role=postgres -U postgres -d <db_name> <path_to_dump>`
 
 ### Run BE:
 1. Run local server using: `python manage.py runserver`

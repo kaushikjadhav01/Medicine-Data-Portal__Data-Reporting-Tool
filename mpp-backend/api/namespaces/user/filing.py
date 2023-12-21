@@ -284,7 +284,7 @@ class FilingPlanSubmissionViewset(viewsets.ModelViewSet):
 
         html_message = render_to_string('partner_submission.html', {'message':message,'partner_name': partner_name.capitalize(),'template_type':template_type,'link':link, 'now':now,'api_link':api_link})
         plain_message = strip_tags(html_message)
-        send_mail(email_subject, plain_message, disguised_email, to_email_ids, html_message=html_message)
+        # send_mail(email_subject, plain_message, disguised_email, to_email_ids, html_message=html_message)
         
         quarter_order=[]
         q_1_quarter = Quarter.objects.filter(is_active=True).order_by('-quarter_year', '-quarter_index')[1]

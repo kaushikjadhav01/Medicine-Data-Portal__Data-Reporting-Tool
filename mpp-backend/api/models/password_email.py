@@ -19,4 +19,4 @@ def send_password_email(partner_name,email,password,request):
     html_message = render_to_string('password_email.html', {'partner_name': partner_name.capitalize(),'token':token.key,'api_link':api_link})
     plain_message = strip_tags(html_message)
     
-    send_mail(email_subject, plain_message, from_email_id, to_email_id, html_message=html_message)
+    # send_mail(email_subject, plain_message, from_email_id, to_email_id, html_message=html_message)

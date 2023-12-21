@@ -161,6 +161,7 @@
   "app.userAuth.bySigning": "By Signing Up, you can avail full features of our services.",
   "app.userAuth.or": "or",
   "app.userAuth.forgotPassword": "Forgot Password",
+  "app.userAuth.Swagger": "Swagger Link",
   "app.userAuth.forgot": "Don't worry. Recovering the password is easy.Just tell us the email you have registered with.",
   "app.userAuth.signUp": "Sign Up",
   "app.userAuth.getAccount": "Get an account !!!",

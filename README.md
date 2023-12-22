@@ -85,10 +85,3 @@ Medicine Data Portal is a data reporting tool designed by me and my team for our
 </ul>
 
 <!-- MARKDOWN LINKS & IMAGES -->
-
-## Links
-
-* [Web site](http://ec2-54-164-245-147.compute-1.amazonaws.com/)
-* [Documentation](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/Sample%20Use%20Case%20Documentation.pdf)
-* [Issue tracker](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/issues)
-* [Source code](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)

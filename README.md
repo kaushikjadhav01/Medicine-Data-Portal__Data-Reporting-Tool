@@ -18,7 +18,7 @@
 # Medicine Data Portal
 This repository contains source code of a **prototype version** of an official project I have worked on. It is a Data Reporting Portal for a large sized pharma company which has multiple partner pharma companies.
 <br><br>
-The prototype is **hosted live** on my personal free tier aws educate instance at: http://ec2-3-91-83-56.compute-1.amazonaws.com
+**URL:** The prototype is **hosted live** on my personal Free Tier AWS instance at: http://ec2-3-91-83-56.compute-1.amazonaws.com
 
 <!-- TABLE OF CONTENTS -->
 <details>

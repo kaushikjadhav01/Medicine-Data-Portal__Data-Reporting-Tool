@@ -18,7 +18,7 @@
 # Medicine Data Portal
 This repository contains source code of a **prototype version** of an official project I have worked on. It is a Data Reporting Portal for a large sized pharma company which has multiple partner pharma companies.
 <br><br>
-**URL:** The prototype is **hosted live** on my personal Free Tier AWS instance at: http://ec2-3-91-83-56.compute-1.amazonaws.com
+**URL:** The prototype is **hosted live** on my personal Free Tier AWS instance at: http://ec2-54-164-245-147.compute-1.amazonaws.com
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -88,7 +88,7 @@ Medicine Data Portal is a data reporting tool designed by me and my team for our
 
 ## Links
 
-* [Web site](http://ec2-3-91-83-56.compute-1.amazonaws.com/)
+* [Web site](http://ec2-54-164-245-147.compute-1.amazonaws.com/)
 * [Documentation](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/Sample%20Use%20Case%20Documentation.pdf)
 * [Issue tracker](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/issues)
 * [Source code](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)

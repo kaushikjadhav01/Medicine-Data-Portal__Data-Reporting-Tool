@@ -1,5 +1,5 @@
 [![DOI](https://zenodo.org/badge/316682135.svg)](https://zenodo.org/doi/10.5281/zenodo.10421266)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Medicine-Data-Portal__Data-Reporting-Tool/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/LICENSE)
 [![Code Coverage](https://codecov.io/gh/NCSU-Fall-2022-SE-Project-Team-11/XpensAuditor---Group-11/branch/main/graphs/badge.svg)](https://codecov.io)
 ![GitHub contributors](https://img.shields.io/badge/Contributors-1-brightgreen)
 [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/edit/master/README.md)
@@ -7,7 +7,7 @@
 ![GitHub issues](https://img.shields.io/github/issues/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)
 [![GitHub Repo Size](https://img.shields.io/github/repo-size/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool.svg)](https://img.shields.io/github/repo-size/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool.svg)
-[![GitHub last commit](https://img.shields.io/github/last-commit/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/commits/main)
+[![GitHub last commit](https://img.shields.io/github/last-commit/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/commits/master)
 ![GitHub language count](https://img.shields.io/github/languages/count/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)
 [![Commit Acitivity](https://img.shields.io/github/commit-activity/m/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)
 [![Code Size](https://img.shields.io/github/languages/code-size/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)](mpp-backend)
@@ -18,7 +18,7 @@
 # Medicine Data Portal
 This repository contains source code of a **prototype version** of an official project I have worked on. It is a Data Reporting Portal for a large sized pharma company which has multiple partner pharma companies.
 <br><br>
-**URL:** The prototype is **hosted live** on my personal Free Tier AWS instance at: http://ec2-54-164-245-147.compute-1.amazonaws.com
+**URL:** The prototype is **hosted live** on my personal Free Tier AWS instance at: http://mdp.kajadhav.me
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -87,7 +87,7 @@ Medicine Data Portal is a data reporting tool designed by me and my team for our
 
 ## Links
 
-* [Web site](http://ec2-54-164-245-147.compute-1.amazonaws.com/)
+* [Web site](http://mdp.kajadhav.me/)
 * [Documentation](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/blob/master/Sample%20Use%20Case%20Documentation.pdf)
 * [Issue tracker](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool/issues)
 * [Source code](https://github.com/kaushikjadhav01/Medicine-Data-Portal__Data-Reporting-Tool)

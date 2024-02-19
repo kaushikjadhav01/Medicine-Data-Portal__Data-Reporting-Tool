@@ -81,7 +81,7 @@ Medicine Data Portal is a data reporting tool designed by me and my team for our
 <li>Github:https://github.com/kaushikjadhav01</li>
 <li>Medium:https://medium.com/@kaushikjadhav01</li>
 <li>LinkedIn:https://www.linkedin.com/in/kaushikjadhav01/</li>
-<li>Portfolio:https://kajadhav.me/</li>
+<li>Portfolio:http://kajadhav.me/</li>
 </ul>
 
 

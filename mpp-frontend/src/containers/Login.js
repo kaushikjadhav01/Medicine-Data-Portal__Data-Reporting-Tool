@@ -42,7 +42,7 @@ const Login = (props) => {
 
   return (
     <div className='gx-login-container'>
-    <a href="http://ec2-54-164-245-147.compute-1.amazonaws.com:8000/api/swagger"><button type='button' className='btn' style={{position: 'absolute', right:20, top:20, color: 'white', background: 'green'}}>Swagger Link</button></a>
+    <a href="http://ec2-3-15-49-26.us-east-2.compute.amazonaws.com:8000/api/swagger"><button type='button' className='btn' style={{position: 'absolute', right:20, top:20, color: 'white', background: 'green'}}>Swagger Link</button></a>
       <div className='gx-login-content'>
         <div className='gx-login-header gx-text-center'>
           <img className='mb-30' src={require('assets/images/logo-white.png')} alt='mpp' title='mpp' />

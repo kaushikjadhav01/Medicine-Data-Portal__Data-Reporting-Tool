@@ -20,7 +20,7 @@ from MPP_API.settings import FROM_EMAIL_ID
 
 class Clock(APIView):
     
-    permission_classes=[IsAdmin]
+    permission_classes=[]
 
     def post(self,request):
 
